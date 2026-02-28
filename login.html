@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Make Future | Login</title>
+  <style>
+    :root{color-scheme:dark;}
+    body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;display:grid;place-items:center;padding:20px}
+    .card{width:min(520px,100%);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px}
+    a{color:#8be9fd;text-decoration:none}
+    input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff}
+    .row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+    button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2 style="margin:0 0 8px;">تسجيل الدخول (Preview)</h2>
+    <div style="opacity:.85;font-size:13px">3 اختيارات (هنفعّلهم بعدين): موبايل+باسورد / يوزر+باسورد / OTP</div>
+
+    <div style="margin-top:12px">
+      <label style="font-size:12px;opacity:.85">موبايل أو يوزر</label>
+      <input placeholder="01xxxxxxxxx أو username" />
+    </div>
+    <div style="margin-top:10px">
+      <label style="font-size:12px;opacity:.85">باسورد</label>
+      <input type="password" placeholder="••••••••" />
+    </div>
+
+    <div class="row">
+      <button onclick="alert('Preview فقط — بعدين هنربط DB ونجعلها Login حقيقي ✅')">دخول</button>
+      <a href="index.html">رجوع للرئيسية</a>
+      <a href="payment.html">الدفع</a>
+    </div>
+  </div>
+</body>
+</html>
