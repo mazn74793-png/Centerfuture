@@ -4,35 +4,293 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Make Future | Login</title>
+
   <style>
-    :root{color-scheme:dark;}
-    body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;display:grid;place-items:center;padding:20px}
-    .card{width:min(520px,100%);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px}
+    :root{ color-scheme: dark; }
+    body{
+      margin:0;
+      font-family:system-ui;
+      background:#0b1020;
+      color:#e8ecff;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:20px;
+    }
+    .card{
+      width:min(560px,100%);
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 10px 40px rgba(0,0,0,.35);
+    }
     a{color:#8be9fd;text-decoration:none}
-    input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff}
-    .row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
-    button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px}
+    .muted{opacity:.85;font-size:13px;line-height:1.5}
+    .top{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; flex-wrap:wrap;
+    }
+    .tabs{display:flex; gap:8px; flex-wrap:wrap;}
+    .tab{
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      padding:8px 12px;
+      border-radius:12px;
+      font-size:13px;
+      font-weight:700;
+      transition:.2s;
+    }
+    .tab.active{ background: rgba(255,255,255,.14); transform: translateY(-1px); }
+
+    label{font-size:12px;opacity:.85}
+    input,select{
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      outline:none;
+      margin-top:6px;
+    }
+    .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+    @media (max-width:520px){ .grid2{grid-template-columns:1fr;} }
+
+    .row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center}
+    button{
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:800;
+      transition:.2s;
+    }
+    button:hover{transform: translateY(-1px); background: rgba(255,255,255,.12);}
+    button.primary{
+      background: linear-gradient(135deg, #7c3aed, #06b6d4);
+      border: none;
+    }
+
+    .msg{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.22);
+      display:none;
+      font-size:13px;
+      line-height:1.5;
+    }
+    .msg.show{display:block;}
+    .msg.ok{ border-color: rgba(34,197,94,.35); }
+    .msg.err{ border-color: rgba(239,68,68,.35); }
+
+    .hr{
+      height:1px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,.14), transparent);
+      margin:14px 0;
+    }
+
+    .small{font-size:12px; opacity:.75}
   </style>
 </head>
+
 <body>
   <div class="card">
-    <h2 style="margin:0 0 8px;">تسجيل الدخول (Preview)</h2>
-    <div style="opacity:.85;font-size:13px">3 اختيارات (هنفعّلهم بعدين): موبايل+باسورد / يوزر+باسورد / OTP</div>
+    <div class="top">
+      <div>
+        <h2 style="margin:0 0 6px;" id="title">تسجيل الدخول</h2>
+        <div class="muted" id="subtitle">موبايل+باسورد / يوزر+باسورد (OTP بعدين)</div>
+      </div>
 
-    <div style="margin-top:12px">
-      <label style="font-size:12px;opacity:.85">موبايل أو يوزر</label>
-      <input placeholder="01xxxxxxxxx أو username" />
-    </div>
-    <div style="margin-top:10px">
-      <label style="font-size:12px;opacity:.85">باسورد</label>
-      <input type="password" placeholder="••••••••" />
+      <div class="tabs">
+        <div class="tab active" id="tabLogin" onclick="UI.show('login')">Login</div>
+        <div class="tab" id="tabSignup" onclick="UI.show('signup')">Signup</div>
+      </div>
     </div>
 
-    <div class="row">
-      <button onclick="alert('Preview فقط — بعدين هنربط DB ونجعلها Login حقيقي ✅')">دخول</button>
-      <a href="index.html">رجوع للرئيسية</a>
-      <a href="payment.html">الدفع</a>
+    <!-- LOGIN -->
+    <div id="panelLogin">
+      <div style="margin-top:12px">
+        <label>موبايل أو يوزر</label>
+        <input id="loginValue" placeholder="01xxxxxxxxx أو username" />
+      </div>
+
+      <div style="margin-top:10px">
+        <label>باسورد</label>
+        <input id="loginPass" type="password" placeholder="••••••••" />
+      </div>
+
+      <div class="row">
+        <button class="primary" onclick="API.login()">دخول</button>
+        <a href="index.html">رجوع للرئيسية</a>
+        <a href="payment.html">الدفع</a>
+      </div>
     </div>
+
+    <!-- SIGNUP -->
+    <div id="panelSignup" style="display:none;">
+      <div class="hr"></div>
+
+      <div class="grid2">
+        <div>
+          <label>اسم الطالب</label>
+          <input id="suName" placeholder="مثال: أحمد محمد" />
+        </div>
+
+        <div>
+          <label>السنة الدراسية</label>
+          <select id="suGrade">
+            <option value="3prep">3 إعدادي</option>
+            <option value="1sec">1 ثانوي</option>
+            <option value="2sec">2 ثانوي</option>
+            <option value="3sec">3 ثانوي</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:10px;">
+        <div>
+          <label>موبايل الطالب</label>
+          <input id="suPhone" placeholder="01xxxxxxxxx" />
+        </div>
+        <div>
+          <label>موبايل ولي الأمر (اختياري)</label>
+          <input id="suParent" placeholder="01xxxxxxxxx" />
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:10px;">
+        <div>
+          <label>يوزر (اختياري)</label>
+          <input id="suUser" placeholder="username (اختياري)" />
+        </div>
+        <div>
+          <label>باسورد</label>
+          <input id="suPass" type="password" placeholder="••••••••" />
+        </div>
+      </div>
+
+      <div class="row">
+        <button class="primary" onclick="API.signup()">إنشاء حساب</button>
+        <span class="small">بعد التسجيل هتقدر تعمل Login فورًا</span>
+      </div>
+    </div>
+
+    <div id="msg" class="msg"></div>
+
+    <div class="hr"></div>
+    <div class="small">لو حصل مشكلة في الدفع: <a href="https://wa.me/201210575530" target="_blank" rel="noreferrer">واتساب الدعم</a></div>
   </div>
+
+  <script>
+    const UI = {
+      show(mode){
+        const isLogin = mode === "login";
+        document.getElementById("panelLogin").style.display = isLogin ? "block" : "none";
+        document.getElementById("panelSignup").style.display = isLogin ? "none" : "block";
+        document.getElementById("tabLogin").classList.toggle("active", isLogin);
+        document.getElementById("tabSignup").classList.toggle("active", !isLogin);
+        document.getElementById("title").textContent = isLogin ? "تسجيل الدخول" : "إنشاء حساب";
+        document.getElementById("subtitle").textContent = isLogin
+          ? "موبايل+باسورد / يوزر+باسورد (OTP بعدين)"
+          : "املأ البيانات لإنشاء حساب طالب";
+        UI.clearMsg();
+      },
+      msg(type, text){
+        const el = document.getElementById("msg");
+        el.className = "msg show " + (type === "ok" ? "ok" : "err");
+        el.textContent = text;
+      },
+      clearMsg(){
+        const el = document.getElementById("msg");
+        el.className = "msg";
+        el.textContent = "";
+      }
+    };
+
+    const API = {
+      async signup(){
+        UI.clearMsg();
+        const payload = {
+          full_name: document.getElementById("suName").value.trim(),
+          phone_student: document.getElementById("suPhone").value.trim(),
+          phone_parent: document.getElementById("suParent").value.trim(),
+          grade: document.getElementById("suGrade").value.trim(),
+          username: document.getElementById("suUser").value.trim(),
+          password: document.getElementById("suPass").value.trim(),
+        };
+
+        if (!payload.full_name || !payload.phone_student || !payload.grade || !payload.password) {
+          UI.msg("err", "من فضلك املأ: الاسم + موبايل الطالب + السنة + الباسورد");
+          return;
+        }
+
+        try {
+          const res = await fetch("/.netlify/functions/signup", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json().catch(() => ({}));
+
+          if (!res.ok || !data.ok) {
+            UI.msg("err", data.error || "حصل خطأ في التسجيل");
+            return;
+          }
+
+          UI.msg("ok", "تم إنشاء الحساب ✅ دلوقتي اعمل Login.");
+          UI.show("login");
+          document.getElementById("loginValue").value = payload.username || payload.phone_student;
+          document.getElementById("loginPass").value = payload.password;
+        } catch (e) {
+          UI.msg("err", "مشكلة اتصال بالسيرفر");
+        }
+      },
+
+      async login(){
+        UI.clearMsg();
+        const payload = {
+          login: document.getElementById("loginValue").value.trim(),
+          password: document.getElementById("loginPass").value.trim(),
+        };
+
+        if (!payload.login || !payload.password) {
+          UI.msg("err", "اكتب الموبايل/اليوزر والباسورد");
+          return;
+        }
+
+        try {
+          const res = await fetch("/.netlify/functions/login", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json().catch(() => ({}));
+
+          if (!res.ok || !data.ok) {
+            UI.msg("err", data.error || "بيانات الدخول غلط");
+            return;
+          }
+
+          // مؤقتًا نخزن بيانات المستخدم في localStorage (لحد ما نعمل Sessions/Cookies)
+          localStorage.setItem("mf_user", JSON.stringify(data.user));
+
+          UI.msg("ok", "تم تسجيل الدخول ✅ جاري التحويل...");
+          setTimeout(() => {
+            if (data.user?.role === "superadmin") location.href = "admin.html";
+            else location.href = "student.html";
+          }, 600);
+        } catch (e) {
+          UI.msg("err", "مشكلة اتصال بالسيرفر");
+        }
+      }
+    };
+  </script>
 </body>
 </html>
