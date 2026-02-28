@@ -1,0 +1,11 @@
+{
+  "name": "centerfuture",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo \"static site + netlify functions\""
+  },
+  "dependencies": {
+    "@netlify/neon": "^0.4.0"
+  }
+}
