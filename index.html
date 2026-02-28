@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Make Future | سنتر فرح</title>
+  <style>
+    :root{color-scheme:dark;}
+    body{
+      margin:0; font-family:system-ui,Segoe UI,Tahoma,Arial;
+      background: radial-gradient(1200px 600px at 20% 10%, #1f2a44 0%, transparent 60%),
+                  radial-gradient(900px 500px at 80% 20%, #2a1f44 0%, transparent 55%),
+                  #0b1020;
+      color:#e8ecff;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    .card{
+      width:min(920px, 100%);
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:18px;
+      padding:22px;
+      box-shadow:0 10px 40px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+    }
+    .top{display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;}
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background: linear-gradient(135deg,#7c3aed,#06b6d4);
+      display:grid;place-items:center;
+      font-weight:800;
+      letter-spacing:.5px;
+    }
+    .title{display:flex; gap:10px; align-items:center;}
+    h1{margin:0; font-size:20px;}
+    .muted{opacity:.8; font-size:13px}
+    .btns{display:flex; gap:10px; flex-wrap:wrap;}
+    button,a.btn{
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color:#fff;
+      padding:10px 14px;
+      border-radius:12px;
+      text-decoration:none;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      transition:.2s;
+    }
+    button:hover,a.btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.12);}
+    .grid{display:grid; grid-template-columns: 1.2fr .8fr; gap:14px; margin-top:14px;}
+    @media (max-width: 860px){.grid{grid-template-columns:1fr;}}
+    .box{
+      background: rgba(0,0,0,.25);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      padding:14px;
+    }
+    .steps{display:grid; gap:10px;}
+    .step{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      transform: translateZ(0);
+      animation: float 5s ease-in-out infinite;
+    }
+    .step:nth-child(2){animation-delay: .4s}
+    .step:nth-child(3){animation-delay: .8s}
+    .step:nth-child(4){animation-delay: 1.2s}
+    @keyframes float{
+      0%,100%{transform: translateY(0);}
+      50%{transform: translateY(-6px);}
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px; padding:6px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+    }
+    .row{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
+    input,select{
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color:#fff;
+      outline:none;
+    }
+    label{font-size:12px; opacity:.85}
+    .two{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+    @media (max-width: 520px){.two{grid-template-columns:1fr;}}
+    .footer{margin-top:12px; opacity:.85; font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+    .small{font-size:12px; opacity:.8}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top">
+      <div class="title">
+        <div class="logo">MF</div>
+        <div>
+          <h1>Make Future — منصة سنتر فرح</h1>
+          <div class="muted">من 3 إعدادي لحد 3 ثانوي • Math & English • قباء جسر السويس</div>
+        </div>
+      </div>
+      <div class="btns">
+        <a class="btn" href="login.html">تسجيل / دخول</a>
+        <a class="btn" href="admin.html">لوحة الأدمن</a>
+        <a class="btn" href="https://wa.me/201210575530" target="_blank" rel="noreferrer">دعم واتساب</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="box">
+        <div class="badge">✨ نسخة Preview على GitHub Pages (قبل Netlify/Neon)</div>
+        <h2 style="margin:10px 0 6px;">هنشتغل إزاي؟</h2>
+        <div class="steps">
+          <div class="step">1) الطالب يسجل بياناته (موبايل + ولي أمر + سنة دراسية)</div>
+          <div class="step">2) يختار الكورسات والمواعيد</div>
+          <div class="step">3) يدفع Vodafone Cash / InstaPay ويرفع إثبات</div>
+          <div class="step">4) الأدمن يوافق → تفتح مكتبة الفيديوهات</div>
+        </div>
+      </div>
+
+      <div class="box">
+        <h2 style="margin:0 0 8px;">تجربة تسجيل سريع (شكل فقط)</h2>
+        <div class="two">
+          <div>
+            <label>اسم الطالب</label>
+            <input placeholder="مثال: أحمد محمد" />
+          </div>
+          <div>
+            <label>سنة دراسية</label>
+            <select>
+              <option>3 إعدادي</option>
+              <option>1 ثانوي</option>
+              <option>2 ثانوي</option>
+              <option>3 ثانوي</option>
+            </select>
+          </div>
+        </div>
+        <div class="two" style="margin-top:10px;">
+          <div>
+            <label>موبايل الطالب</label>
+            <input placeholder="01xxxxxxxxx" />
+          </div>
+          <div>
+            <label>موبايل ولي الأمر</label>
+            <input placeholder="01xxxxxxxxx" />
+          </div>
+        </div>
+        <div class="row">
+          <button onclick="alert('ده Preview بس — هنفعّل التسجيل الحقيقي بعد Netlify/Neon ✅')">إرسال</button>
+          <a class="btn" href="payment.html">الدفع</a>
+        </div>
+        <div class="small" style="margin-top:10px;">
+          تواصل: 01210575530 • 01006693681
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>© Make Future</div>
+      <div class="small">Dark/Light + عربي/إنجليزي هيتعملوا في نسخة React بعد ما نتأكد Pages شغال</div>
+    </div>
+  </div>
+</body>
+</html>
