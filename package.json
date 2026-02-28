@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "echo \"static site + netlify functions\""
+    "build": "echo static"
   },
   "dependencies": {
     "@netlify/neon": "^0.4.0"
