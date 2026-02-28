@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Make Future | Admin</title>
+  <style>
+    :root{color-scheme:dark;}
+    body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;padding:20px}
+    .card{max-width:980px;margin:auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    @media (max-width:860px){.grid{grid-template-columns:1fr}}
+    .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:12px}
+    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;display:inline-flex;gap:8px;align-items:center}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+    th,td{border-bottom:1px solid rgba(255,255,255,.10);padding:8px;text-align:right;opacity:.95}
+    th{opacity:.8}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2 style="margin:0">لوحة الأدمن (Preview)</h2>
+    <div style="opacity:.85;font-size:13px">سوبر أدمن: مازن + فرح — هنا هنشوف الطلاب/الدفع/الكورسات (دلوقتي ديمو).</div>
+
+    <div class="grid">
+      <div class="box">
+        <b>طلاب سجّلوا (ديمو)</b>
+        <table>
+          <thead><tr><th>الاسم</th><th>السنة</th><th>الموبايل</th><th>الحالة</th></tr></thead>
+          <tbody>
+            <tr><td>أحمد</td><td>3 ثانوي</td><td>0100•••</td><td>Pending</td></tr>
+            <tr><td>مريم</td><td>1 ثانوي</td><td>0112•••</td><td>Approved</td></tr>
+          </tbody>
+        </table>
+        <div class="row">
+          <button onclick="alert('هنا هنضيف/نوافق الدفع بعد Netlify + Neon ✅')">Approve Payment</button>
+        </div>
+      </div>
+
+      <div class="box">
+        <b>إدارة الكورسات (ديمو)</b>
+        <div style="opacity:.85;font-size:13px;margin-top:6px">
+          Math & English لكل سنة — الأدمن هيعدل من لوحة حقيقية لاحقًا.
+        </div>
+        <div class="row">
+          <button onclick="alert('Add Course (Preview)')">Add Course</button>
+          <button onclick="alert('Edit Schedule (Preview)')">Edit Schedule</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:14px">
+      <a href="index.html">رجوع للرئيسية</a>
+      <a href="payment.html">صفحة الدفع</a>
+      <a href="https://wa.me/201210575530" target="_blank" rel="noreferrer">واتساب دعم</a>
+    </div>
+  </div>
+</body>
+</html>
