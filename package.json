@@ -6,6 +6,6 @@
     "build": "echo static"
   },
   "dependencies": {
-    "@netlify/neon": "^0.4.0"
+    "@netlify/neon": "^0.1.2"
   }
 }
