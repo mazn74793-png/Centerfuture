@@ -4,46 +4,134 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Make Future | سنتر فرح</title>
+
   <style>
-    :root{color-scheme:dark;}
+    /* ========= Base ========= */
+    :root{
+      color-scheme: dark;
+      --bg: #0b1020;
+      --text: #e8ecff;
+      --muted: rgba(232,236,255,.78);
+      --card: rgba(255,255,255,.06);
+      --cardBorder: rgba(255,255,255,.12);
+      --box: rgba(0,0,0,.25);
+      --btn: rgba(255,255,255,.08);
+      --btnHover: rgba(255,255,255,.12);
+      --shadow: rgba(0,0,0,.35);
+      --accent1: #7c3aed;
+      --accent2: #06b6d4;
+    }
+
     body{
-      margin:0; font-family:system-ui,Segoe UI,Tahoma,Arial;
-      background: radial-gradient(1200px 600px at 20% 10%, #1f2a44 0%, transparent 60%),
-                  radial-gradient(900px 500px at 80% 20%, #2a1f44 0%, transparent 55%),
-                  #0b1020;
-      color:#e8ecff;
+      margin:0;
+      font-family:system-ui, Segoe UI, Tahoma, Arial;
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(31,42,68,.95) 0%, transparent 60%),
+        radial-gradient(900px 500px at 80% 20%, rgba(42,31,68,.9) 0%, transparent 55%),
+        var(--bg);
+      color: var(--text);
       min-height:100vh;
       display:flex;
       align-items:center;
       justify-content:center;
       padding:20px;
+      overflow-x:hidden;
     }
+
+    /* ========= Light Mode ========= */
+    body.light{
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --text: #0b1020;
+      --muted: rgba(11,16,32,.70);
+      --card: rgba(0,0,0,.04);
+      --cardBorder: rgba(0,0,0,.10);
+      --box: rgba(255,255,255,.75);
+      --btn: rgba(0,0,0,.06);
+      --btnHover: rgba(0,0,0,.09);
+      --shadow: rgba(0,0,0,.12);
+    }
+
+    /* ========= Card Layout ========= */
     .card{
-      width:min(920px, 100%);
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
+      width:min(980px, 100%);
+      background: var(--card);
+      border:1px solid var(--cardBorder);
       border-radius:18px;
       padding:22px;
-      box-shadow:0 10px 40px rgba(0,0,0,.35);
+      box-shadow:0 10px 40px var(--shadow);
       backdrop-filter: blur(10px);
+      position:relative;
     }
-    .top{display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;}
+
+    /* Glow blobs */
+    .glow{
+      pointer-events:none;
+      position:absolute;
+      inset:-40px;
+      overflow:hidden;
+      border-radius:22px;
+      z-index:-1;
+    }
+    .glow::before,
+    .glow::after{
+      content:"";
+      position:absolute;
+      width:420px;height:420px;
+      border-radius:50%;
+      filter: blur(70px);
+      opacity:.35;
+    }
+    .glow::before{
+      left:-80px; top:-120px;
+      background: var(--accent1);
+    }
+    .glow::after{
+      right:-120px; top:-70px;
+      background: var(--accent2);
+      opacity:.22;
+    }
+
+    .top{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .title{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
     .logo{
       width:44px;height:44px;border-radius:14px;
-      background: linear-gradient(135deg,#7c3aed,#06b6d4);
+      background: linear-gradient(135deg,var(--accent1),var(--accent2));
       display:grid;place-items:center;
-      font-weight:800;
+      font-weight:900;
       letter-spacing:.5px;
+      color:white;
+      user-select:none;
+      transform: translateZ(0);
+      animation: pulse 3.2s ease-in-out infinite;
     }
-    .title{display:flex; gap:10px; align-items:center;}
+    @keyframes pulse{
+      0%,100%{transform: translateY(0) scale(1);}
+      50%{transform: translateY(-2px) scale(1.02);}
+    }
+
     h1{margin:0; font-size:20px;}
-    .muted{opacity:.8; font-size:13px}
+    .muted{opacity:.9; color: var(--muted); font-size:13px; line-height:1.45;}
+
     .btns{display:flex; gap:10px; flex-wrap:wrap;}
+
     button,a.btn{
       cursor:pointer;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.08);
-      color:#fff;
+      border:1px solid var(--cardBorder);
+      background: var(--btn);
+      color: var(--text);
       padding:10px 14px;
       border-radius:12px;
       text-decoration:none;
@@ -51,24 +139,47 @@
       gap:8px;
       align-items:center;
       transition:.2s;
+      font-weight:600;
     }
-    button:hover,a.btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.12);}
-    .grid{display:grid; grid-template-columns: 1.2fr .8fr; gap:14px; margin-top:14px;}
-    @media (max-width: 860px){.grid{grid-template-columns:1fr;}}
+    button:hover,a.btn:hover{
+      transform: translateY(-1px);
+      background: var(--btnHover);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 900px){
+      .grid{grid-template-columns:1fr;}
+    }
+
     .box{
-      background: rgba(0,0,0,.25);
-      border:1px solid rgba(255,255,255,.12);
+      background: var(--box);
+      border:1px solid var(--cardBorder);
       border-radius:16px;
       padding:14px;
     }
-    .steps{display:grid; gap:10px;}
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px; padding:6px 10px; border-radius:999px;
+      border:1px solid var(--cardBorder);
+      background: var(--btn);
+      color: var(--text);
+      width: fit-content;
+    }
+
+    .steps{display:grid; gap:10px; margin-top:10px;}
     .step{
       padding:12px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
+      border:1px solid var(--cardBorder);
+      background: var(--btn);
       transform: translateZ(0);
-      animation: float 5s ease-in-out infinite;
+      animation: float 5.2s ease-in-out infinite;
     }
     .step:nth-child(2){animation-delay: .4s}
     .step:nth-child(3){animation-delay: .8s}
@@ -77,68 +188,160 @@
       0%,100%{transform: translateY(0);}
       50%{transform: translateY(-6px);}
     }
-    .badge{
-      display:inline-flex; align-items:center; gap:8px;
-      font-size:12px; padding:6px 10px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.08);
-    }
+
     .row{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
     input,select{
       width:100%;
       padding:10px 12px;
       border-radius:12px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color:#fff;
+      border:1px solid var(--cardBorder);
+      background: rgba(0,0,0,.15);
+      color: var(--text);
       outline:none;
     }
-    label{font-size:12px; opacity:.85}
+    body.light input, body.light select{
+      background: rgba(255,255,255,.7);
+    }
+    label{font-size:12px; color: var(--muted)}
     .two{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
     @media (max-width: 520px){.two{grid-template-columns:1fr;}}
-    .footer{margin-top:12px; opacity:.85; font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
-    .small{font-size:12px; opacity:.8}
+
+    .footer{
+      margin-top:12px;
+      color: var(--muted);
+      font-size:13px;
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    /* ========= Scroll reveal ========= */
+    .reveal{
+      opacity:0;
+      transform: translateY(14px);
+      transition: .65s ease;
+    }
+    .reveal.show{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    /* little separators */
+    .hr{
+      height:1px;
+      background: linear-gradient(to right, transparent, var(--cardBorder), transparent);
+      margin:12px 0;
+    }
   </style>
 </head>
+
 <body>
   <div class="card">
-    <div class="top">
+    <div class="glow"></div>
+
+    <div class="top reveal">
       <div class="title">
         <div class="logo">MF</div>
         <div>
-          <h1>Make Future — منصة سنتر فرح</h1>
-          <div class="muted">من 3 إعدادي لحد 3 ثانوي • Math & English • قباء جسر السويس</div>
+          <h1
+            data-i18n-ar="Make Future — منصة سنتر فرح"
+            data-i18n-en="Make Future — Farah Center Platform"
+          >
+            Make Future — منصة سنتر فرح
+          </h1>
+
+          <div
+            class="muted"
+            data-i18n-ar="من 3 إعدادي لحد 3 ثانوي • Math & English • قباء جسر السويس"
+            data-i18n-en="From Grade 9 to Grade 12 • Math & English • Qobaa, Gesr El-Suez"
+          >
+            من 3 إعدادي لحد 3 ثانوي • Math & English • قباء جسر السويس
+          </div>
         </div>
       </div>
+
       <div class="btns">
-        <a class="btn" href="login.html">تسجيل / دخول</a>
-        <a class="btn" href="admin.html">لوحة الأدمن</a>
-        <a class="btn" href="https://wa.me/201210575530" target="_blank" rel="noreferrer">دعم واتساب</a>
+        <a class="btn" href="login.html"
+           data-i18n-ar="تسجيل / دخول"
+           data-i18n-en="Login / Signup">تسجيل / دخول</a>
+
+        <a class="btn" href="admin.html"
+           data-i18n-ar="لوحة الأدمن"
+           data-i18n-en="Admin Panel">لوحة الأدمن</a>
+
+        <a class="btn" href="https://wa.me/201210575530" target="_blank" rel="noreferrer"
+           data-i18n-ar="دعم واتساب"
+           data-i18n-en="WhatsApp Support">دعم واتساب</a>
+
+        <button onclick="MF.toggleTheme()"
+          data-i18n-ar="دارك / لايت"
+          data-i18n-en="Dark / Light">دارك / لايت</button>
+
+        <button onclick="MF.toggleLang()"
+          data-i18n-ar="AR / EN"
+          data-i18n-en="AR / EN">AR / EN</button>
       </div>
     </div>
 
     <div class="grid">
-      <div class="box">
-        <div class="badge">✨ نسخة Preview على GitHub Pages (قبل Netlify/Neon)</div>
-        <h2 style="margin:10px 0 6px;">هنشتغل إزاي؟</h2>
+      <div class="box reveal">
+        <div class="badge"
+          data-i18n-ar="✨ نسخة Preview على GitHub Pages (قبل Netlify/Neon)"
+          data-i18n-en="✨ GitHub Pages Preview (before Netlify/Neon)"
+        >
+          ✨ نسخة Preview على GitHub Pages (قبل Netlify/Neon)
+        </div>
+
+        <div class="hr"></div>
+
+        <h2 style="margin:0 0 6px;"
+          data-i18n-ar="هنشتغل إزاي؟"
+          data-i18n-en="How it works?"
+        >هنشتغل إزاي؟</h2>
+
         <div class="steps">
-          <div class="step">1) الطالب يسجل بياناته (موبايل + ولي أمر + سنة دراسية)</div>
-          <div class="step">2) يختار الكورسات والمواعيد</div>
-          <div class="step">3) يدفع Vodafone Cash / InstaPay ويرفع إثبات</div>
-          <div class="step">4) الأدمن يوافق → تفتح مكتبة الفيديوهات</div>
+          <div class="step"
+            data-i18n-ar="1) الطالب يسجل بياناته (موبايل + ولي أمر + سنة دراسية)"
+            data-i18n-en="1) Student signs up (phone + parent phone + grade)"
+          >1) الطالب يسجل بياناته (موبايل + ولي أمر + سنة دراسية)</div>
+
+          <div class="step"
+            data-i18n-ar="2) يختار الكورسات والمواعيد (Math / English)"
+            data-i18n-en="2) Choose courses & schedule (Math / English)"
+          >2) يختار الكورسات والمواعيد (Math / English)</div>
+
+          <div class="step"
+            data-i18n-ar="3) يدفع Vodafone Cash / InstaPay ويرفع إثبات"
+            data-i18n-en="3) Pay via Vodafone Cash / InstaPay and upload proof"
+          >3) يدفع Vodafone Cash / InstaPay ويرفع إثبات</div>
+
+          <div class="step"
+            data-i18n-ar="4) الأدمن يوافق → تفتح مكتبة الفيديوهات"
+            data-i18n-en="4) Admin approves → video library unlocked"
+          >4) الأدمن يوافق → تفتح مكتبة الفيديوهات</div>
         </div>
       </div>
 
-      <div class="box">
-        <h2 style="margin:0 0 8px;">تجربة تسجيل سريع (شكل فقط)</h2>
+      <div class="box reveal">
+        <h2 style="margin:0 0 8px;"
+          data-i18n-ar="تجربة تسجيل سريع (شكل فقط)"
+          data-i18n-en="Quick Signup Preview (UI only)"
+        >تجربة تسجيل سريع (شكل فقط)</h2>
+
         <div class="two">
           <div>
-            <label>اسم الطالب</label>
-            <input placeholder="مثال: أحمد محمد" />
+            <label data-i18n-ar="اسم الطالب" data-i18n-en="Student name">اسم الطالب</label>
+            <input
+              data-ph-ar="مثال: أحمد محمد"
+              data-ph-en="e.g. Ahmed Mohamed"
+              placeholder="مثال: أحمد محمد"
+            />
           </div>
+
           <div>
-            <label>سنة دراسية</label>
-            <select>
+            <label data-i18n-ar="السنة الدراسية" data-i18n-en="Grade">السنة الدراسية</label>
+            <select id="gradeSelect">
               <option>3 إعدادي</option>
               <option>1 ثانوي</option>
               <option>2 ثانوي</option>
@@ -146,30 +349,116 @@
             </select>
           </div>
         </div>
+
         <div class="two" style="margin-top:10px;">
           <div>
-            <label>موبايل الطالب</label>
+            <label data-i18n-ar="موبايل الطالب" data-i18n-en="Student phone">موبايل الطالب</label>
             <input placeholder="01xxxxxxxxx" />
           </div>
+
           <div>
-            <label>موبايل ولي الأمر</label>
+            <label data-i18n-ar="موبايل ولي الأمر" data-i18n-en="Parent phone">موبايل ولي الأمر</label>
             <input placeholder="01xxxxxxxxx" />
           </div>
         </div>
+
         <div class="row">
-          <button onclick="alert('ده Preview بس — هنفعّل التسجيل الحقيقي بعد Netlify/Neon ✅')">إرسال</button>
-          <a class="btn" href="payment.html">الدفع</a>
+          <button onclick="alert(MF.lang==='ar' ? 'ده Preview بس — هنفعّل التسجيل الحقيقي بعد Netlify/Neon ✅' : 'Preview only — real signup after Netlify/Neon ✅')"
+            data-i18n-ar="إرسال"
+            data-i18n-en="Submit"
+          >إرسال</button>
+
+          <a class="btn" href="payment.html"
+            data-i18n-ar="الدفع"
+            data-i18n-en="Payment"
+          >الدفع</a>
         </div>
-        <div class="small" style="margin-top:10px;">
+
+        <div class="hr"></div>
+
+        <div class="muted"
+          data-i18n-ar="تواصل: 01210575530 • 01006693681"
+          data-i18n-en="Contact: 01210575530 • 01006693681"
+        >
           تواصل: 01210575530 • 01006693681
         </div>
       </div>
     </div>
 
-    <div class="footer">
+    <div class="footer reveal">
       <div>© Make Future</div>
-      <div class="small">Dark/Light + عربي/إنجليزي هيتعملوا في نسخة React بعد ما نتأكد Pages شغال</div>
+      <div class="muted"
+        data-i18n-ar="دارك/لايت + عربي/إنجليزي جاهزين — النسخة الحقيقية (Login/DB/Admin) مع Netlify + Neon"
+        data-i18n-en="Dark/Light + AR/EN ready — real Login/DB/Admin comes with Netlify + Neon"
+      >
+        دارك/لايت + عربي/إنجليزي جاهزين — النسخة الحقيقية (Login/DB/Admin) مع Netlify + Neon
+      </div>
     </div>
   </div>
+
+  <script>
+    // ======== State ========
+    const MF = {
+      lang: localStorage.getItem("mf_lang") || "ar",
+      theme: localStorage.getItem("mf_theme") || "dark",
+      toggleLang() {
+        this.setLang(this.lang === "ar" ? "en" : "ar");
+      },
+      toggleTheme() {
+        this.setTheme(this.theme === "dark" ? "light" : "dark");
+      },
+      setLang(lang) {
+        this.lang = lang;
+        localStorage.setItem("mf_lang", lang);
+
+        document.documentElement.lang = lang;
+        document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
+
+        // swap text
+        document.querySelectorAll("[data-i18n-ar]").forEach((el) => {
+          el.textContent = (lang === "ar") ? el.dataset.i18nAr : el.dataset.i18nEn;
+        });
+
+        // swap placeholders (custom attributes)
+        document.querySelectorAll("[data-ph-ar]").forEach((el) => {
+          el.placeholder = (lang === "ar") ? el.dataset.phAr : el.dataset.phEn;
+        });
+
+        // swap grade options (simple)
+        const sel = document.getElementById("gradeSelect");
+        if (sel) {
+          const ar = ["3 إعدادي","1 ثانوي","2 ثانوي","3 ثانوي"];
+          const en = ["Grade 9","Grade 10","Grade 11","Grade 12"];
+          const currentIndex = sel.selectedIndex;
+          sel.innerHTML = "";
+          (lang === "ar" ? ar : en).forEach((g) => {
+            const o = document.createElement("option");
+            o.textContent = g;
+            sel.appendChild(o);
+          });
+          sel.selectedIndex = Math.max(0, Math.min(currentIndex, sel.options.length - 1));
+        }
+      },
+      setTheme(theme) {
+        this.theme = theme;
+        localStorage.setItem("mf_theme", theme);
+        document.body.classList.toggle("light", theme === "light");
+      }
+    };
+
+    window.MF = MF;
+    MF.setTheme(MF.theme);
+    MF.setLang(MF.lang);
+
+    // ======== Scroll reveal ========
+    const items = document.querySelectorAll(".reveal");
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) e.target.classList.add("show");
+      });
+    }, { threshold: 0.12 });
+
+    items.forEach((el) => io.observe(el));
+  </script>
 </body>
 </html>
