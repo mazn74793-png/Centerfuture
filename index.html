@@ -189,23 +189,6 @@
       50%{transform: translateY(-6px);}
     }
 
-    .row{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
-    input,select{
-      width:100%;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--cardBorder);
-      background: rgba(0,0,0,.15);
-      color: var(--text);
-      outline:none;
-    }
-    body.light input, body.light select{
-      background: rgba(255,255,255,.7);
-    }
-    label{font-size:12px; color: var(--muted)}
-    .two{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-    @media (max-width: 520px){.two{grid-template-columns:1fr;}}
-
     .footer{
       margin-top:12px;
       color: var(--muted);
@@ -227,7 +210,6 @@
       transform: translateY(0);
     }
 
-    /* little separators */
     .hr{
       height:1px;
       background: linear-gradient(to right, transparent, var(--cardBorder), transparent);
@@ -247,28 +229,32 @@
           <h1
             data-i18n-ar="Make Future — منصة سنتر فرح"
             data-i18n-en="Make Future — Farah Center Platform"
-          >
-            Make Future — منصة سنتر فرح
-          </h1>
+          >Make Future — منصة سنتر فرح</h1>
 
           <div
             class="muted"
             data-i18n-ar="من 3 إعدادي لحد 3 ثانوي • Math & English • قباء جسر السويس"
             data-i18n-en="From Grade 9 to Grade 12 • Math & English • Qobaa, Gesr El-Suez"
-          >
-            من 3 إعدادي لحد 3 ثانوي • Math & English • قباء جسر السويس
-          </div>
+          >من 3 إعدادي لحد 3 ثانوي • Math & English • قباء جسر السويس</div>
         </div>
       </div>
 
       <div class="btns">
         <a class="btn" href="login.html"
-           data-i18n-ar="تسجيل / دخول"
-           data-i18n-en="Login / Signup">تسجيل / دخول</a>
+           data-i18n-ar="ابدأ (تسجيل / دخول)"
+           data-i18n-en="Start (Login / Signup)">ابدأ (تسجيل / دخول)</a>
+
+        <a class="btn" href="student.html"
+           data-i18n-ar="لوحة الطالب"
+           data-i18n-en="Student Dashboard">لوحة الطالب</a>
 
         <a class="btn" href="admin.html"
            data-i18n-ar="لوحة الأدمن"
            data-i18n-en="Admin Panel">لوحة الأدمن</a>
+
+        <a class="btn" href="admin-payments.html"
+           data-i18n-ar="طلبات الدفع"
+           data-i18n-en="Payments Requests">طلبات الدفع</a>
 
         <a class="btn" href="https://wa.me/201210575530" target="_blank" rel="noreferrer"
            data-i18n-ar="دعم واتساب"
@@ -287,91 +273,69 @@
     <div class="grid">
       <div class="box reveal">
         <div class="badge"
-          data-i18n-ar="✨ نسخة Preview على GitHub Pages (قبل Netlify/Neon)"
-          data-i18n-en="✨ GitHub Pages Preview (before Netlify/Neon)"
-        >
-          ✨ نسخة Preview على GitHub Pages (قبل Netlify/Neon)
-        </div>
+          data-i18n-ar="✨ النظام شغال: كورسات + مواعيد + دفع (Pending) + موافقة أدمن"
+          data-i18n-en="✨ Live flow: Courses + Schedule + Payment (Pending) + Admin Approval"
+        >✨ النظام شغال: كورسات + مواعيد + دفع (Pending) + موافقة أدمن</div>
 
         <div class="hr"></div>
 
         <h2 style="margin:0 0 6px;"
-          data-i18n-ar="هنشتغل إزاي؟"
+          data-i18n-ar="هتمشي إزاي؟"
           data-i18n-en="How it works?"
-        >هنشتغل إزاي؟</h2>
+        >هتمشي إزاي؟</h2>
 
         <div class="steps">
           <div class="step"
-            data-i18n-ar="1) الطالب يسجل بياناته (موبايل + ولي أمر + سنة دراسية)"
-            data-i18n-en="1) Student signs up (phone + parent phone + grade)"
-          >1) الطالب يسجل بياناته (موبايل + ولي أمر + سنة دراسية)</div>
+            data-i18n-ar="1) الطالب يعمل حساب ويسجل دخول"
+            data-i18n-en="1) Student signs up and logs in"
+          >1) الطالب يعمل حساب ويسجل دخول</div>
 
           <div class="step"
-            data-i18n-ar="2) يختار الكورسات والمواعيد (Math / English)"
-            data-i18n-en="2) Choose courses & schedule (Math / English)"
-          >2) يختار الكورسات والمواعيد (Math / English)</div>
+            data-i18n-ar="2) يشوف الكورسات والمواعيد ويختار كورس"
+            data-i18n-en="2) View courses & schedule and choose a course"
+          >2) يشوف الكورسات والمواعيد ويختار كورس</div>
 
           <div class="step"
-            data-i18n-ar="3) يدفع Vodafone Cash / InstaPay ويرفع إثبات"
-            data-i18n-en="3) Pay via Vodafone Cash / InstaPay and upload proof"
-          >3) يدفع Vodafone Cash / InstaPay ويرفع إثبات</div>
+            data-i18n-ar="3) يدفع Vodafone Cash / InstaPay ويسجل رقم العملية"
+            data-i18n-en="3) Pay via Vodafone Cash / InstaPay and enter transaction note"
+          >3) يدفع Vodafone Cash / InstaPay ويسجل رقم العملية</div>
 
           <div class="step"
-            data-i18n-ar="4) الأدمن يوافق → تفتح مكتبة الفيديوهات"
-            data-i18n-en="4) Admin approves → video library unlocked"
-          >4) الأدمن يوافق → تفتح مكتبة الفيديوهات</div>
+            data-i18n-ar="4) الأدمن يراجع ويوافق → بعد الموافقة هنفتح الفيديوهات"
+            data-i18n-en="4) Admin reviews & approves → then videos will unlock"
+          >4) الأدمن يراجع ويوافق → بعد الموافقة هنفتح الفيديوهات</div>
         </div>
       </div>
 
       <div class="box reveal">
         <h2 style="margin:0 0 8px;"
-          data-i18n-ar="تجربة تسجيل سريع (شكل فقط)"
-          data-i18n-en="Quick Signup Preview (UI only)"
-        >تجربة تسجيل سريع (شكل فقط)</h2>
+          data-i18n-ar="ابدأ دلوقتي"
+          data-i18n-en="Start now"
+        >ابدأ دلوقتي</h2>
 
-        <div class="two">
-          <div>
-            <label data-i18n-ar="اسم الطالب" data-i18n-en="Student name">اسم الطالب</label>
-            <input
-              data-ph-ar="مثال: أحمد محمد"
-              data-ph-en="e.g. Ahmed Mohamed"
-              placeholder="مثال: أحمد محمد"
-            />
-          </div>
+        <div class="muted"
+          data-i18n-ar="لو أنت طالب: ادخل لوحة الطالب واختار الكورس المناسب. لو أنت أدمن: ادخل لوحة الأدمن لمراجعة طلبات الدفع."
+          data-i18n-en="If you're a student: open Student Dashboard and choose your course. If you're an admin: open Admin Panel to review payment requests."
+        >لو أنت طالب: ادخل لوحة الطالب واختار الكورس المناسب. لو أنت أدمن: ادخل لوحة الأدمن لمراجعة طلبات الدفع.</div>
 
-          <div>
-            <label data-i18n-ar="السنة الدراسية" data-i18n-en="Grade">السنة الدراسية</label>
-            <select id="gradeSelect">
-              <option>3 إعدادي</option>
-              <option>1 ثانوي</option>
-              <option>2 ثانوي</option>
-              <option>3 ثانوي</option>
-            </select>
-          </div>
-        </div>
+        <div class="hr"></div>
 
-        <div class="two" style="margin-top:10px;">
-          <div>
-            <label data-i18n-ar="موبايل الطالب" data-i18n-en="Student phone">موبايل الطالب</label>
-            <input placeholder="01xxxxxxxxx" />
-          </div>
+        <div class="btns">
+          <a class="btn" href="student.html"
+             data-i18n-ar="👨‍🎓 طالب"
+             data-i18n-en="👨‍🎓 Student">👨‍🎓 طالب</a>
 
-          <div>
-            <label data-i18n-ar="موبايل ولي الأمر" data-i18n-en="Parent phone">موبايل ولي الأمر</label>
-            <input placeholder="01xxxxxxxxx" />
-          </div>
-        </div>
+          <a class="btn" href="admin.html"
+             data-i18n-ar="🛠️ أدمن"
+             data-i18n-en="🛠️ Admin">🛠️ أدمن</a>
 
-        <div class="row">
-          <button onclick="alert(MF.lang==='ar' ? 'ده Preview بس — هنفعّل التسجيل الحقيقي بعد Netlify/Neon ✅' : 'Preview only — real signup after Netlify/Neon ✅')"
-            data-i18n-ar="إرسال"
-            data-i18n-en="Submit"
-          >إرسال</button>
+          <a class="btn" href="admin-payments.html"
+             data-i18n-ar="💳 مراجعة الدفع"
+             data-i18n-en="💳 Review Payments">💳 مراجعة الدفع</a>
 
           <a class="btn" href="payment.html"
-            data-i18n-ar="الدفع"
-            data-i18n-en="Payment"
-          >الدفع</a>
+             data-i18n-ar="💰 صفحة الدفع"
+             data-i18n-en="💰 Payment Page">💰 صفحة الدفع</a>
         </div>
 
         <div class="hr"></div>
@@ -379,65 +343,33 @@
         <div class="muted"
           data-i18n-ar="تواصل: 01210575530 • 01006693681"
           data-i18n-en="Contact: 01210575530 • 01006693681"
-        >
-          تواصل: 01210575530 • 01006693681
-        </div>
+        >تواصل: 01210575530 • 01006693681</div>
       </div>
     </div>
 
     <div class="footer reveal">
       <div>© Make Future</div>
       <div class="muted"
-        data-i18n-ar="دارك/لايت + عربي/إنجليزي جاهزين — النسخة الحقيقية (Login/DB/Admin) مع Netlify + Neon"
-        data-i18n-en="Dark/Light + AR/EN ready — real Login/DB/Admin comes with Netlify + Neon"
-      >
-        دارك/لايت + عربي/إنجليزي جاهزين — النسخة الحقيقية (Login/DB/Admin) مع Netlify + Neon
-      </div>
+        data-i18n-ar="دارك/لايت + عربي/إنجليزي جاهزين — والكورسات/المواعيد تتحدث فورًا من لوحة الأدمن"
+        data-i18n-en="Dark/Light + AR/EN ready — courses/schedules update instantly from Admin Panel"
+      >دارك/لايت + عربي/إنجليزي جاهزين — والكورسات/المواعيد تتحدث فورًا من لوحة الأدمن</div>
     </div>
   </div>
 
   <script>
-    // ======== State ========
     const MF = {
       lang: localStorage.getItem("mf_lang") || "ar",
       theme: localStorage.getItem("mf_theme") || "dark",
-      toggleLang() {
-        this.setLang(this.lang === "ar" ? "en" : "ar");
-      },
-      toggleTheme() {
-        this.setTheme(this.theme === "dark" ? "light" : "dark");
-      },
+      toggleLang() { this.setLang(this.lang === "ar" ? "en" : "ar"); },
+      toggleTheme() { this.setTheme(this.theme === "dark" ? "light" : "dark"); },
       setLang(lang) {
         this.lang = lang;
         localStorage.setItem("mf_lang", lang);
-
         document.documentElement.lang = lang;
         document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
-
-        // swap text
         document.querySelectorAll("[data-i18n-ar]").forEach((el) => {
           el.textContent = (lang === "ar") ? el.dataset.i18nAr : el.dataset.i18nEn;
         });
-
-        // swap placeholders (custom attributes)
-        document.querySelectorAll("[data-ph-ar]").forEach((el) => {
-          el.placeholder = (lang === "ar") ? el.dataset.phAr : el.dataset.phEn;
-        });
-
-        // swap grade options (simple)
-        const sel = document.getElementById("gradeSelect");
-        if (sel) {
-          const ar = ["3 إعدادي","1 ثانوي","2 ثانوي","3 ثانوي"];
-          const en = ["Grade 9","Grade 10","Grade 11","Grade 12"];
-          const currentIndex = sel.selectedIndex;
-          sel.innerHTML = "";
-          (lang === "ar" ? ar : en).forEach((g) => {
-            const o = document.createElement("option");
-            o.textContent = g;
-            sel.appendChild(o);
-          });
-          sel.selectedIndex = Math.max(0, Math.min(currentIndex, sel.options.length - 1));
-        }
       },
       setTheme(theme) {
         this.theme = theme;
@@ -445,19 +377,14 @@
         document.body.classList.toggle("light", theme === "light");
       }
     };
-
     window.MF = MF;
     MF.setTheme(MF.theme);
     MF.setLang(MF.lang);
 
-    // ======== Scroll reveal ========
     const items = document.querySelectorAll(".reveal");
     const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) e.target.classList.add("show");
-      });
+      entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("show"); });
     }, { threshold: 0.12 });
-
     items.forEach((el) => io.observe(el));
   </script>
 </body>
