@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Make Future | Admin Payments</title>
+  <style>
+    :root{color-scheme:dark}
+    body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;padding:20px}
+    .card{max-width:1050px;margin:0 auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:800}
+    button.ok{border:none;background:linear-gradient(135deg,#16a34a,#06b6d4)}
+    button.bad{border:none;background:linear-gradient(135deg,#ef4444,#7c3aed)}
+    .muted{opacity:.82;font-size:13px;line-height:1.6}
+    .hr{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.14),transparent);margin:14px 0}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{border-bottom:1px solid rgba(255,255,255,.12);padding:10px;font-size:13px;vertical-align:top}
+    th{text-align:right;opacity:.85}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <div style="font-size:18px;font-weight:900">لوحة الدفع</div>
+        <div class="muted">راجع الطلبات واعمل Approve / Reject</div>
+      </div>
+      <div class="row">
+        <a href="admin.html">رجوع للأدمن</a>
+        <a href="index.html">الرئيسية</a>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="row">
+      <button onclick="load('pending')">Pending</button>
+      <button onclick="load('approved')">Approved</button>
+      <button onclick="load('rejected')">Rejected</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>طالب</th>
+          <th>كورس</th>
+          <th>تفاصيل الدفع</th>
+          <th>إجراء</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+<script>
+  const me = JSON.parse(localStorage.getItem("mf_user") || "null");
+  if(!me || me.role !== "superadmin") location.href="login.html";
+
+  async function load(status){
+    const res = await fetch(`/.netlify/functions/admin_payments?status=${encodeURIComponent(status)}`);
+    const data = await res.json().catch(()=>({}));
+
+    const tb = document.getElementById("tbody");
+    tb.innerHTML = "";
+
+    if(!res.ok || !data.ok){
+      tb.innerHTML = `<tr><td colspan="4">فشل التحميل</td></tr>`;
+      return;
+    }
+
+    if(data.payments.length === 0){
+      tb.innerHTML = `<tr><td colspan="4">مفيش طلبات</td></tr>`;
+      return;
+    }
+
+    data.payments.forEach(p=>{
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>
+          <b>${esc(p.full_name)}</b><br>
+          ${esc(p.phone_student)}<br>
+          <span class="muted">${esc(p.grade)}</span>
+        </td>
+        <td>
+          <b>${esc(p.course_title || "—")}</b><br>
+          ${esc(p.subject || "")} — ${esc(p.teacher_name || "")}<br>
+          <span class="muted">course_id: ${p.course_id ?? "—"}</span>
+        </td>
+        <td>
+          method: <b>${esc(p.method)}</b><br>
+          amount: <b>${esc(p.amount ?? "")}</b><br>
+          note: <b>${esc(p.receipt_note || "")}</b><br>
+          <span class="muted">${esc(p.created_at || "")}</span>
+        </td>
+        <td>
+          <div class="row">
+            <button class="ok" onclick="act(${p.id},'approve')">Approve</button>
+            <button class="bad" onclick="act(${p.id},'reject')">Reject</button>
+          </div>
+        </td>
+      `;
+      tb.appendChild(tr);
+    });
+  }
+
+  async function act(id, action){
+    const res = await fetch("/.netlify/functions/admin_payments", {
+      method:"POST",
+      headers: {"content-type":"application/json"},
+      body: JSON.stringify({ id, action })
+    });
+    const data = await res.json().catch(()=>({}));
+    if(!res.ok || !data.ok){ alert(data.error || "فشل"); return; }
+    load("pending");
+  }
+
+  function esc(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
+
+  load("pending");
+</script>
+</body>
+</html>
