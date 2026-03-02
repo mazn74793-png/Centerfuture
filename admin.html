@@ -1,219 +1,537 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Make Future | Admin Panel</title>
-
-<style>
-:root{color-scheme:dark}
-body{
-  margin:0;
-  font-family:system-ui;
-  background:#0b1020;
-  color:#e8ecff;
-  min-height:100vh;
-  padding:20px;
-}
-.card{
-  max-width:1200px;
-  margin:auto;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:18px;
-  padding:20px;
-  box-shadow:0 10px 40px rgba(0,0,0,.35);
-}
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-}
-.logo{
-  width:45px;height:45px;border-radius:14px;
-  background:linear-gradient(135deg,#7c3aed,#06b6d4);
-  display:grid;place-items:center;
-  font-weight:900;
-}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-button,a{
-  cursor:pointer;
-  border:1px solid rgba(255,255,255,.16);
-  background:rgba(255,255,255,.08);
-  color:#fff;
-  padding:8px 12px;
-  border-radius:12px;
-  text-decoration:none;
-  font-weight:700;
-}
-button:hover,a:hover{background:rgba(255,255,255,.14)}
-.tabBtns{
-  margin-top:20px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.tab{
-  display:none;
-  margin-top:20px;
-}
-.tab.active{display:block}
-.box{
-  background:rgba(0,0,0,.25);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:16px;
-  padding:14px;
-  margin-top:15px;
-}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{
-  border-bottom:1px solid rgba(255,255,255,.12);
-  padding:10px;
-  font-size:13px;
-}
-th{text-align:right;opacity:.8}
-input,select{
-  width:100%;
-  padding:8px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.15);
-  background:rgba(255,255,255,.06);
-  color:#fff;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Make Future | Admin</title>
+  <style>
+    :root{color-scheme:dark}
+    body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;padding:20px}
+    .card{max-width:1200px;margin:0 auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+    .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+    .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:grid;place-items:center;font-weight:900}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:800}
+    a:hover,button:hover{transform:translateY(-1px);background:rgba(255,255,255,.12)}
+    .muted{opacity:.82;font-size:13px;line-height:1.6}
+    .hr{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.14),transparent);margin:14px 0}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap}
+    .tabBtn.active{background:rgba(255,255,255,.14)}
+    .tab{display:none;margin-top:14px}
+    .tab.active{display:block}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+    .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
+    input,select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;outline:none}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{border-bottom:1px solid rgba(255,255,255,.12);padding:10px;font-size:13px;vertical-align:top}
+    th{text-align:right;opacity:.85}
+    .msg{margin-top:10px;padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.14);display:none}
+    .msg.show{display:block}
+    .btnSm{padding:8px 10px;border-radius:10px}
+    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.14);padding:6px 10px;border-radius:999px;font-size:12px;opacity:.9}
+  </style>
 </head>
-
 <body>
+  <div class="card">
+    <div class="top">
+      <div class="row">
+        <div class="logo">MF</div>
+        <div>
+          <div style="font-size:18px;font-weight:900">لوحة الأدمن</div>
+          <div class="muted">Courses • Schedules • Payments</div>
+        </div>
+      </div>
+      <div class="row">
+        <a href="index.html">الرئيسية</a>
+        <a href="student.html">طالب</a>
+        <a href="admin-payments.html">طلبات الدفع (صفحة)</a>
+        <button onclick="logout()">خروج</button>
+      </div>
+    </div>
 
-<div class="card">
+    <div id="msg" class="msg"></div>
 
-<div class="top">
-  <div class="row">
-    <div class="logo">MF</div>
-    <div>
-      <div style="font-size:18px;font-weight:900">Admin Dashboard</div>
-      <div style="opacity:.7;font-size:13px">Make Future Control Panel</div>
+    <div class="hr"></div>
+
+    <div class="tabs">
+      <button class="tabBtn active" onclick="openTab('dash', this)">📊 Dashboard</button>
+      <button class="tabBtn" onclick="openTab('courses', this)">🎓 Courses</button>
+      <button class="tabBtn" onclick="openTab('sched', this)">🗓️ Schedules</button>
+      <button class="tabBtn" onclick="openTab('pay', this)">💳 Payments</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dash" class="tab active">
+      <div class="grid">
+        <div class="box">
+          <div class="pill">📌 أرقام سريعة</div>
+          <div id="stats" class="muted" style="margin-top:10px">Loading…</div>
+          <div class="row" style="margin-top:10px">
+            <button class="btnSm" onclick="loadStats()">تحديث</button>
+          </div>
+        </div>
+        <div class="box">
+          <div class="pill">🧾 آخر طلبات دفع</div>
+          <div id="latestPay" class="muted" style="margin-top:10px">Loading…</div>
+        </div>
+      </div>
+
+      <div class="box" style="margin-top:12px">
+        <div class="pill">🧑‍🎓 آخر تسجيلات</div>
+        <div id="latestUsers" class="muted" style="margin-top:10px">Loading…</div>
+      </div>
+    </div>
+
+    <!-- Courses -->
+    <div id="courses" class="tab">
+      <div class="box">
+        <div class="pill">🎓 فلترة</div>
+        <div class="row" style="margin-top:10px">
+          <div style="flex:1;min-width:180px">
+            <div class="muted">السنة</div>
+            <select id="grade">
+              <option value="3prep">3 إعدادي</option>
+              <option value="1sec">1 ثانوي</option>
+              <option value="2sec">2 ثانوي</option>
+              <option value="3sec">3 ثانوي</option>
+            </select>
+          </div>
+          <div style="flex:1;min-width:180px">
+            <div class="muted">المادة</div>
+            <select id="subject">
+              <option value="Math">Math</option>
+              <option value="English">English</option>
+            </select>
+          </div>
+          <button class="btnSm" onclick="loadCourses()">تحديث</button>
+        </div>
+
+        <table id="coursesTable">
+          <thead>
+            <tr>
+              <th>الكورس</th>
+              <th>المدرس</th>
+              <th>Active</th>
+              <th>Schedules</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="box">
+        <div class="pill">➕ إضافة كورس</div>
+        <div class="grid" style="margin-top:10px">
+          <div>
+            <div class="muted">اسم الكورس</div>
+            <input id="cTitle" placeholder="مثال: Algebra 1" />
+          </div>
+          <div>
+            <div class="muted">اسم المدرس</div>
+            <input id="cTeacher" placeholder="مثال: Mr. Karim" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <label class="muted" style="display:flex;gap:8px;align-items:center">
+            <input type="checkbox" id="cActive" checked style="width:auto" />
+            Active
+          </label>
+          <button class="btnSm" onclick="createCourse()">حفظ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Schedules -->
+    <div id="sched" class="tab">
+      <div class="box">
+        <div class="pill">📌 الكورس المختار</div>
+        <div id="selectedCourse" class="muted" style="margin-top:10px">اختار كورس من تبويب Courses ثم اضغط Edit schedule</div>
+      </div>
+
+      <div class="box">
+        <div class="pill">🗓️ المواعيد</div>
+        <table id="schTable">
+          <thead>
+            <tr>
+              <th>اليوم</th>
+              <th>من</th>
+              <th>إلى</th>
+              <th>ملاحظات</th>
+              <th>حفظ/حذف</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <div class="hr"></div>
+
+        <div class="pill">➕ إضافة موعد</div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:10px">
+          <div>
+            <div class="muted">اليوم</div>
+            <input id="nDay" placeholder="مثال: السبت" />
+          </div>
+          <div>
+            <div class="muted">ملاحظات (اختياري)</div>
+            <input id="nNotes" placeholder="مثال: حصة تجريبية" />
+          </div>
+        </div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:10px">
+          <div>
+            <div class="muted">من</div>
+            <input id="nStart" placeholder="مثال: 5:00 PM" />
+          </div>
+          <div>
+            <div class="muted">إلى</div>
+            <input id="nEnd" placeholder="مثال: 6:30 PM" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button class="btnSm" onclick="addSchedule()">إضافة</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payments -->
+    <div id="pay" class="tab">
+      <div class="box">
+        <div class="pill">💳 طلبات الدفع</div>
+        <div class="row" style="margin-top:10px">
+          <button class="btnSm" onclick="loadPayments('pending')">Pending</button>
+          <button class="btnSm" onclick="loadPayments('approved')">Approved</button>
+          <button class="btnSm" onclick="loadPayments('rejected')">Rejected</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>طالب</th>
+              <th>كورس</th>
+              <th>تفاصيل</th>
+              <th>إجراء</th>
+            </tr>
+          </thead>
+          <tbody id="payBody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <a href="index.html">الرئيسية</a>
-    <a href="student.html">طالب</a>
-    <a href="admin-payments.html">طلبات الدفع</a>
-    <button onclick="logout()">خروج</button>
-  </div>
-</div>
-
-<!-- Tabs -->
-<div class="tabBtns">
-  <button onclick="openTab('dashboard')">📊 Dashboard</button>
-  <button onclick="openTab('courses')">🎓 Courses</button>
-  <button onclick="openTab('schedules')">🗓️ Schedules</button>
-  <button onclick="openTab('payments')">💳 Payments</button>
-</div>
-
-<!-- Dashboard -->
-<div id="dashboard" class="tab active">
-  <div class="box">
-    <h3>ملخص سريع</h3>
-    <div id="stats">Loading...</div>
-  </div>
-</div>
-
-<!-- Courses -->
-<div id="courses" class="tab">
-  <div class="box">
-    <h3>إضافة كورس</h3>
-    <input id="cTitle" placeholder="اسم الكورس">
-    <input id="cTeacher" placeholder="اسم المدرس" style="margin-top:8px">
-    <button onclick="createCourse()" style="margin-top:10px">حفظ</button>
-  </div>
-</div>
-
-<!-- Schedules -->
-<div id="schedules" class="tab">
-  <div class="box">
-    <h3>المواعيد</h3>
-    <div>اختار كورس من صفحة Courses علشان تعدل المواعيد.</div>
-  </div>
-</div>
-
-<!-- Payments -->
-<div id="payments" class="tab">
-  <div class="box">
-    <h3>طلبات الدفع</h3>
-    <button onclick="loadPayments()">تحديث</button>
-    <table>
-      <thead>
-        <tr>
-          <th>طالب</th>
-          <th>كورس</th>
-          <th>طريقة</th>
-          <th>إجراء</th>
-        </tr>
-      </thead>
-      <tbody id="payTable"></tbody>
-    </table>
-  </div>
-</div>
-
-</div>
 
 <script>
-const me = JSON.parse(localStorage.getItem("mf_user")||"null");
-if(!me || me.role!=="superadmin"){location.href="login.html"}
+  // Guard
+  const me = JSON.parse(localStorage.getItem("mf_user") || "null");
+  if(!me || me.role !== "superadmin") location.href = "login.html";
 
-function logout(){
-  localStorage.removeItem("mf_user");
-  location.href="login.html";
-}
+  const msgEl = document.getElementById("msg");
+  function msg(t){
+    msgEl.textContent = t;
+    msgEl.className = "msg show";
+    setTimeout(()=> msgEl.className="msg", 2600);
+  }
+  function logout(){
+    localStorage.removeItem("mf_user");
+    location.href = "login.html";
+  }
+  function openTab(id, btn){
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".tabBtn").forEach(x=>x.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    btn.classList.add("active");
+  }
 
-function openTab(id){
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
+  // ===== Dashboard =====
+  async function loadStats(){
+    const stats = document.getElementById("stats");
+    const latestUsers = document.getElementById("latestUsers");
+    const latestPay = document.getElementById("latestPay");
 
-async function createCourse(){
-  const title=document.getElementById("cTitle").value.trim();
-  const teacher=document.getElementById("cTeacher").value.trim();
-  if(!title||!teacher){alert("اكتب البيانات");return}
-  await fetch("/.netlify/functions/admin_courses",{
-    method:"POST",
-    headers:{"content-type":"application/json"},
-    body:JSON.stringify({grade:"3prep",subject:"Math",title,teacher_name:teacher,is_active:true})
-  });
-  alert("اتحفظ ✅");
-}
+    stats.textContent = "Loading…";
+    latestUsers.textContent = "Loading…";
+    latestPay.textContent = "Loading…";
 
-async function loadPayments(){
-  const res=await fetch("/.netlify/functions/admin_payments?status=pending");
-  const data=await res.json();
-  const tb=document.getElementById("payTable");
-  tb.innerHTML="";
-  data.payments.forEach(p=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`
-      <td>${p.full_name}</td>
-      <td>${p.course_title||""}</td>
-      <td>${p.method}</td>
-      <td>
-        <button onclick="act(${p.id},'approve')">Approve</button>
-        <button onclick="act(${p.id},'reject')">Reject</button>
-      </td>
+    const res = await fetch("/.netlify/functions/admin_stats");
+    const data = await res.json().catch(()=>({}));
+
+    if(!res.ok || !data.ok){
+      stats.textContent = data.error || "فشل تحميل الداشبورد";
+      latestUsers.textContent = "";
+      latestPay.textContent = "";
+      return;
+    }
+
+    stats.innerHTML = `
+      Users: <b>${data.counts.users}</b><br>
+      Courses: <b>${data.counts.courses}</b><br>
+      Schedules: <b>${data.counts.schedules}</b><br>
+      Pending: <b>${data.counts.pending}</b> • Approved: <b>${data.counts.approved}</b> • Rejected: <b>${data.counts.rejected}</b>
     `;
-    tb.appendChild(tr);
-  });
-}
 
-async function act(id,action){
-  await fetch("/.netlify/functions/admin_payments",{
-    method:"POST",
-    headers:{"content-type":"application/json"},
-    body:JSON.stringify({id,action})
-  });
-  loadPayments();
-}
+    latestUsers.innerHTML = (data.latestUsers||[]).map(u =>
+      `• <b>${esc(u.full_name||"")}</b> — ${esc(u.phone_student||"")} — ${esc(u.grade||"")} — <span class="muted">${esc(u.role||"")}</span>`
+    ).join("<br>") || "—";
+
+    latestPay.innerHTML = (data.latestPayments||[]).map(p =>
+      `• <b>${esc(p.full_name||"")}</b> — ${esc(p.course_title||"—")} — <b>${esc(p.status||"")}</b> — ${esc(p.method||"")}`
+    ).join("<br>") || "—";
+  }
+
+  // ===== Courses =====
+  let selectedCourseId = null;
+  let selectedCourseTitle = "";
+
+  async function loadCourses(){
+    const grade = document.getElementById("grade").value;
+    const subject = document.getElementById("subject").value;
+
+    const res = await fetch(`/.netlify/functions/admin_courses?grade=${encodeURIComponent(grade)}&subject=${encodeURIComponent(subject)}`);
+    const data = await res.json().catch(()=>({}));
+
+    const tbody = document.querySelector("#coursesTable tbody");
+    tbody.innerHTML = "";
+
+    if(!res.ok || !data.ok){
+      msg(data.error || "فشل تحميل الكورسات");
+      return;
+    }
+
+    if((data.courses||[]).length === 0){
+      tbody.innerHTML = `<tr><td colspan="4">مفيش كورسات لسه.</td></tr>`;
+      return;
+    }
+
+    data.courses.forEach(c => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${esc(c.title)}</td>
+        <td>${esc(c.teacher_name)}</td>
+        <td>${c.is_active ? "✅" : "❌"}</td>
+        <td><button class="btnSm" onclick="selectCourse(${c.id}, '${escAttr(c.title)}')">Edit schedule</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    msg("تم تحديث الكورسات ✅");
+  }
+
+  async function createCourse(){
+    const grade = document.getElementById("grade").value;
+    const subject = document.getElementById("subject").value;
+    const title = document.getElementById("cTitle").value.trim();
+    const teacher_name = document.getElementById("cTeacher").value.trim();
+    const is_active = document.getElementById("cActive").checked;
+
+    if(!title || !teacher_name){
+      msg("اكتب اسم الكورس واسم المدرس");
+      return;
+    }
+
+    const res = await fetch("/.netlify/functions/admin_courses", {
+      method:"POST",
+      headers: {"content-type":"application/json"},
+      body: JSON.stringify({ grade, subject, title, teacher_name, is_active })
+    });
+    const data = await res.json().catch(()=>({}));
+
+    if(!res.ok || !data.ok){
+      msg(data.error || "فشل حفظ الكورس");
+      return;
+    }
+
+    document.getElementById("cTitle").value = "";
+    document.getElementById("cTeacher").value = "";
+    msg("اتحفظ ✅");
+    loadCourses();
+  }
+
+  function selectCourse(id, title){
+    selectedCourseId = id;
+    selectedCourseTitle = title;
+    document.getElementById("selectedCourse").innerHTML = `ID: <b>${id}</b> — <b>${esc(title)}</b>`;
+    // افتح تبويب المواعيد تلقائي
+    openTab('sched', document.querySelectorAll(".tabBtn")[2]);
+    loadSchedules();
+  }
+
+  // ===== Schedules =====
+  async function loadSchedules(){
+    if(!selectedCourseId){ msg("اختار كورس الأول"); return; }
+
+    const res = await fetch(`/.netlify/functions/admin_schedules?course_id=${selectedCourseId}`);
+    const data = await res.json().catch(()=>({}));
+
+    const tbody = document.querySelector("#schTable tbody");
+    tbody.innerHTML = "";
+
+    if(!res.ok || !data.ok){
+      msg(data.error || "فشل تحميل المواعيد");
+      return;
+    }
+
+    if((data.schedules||[]).length === 0){
+      tbody.innerHTML = `<tr><td colspan="5">مفيش مواعيد للكورس ده لسه.</td></tr>`;
+      return;
+    }
+
+    data.schedules.forEach(s => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input value="${escAttr(s.day_of_week)}" data-k="day" data-id="${s.id}"></td>
+        <td><input value="${escAttr(s.start_time)}" data-k="start" data-id="${s.id}"></td>
+        <td><input value="${escAttr(s.end_time)}" data-k="end" data-id="${s.id}"></td>
+        <td><input value="${escAttr(s.notes || "")}" data-k="notes" data-id="${s.id}"></td>
+        <td class="row">
+          <button class="btnSm" onclick="saveSchedule(${s.id})">حفظ</button>
+          <button class="btnSm" onclick="delSchedule(${s.id})">حذف</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    msg("تم تحديث المواعيد ✅");
+  }
+
+  function val(id,key){
+    const el = document.querySelector(`input[data-id="${id}"][data-k="${key}"]`);
+    return el ? el.value.trim() : "";
+  }
+
+  async function saveSchedule(id){
+    const payload = {
+      id,
+      course_id: selectedCourseId,
+      day_of_week: val(id,"day"),
+      start_time: val(id,"start"),
+      end_time: val(id,"end"),
+      notes: val(id,"notes")
+    };
+
+    const res = await fetch("/.netlify/functions/admin_schedules", {
+      method:"POST",
+      headers: {"content-type":"application/json"},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(()=>({}));
+
+    if(!res.ok || !data.ok){
+      msg(data.error || "فشل الحفظ");
+      return;
+    }
+    msg("اتحفظ ✅");
+    loadSchedules();
+  }
+
+  async function delSchedule(id){
+    const res = await fetch("/.netlify/functions/admin_schedules", {
+      method:"DELETE",
+      headers: {"content-type":"application/json"},
+      body: JSON.stringify({ id })
+    });
+    const data = await res.json().catch(()=>({}));
+
+    if(!res.ok || !data.ok){
+      msg(data.error || "فشل الحذف");
+      return;
+    }
+    msg("اتحذف ✅");
+    loadSchedules();
+  }
+
+  async function addSchedule(){
+    if(!selectedCourseId){ msg("اختار كورس الأول"); return; }
+
+    const payload = {
+      course_id: selectedCourseId,
+      day_of_week: document.getElementById("nDay").value.trim(),
+      start_time: document.getElementById("nStart").value.trim(),
+      end_time: document.getElementById("nEnd").value.trim(),
+      notes: document.getElementById("nNotes").value.trim()
+    };
+
+    if(!payload.day_of_week || !payload.start_time || !payload.end_time){
+      msg("اكتب اليوم + من + إلى");
+      return;
+    }
+
+    const res = await fetch("/.netlify/functions/admin_schedules", {
+      method:"POST",
+      headers: {"content-type":"application/json"},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(()=>({}));
+
+    if(!res.ok || !data.ok){
+      msg(data.error || "فشل الإضافة");
+      return;
+    }
+
+    document.getElementById("nDay").value="";
+    document.getElementById("nStart").value="";
+    document.getElementById("nEnd").value="";
+    document.getElementById("nNotes").value="";
+    msg("اتضاف ✅");
+    loadSchedules();
+  }
+
+  // ===== Payments =====
+  async function loadPayments(status){
+    const tb = document.getElementById("payBody");
+    tb.innerHTML = `<tr><td colspan="4">Loading…</td></tr>`;
+
+    const res = await fetch(`/.netlify/functions/admin_payments?status=${encodeURIComponent(status)}`);
+    const data = await res.json().catch(()=>({}));
+
+    tb.innerHTML = "";
+
+    if(!res.ok || !data.ok){
+      tb.innerHTML = `<tr><td colspan="4">فشل التحميل</td></tr>`;
+      return;
+    }
+
+    if((data.payments||[]).length === 0){
+      tb.innerHTML = `<tr><td colspan="4">مفيش طلبات</td></tr>`;
+      return;
+    }
+
+    data.payments.forEach(p=>{
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><b>${esc(p.full_name)}</b><br>${esc(p.phone_student)}<br><span class="muted">${esc(p.grade)}</span></td>
+        <td><b>${esc(p.course_title||"—")}</b><br>${esc(p.subject||"")} — ${esc(p.teacher_name||"")}</td>
+        <td>method: <b>${esc(p.method)}</b><br>amount: <b>${esc(p.amount ?? "")}</b><br>note: <b>${esc(p.receipt_note||"")}</b></td>
+        <td>
+          <div class="row">
+            <button class="btnSm" onclick="payAct(${p.id},'approve')">Approve</button>
+            <button class="btnSm" onclick="payAct(${p.id},'reject')">Reject</button>
+          </div>
+        </td>
+      `;
+      tb.appendChild(tr);
+    });
+  }
+
+  async function payAct(id, action){
+    const res = await fetch("/.netlify/functions/admin_payments",{
+      method:"POST",
+      headers: {"content-type":"application/json"},
+      body: JSON.stringify({ id, action })
+    });
+    const data = await res.json().catch(()=>({}));
+
+    if(!res.ok || !data.ok){
+      msg(data.error || "فشل الإجراء");
+      return;
+    }
+    msg("تم ✅");
+    loadPayments("pending");
+  }
+
+  function esc(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
+  function escAttr(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("\"","&quot;").replaceAll("'","&#39;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
+
+  // أول تحميل
+  loadStats();
+  loadCourses();
 </script>
-
 </body>
 </html>
