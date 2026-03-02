@@ -5,56 +5,380 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Make Future | Admin</title>
   <style>
-    :root{color-scheme:dark;}
+    :root{color-scheme:dark}
     body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;padding:20px}
-    .card{max-width:980px;margin:auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px}
+    .card{max-width:1050px;margin:0 auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+    .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+    .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:grid;place-items:center;font-weight:900}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:800}
+    a:hover,button:hover{transform:translateY(-1px);background:rgba(255,255,255,.12)}
+    input,select,textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;outline:none}
+    textarea{min-height:70px}
+    .muted{opacity:.8;font-size:13px;line-height:1.6}
+    .hr{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.14),transparent);margin:14px 0}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-    @media (max-width:860px){.grid{grid-template-columns:1fr}}
-    .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:12px}
-    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;display:inline-flex;gap:8px;align-items:center}
-    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
-    th,td{border-bottom:1px solid rgba(255,255,255,.10);padding:8px;text-align:right;opacity:.95}
-    th{opacity:.8}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+    .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
+    .tag{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);padding:6px 10px;border-radius:999px;font-size:12px}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{border-bottom:1px solid rgba(255,255,255,.12);padding:10px;font-size:13px;vertical-align:top}
+    th{opacity:.85;text-align:right}
+    .btnSm{padding:8px 10px;border-radius:10px;font-weight:800}
+    .msg{margin-top:10px;padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.14);display:none}
+    .msg.show{display:block}
   </style>
 </head>
 <body>
   <div class="card">
-    <h2 style="margin:0">لوحة الأدمن (Preview)</h2>
-    <div style="opacity:.85;font-size:13px">سوبر أدمن: مازن + فرح — هنا هنشوف الطلاب/الدفع/الكورسات (دلوقتي ديمو).</div>
+    <div class="top">
+      <div class="row">
+        <div class="logo">MF</div>
+        <div>
+          <div style="font-size:18px;font-weight:900">Make Future</div>
+          <div class="muted">لوحة الأدمن (Courses & Schedules)</div>
+        </div>
+      </div>
+      <div class="row">
+        <a href="index.html">الرئيسية</a>
+        <a href="student.html">طالب</a>
+        <button onclick="logout()">خروج</button>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div id="msg" class="msg"></div>
 
     <div class="grid">
       <div class="box">
-        <b>طلاب سجّلوا (ديمو)</b>
-        <table>
-          <thead><tr><th>الاسم</th><th>السنة</th><th>الموبايل</th><th>الحالة</th></tr></thead>
-          <tbody>
-            <tr><td>أحمد</td><td>3 ثانوي</td><td>0100•••</td><td>Pending</td></tr>
-            <tr><td>مريم</td><td>1 ثانوي</td><td>0112•••</td><td>Approved</td></tr>
-          </tbody>
-        </table>
-        <div class="row">
-          <button onclick="alert('هنا هنضيف/نوافق الدفع بعد Netlify + Neon ✅')">Approve Payment</button>
+        <div class="tag">🎓 الكورسات</div>
+
+        <div class="row" style="margin-top:10px">
+          <div style="flex:1;min-width:180px">
+            <div class="muted">السنة</div>
+            <select id="grade">
+              <option value="3prep">3 إعدادي</option>
+              <option value="1sec">1 ثانوي</option>
+              <option value="2sec">2 ثانوي</option>
+              <option value="3sec">3 ثانوي</option>
+            </select>
+          </div>
+
+          <div style="flex:1;min-width:180px">
+            <div class="muted">المادة</div>
+            <select id="subject">
+              <option value="Math">Math</option>
+              <option value="English">English</option>
+            </select>
+          </div>
+
+          <button class="btnSm" onclick="loadCourses()">تحديث</button>
         </div>
+
+        <table id="coursesTable">
+          <thead>
+            <tr>
+              <th>الكورس</th>
+              <th>المدرس</th>
+              <th>Active</th>
+              <th>Schedules</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <div class="hr"></div>
+
+        <div class="tag">➕ إضافة/تعديل كورس</div>
+        <div style="margin-top:10px" class="grid" style="grid-template-columns:1fr 1fr">
+          <div>
+            <div class="muted">اسم الكورس</div>
+            <input id="cTitle" placeholder="مثال: Algebra 1" />
+          </div>
+          <div>
+            <div class="muted">اسم المدرس</div>
+            <input id="cTeacher" placeholder="مثال: Mr. Karim" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <label class="muted" style="display:flex;gap:8px;align-items:center">
+            <input type="checkbox" id="cActive" checked style="width:auto" />
+            Active
+          </label>
+          <button class="btnSm" onclick="createCourse()">حفظ كورس جديد</button>
+        </div>
+
       </div>
 
       <div class="box">
-        <b>إدارة الكورسات (ديمو)</b>
-        <div style="opacity:.85;font-size:13px;margin-top:6px">
-          Math & English لكل سنة — الأدمن هيعدل من لوحة حقيقية لاحقًا.
+        <div class="tag">🗓️ المواعيد (Schedules)</div>
+        <div class="muted" style="margin-top:10px">اختار كورس من الجدول علشان يفتح تعديل المواعيد.</div>
+
+        <div class="hr"></div>
+
+        <div class="tag">📌 الكورس المختار</div>
+        <div id="selectedCourse" class="muted" style="margin-top:10px">—</div>
+
+        <table id="schTable">
+          <thead>
+            <tr>
+              <th>اليوم</th>
+              <th>من</th>
+              <th>إلى</th>
+              <th>ملاحظات</th>
+              <th>حفظ/حذف</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <div class="hr"></div>
+
+        <div class="tag">➕ إضافة موعد</div>
+        <div class="grid" style="grid-template-columns:1fr 1fr">
+          <div>
+            <div class="muted">اليوم</div>
+            <input id="nDay" placeholder="مثال: السبت" />
+          </div>
+          <div>
+            <div class="muted">ملاحظات (اختياري)</div>
+            <input id="nNotes" placeholder="مثال: حصة تجريبية" />
+          </div>
         </div>
-        <div class="row">
-          <button onclick="alert('Add Course (Preview)')">Add Course</button>
-          <button onclick="alert('Edit Schedule (Preview)')">Edit Schedule</button>
+
+        <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:10px">
+          <div>
+            <div class="muted">من</div>
+            <input id="nStart" placeholder="مثال: 5:00 PM" />
+          </div>
+          <div>
+            <div class="muted">إلى</div>
+            <input id="nEnd" placeholder="مثال: 6:30 PM" />
+          </div>
         </div>
+
+        <div class="row" style="margin-top:10px">
+          <button class="btnSm" onclick="addSchedule()">إضافة</button>
+        </div>
+
       </div>
     </div>
-
-    <div class="row" style="margin-top:14px">
-      <a href="index.html">رجوع للرئيسية</a>
-      <a href="payment.html">صفحة الدفع</a>
-      <a href="https://wa.me/201210575530" target="_blank" rel="noreferrer">واتساب دعم</a>
-    </div>
   </div>
+
+  <script>
+    const msgEl = document.getElementById("msg");
+    function msg(text){
+      msgEl.textContent = text;
+      msgEl.className = "msg show";
+      setTimeout(()=> msgEl.className="msg", 2500);
+    }
+
+    function logout(){
+      localStorage.removeItem("mf_user");
+      location.href = "login.html";
+    }
+
+    // Guard: لازم superadmin
+    const me = JSON.parse(localStorage.getItem("mf_user") || "null");
+    if(!me || me.role !== "superadmin"){
+      location.href = "login.html";
+    }
+
+    let selectedCourseId = null;
+    let selectedCourseTitle = "";
+
+    async function loadCourses(){
+      const grade = document.getElementById("grade").value;
+      const subject = document.getElementById("subject").value;
+
+      const res = await fetch(`/.netlify/functions/admin_courses?grade=${encodeURIComponent(grade)}&subject=${encodeURIComponent(subject)}`);
+      const data = await res.json().catch(()=>({}));
+
+      const tbody = document.querySelector("#coursesTable tbody");
+      tbody.innerHTML = "";
+
+      if(!res.ok || !data.ok){
+        msg(data.error || "فشل تحميل الكورسات");
+        return;
+      }
+
+      data.courses.forEach(c => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(c.title)}</td>
+          <td>${escapeHtml(c.teacher_name)}</td>
+          <td>${c.is_active ? "✅" : "❌"}</td>
+          <td><button class="btnSm" onclick="selectCourse(${c.id}, '${escapeAttr(c.title)}')">Edit schedule</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      msg("تم تحديث الكورسات ✅");
+    }
+
+    async function createCourse(){
+      const grade = document.getElementById("grade").value;
+      const subject = document.getElementById("subject").value;
+      const title = document.getElementById("cTitle").value.trim();
+      const teacher_name = document.getElementById("cTeacher").value.trim();
+      const is_active = document.getElementById("cActive").checked;
+
+      if(!title || !teacher_name){
+        msg("اكتب اسم الكورس واسم المدرس");
+        return;
+      }
+
+      const res = await fetch("/.netlify/functions/admin_courses", {
+        method:"POST",
+        headers: {"content-type":"application/json"},
+        body: JSON.stringify({ grade, subject, title, teacher_name, is_active })
+      });
+      const data = await res.json().catch(()=>({}));
+
+      if(!res.ok || !data.ok){
+        msg(data.error || "فشل حفظ الكورس");
+        return;
+      }
+
+      document.getElementById("cTitle").value = "";
+      document.getElementById("cTeacher").value = "";
+      msg("اتحفظ ✅");
+      loadCourses();
+    }
+
+    function selectCourse(id, title){
+      selectedCourseId = id;
+      selectedCourseTitle = title;
+      document.getElementById("selectedCourse").innerHTML = `ID: <b>${id}</b> — <b>${escapeHtml(title)}</b>`;
+      loadSchedules();
+    }
+
+    async function loadSchedules(){
+      if(!selectedCourseId){ msg("اختار كورس الأول"); return; }
+
+      const res = await fetch(`/.netlify/functions/admin_schedules?course_id=${selectedCourseId}`);
+      const data = await res.json().catch(()=>({}));
+
+      const tbody = document.querySelector("#schTable tbody");
+      tbody.innerHTML = "";
+
+      if(!res.ok || !data.ok){
+        msg(data.error || "فشل تحميل المواعيد");
+        return;
+      }
+
+      data.schedules.forEach(s => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><input value="${escapeAttr(s.day_of_week)}" data-k="day" data-id="${s.id}" /></td>
+          <td><input value="${escapeAttr(s.start_time)}" data-k="start" data-id="${s.id}" /></td>
+          <td><input value="${escapeAttr(s.end_time)}" data-k="end" data-id="${s.id}" /></td>
+          <td><input value="${escapeAttr(s.notes || "")}" data-k="notes" data-id="${s.id}" /></td>
+          <td class="row">
+            <button class="btnSm" onclick="saveSchedule(${s.id})">حفظ</button>
+            <button class="btnSm" onclick="delSchedule(${s.id})">حذف</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      msg("تم تحديث المواعيد ✅");
+    }
+
+    function getRowValue(id, key){
+      const el = document.querySelector(`input[data-id="${id}"][data-k="${key}"]`);
+      return el ? el.value.trim() : "";
+    }
+
+    async function saveSchedule(id){
+      if(!selectedCourseId) return;
+
+      const payload = {
+        id,
+        course_id: selectedCourseId,
+        day_of_week: getRowValue(id, "day"),
+        start_time: getRowValue(id, "start"),
+        end_time: getRowValue(id, "end"),
+        notes: getRowValue(id, "notes")
+      };
+
+      const res = await fetch("/.netlify/functions/admin_schedules", {
+        method:"POST",
+        headers: {"content-type":"application/json"},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(()=>({}));
+
+      if(!res.ok || !data.ok){
+        msg(data.error || "فشل الحفظ");
+        return;
+      }
+      msg("اتحفظ ✅");
+      loadSchedules();
+    }
+
+    async function delSchedule(id){
+      const res = await fetch("/.netlify/functions/admin_schedules", {
+        method:"DELETE",
+        headers: {"content-type":"application/json"},
+        body: JSON.stringify({ id })
+      });
+      const data = await res.json().catch(()=>({}));
+
+      if(!res.ok || !data.ok){
+        msg(data.error || "فشل الحذف");
+        return;
+      }
+      msg("اتحذف ✅");
+      loadSchedules();
+    }
+
+    async function addSchedule(){
+      if(!selectedCourseId){ msg("اختار كورس الأول"); return; }
+
+      const payload = {
+        course_id: selectedCourseId,
+        day_of_week: document.getElementById("nDay").value.trim(),
+        start_time: document.getElementById("nStart").value.trim(),
+        end_time: document.getElementById("nEnd").value.trim(),
+        notes: document.getElementById("nNotes").value.trim()
+      };
+
+      if(!payload.day_of_week || !payload.start_time || !payload.end_time){
+        msg("اكتب اليوم + من + إلى");
+        return;
+      }
+
+      const res = await fetch("/.netlify/functions/admin_schedules", {
+        method:"POST",
+        headers: {"content-type":"application/json"},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(()=>({}));
+
+      if(!res.ok || !data.ok){
+        msg(data.error || "فشل الإضافة");
+        return;
+      }
+
+      document.getElementById("nDay").value="";
+      document.getElementById("nStart").value="";
+      document.getElementById("nEnd").value="";
+      document.getElementById("nNotes").value="";
+      msg("اتضاف ✅");
+      loadSchedules();
+    }
+
+    function escapeHtml(s){
+      return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+    }
+    function escapeAttr(s){
+      return String(s||"").replaceAll("&","&amp;").replaceAll("\"","&quot;").replaceAll("'","&#39;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+    }
+
+    // أول تحميل
+    loadCourses();
+  </script>
 </body>
 </html>
