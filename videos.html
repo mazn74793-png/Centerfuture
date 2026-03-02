@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Make Future | Videos</title>
+  <style>
+    :root{color-scheme:dark}
+    body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;padding:20px}
+    .card{max-width:1050px;margin:0 auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+    .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+    .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:grid;place-items:center;font-weight:900}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:800}
+    a:hover,button:hover{transform:translateY(-1px);background:rgba(255,255,255,.12)}
+    .muted{opacity:.82;font-size:13px;line-height:1.6}
+    .hr{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.14),transparent);margin:14px 0}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+    .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
+    .v{border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.22);border-radius:16px;padding:14px;margin-top:10px}
+    .v h3{margin:0 0 8px;font-size:16px}
+    iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:14px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top">
+      <div class="row">
+        <div class="logo">MF</div>
+        <div>
+          <div style="font-size:18px;font-weight:900">مكتبة الفيديوهات</div>
+          <div class="muted" id="sub">…</div>
+        </div>
+      </div>
+      <div class="row">
+        <a href="student.html">رجوع للطالب</a>
+        <a href="index.html">الرئيسية</a>
+        <a href="https://wa.me/201210575530" target="_blank" rel="noreferrer">واتساب الدعم</a>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div id="state" class="box">
+      <div class="muted">جاري التحميل…</div>
+    </div>
+
+    <div id="list" style="margin-top:12px"></div>
+  </div>
+
+<script>
+  const me = JSON.parse(localStorage.getItem("mf_user") || "null");
+  const selectedCourse = JSON.parse(localStorage.getItem("mf_selected_course") || "null");
+  const state = document.getElementById("state");
+  const list = document.getElementById("list");
+  const sub = document.getElementById("sub");
+
+  if(!me) location.href = "login.html";
+  if(!selectedCourse){
+    state.innerHTML = `<div class="muted">مفيش كورس مختار — ارجع لصفحة الطالب واختار كورس.</div>`;
+  } else {
+    load();
+  }
+
+  function ytEmbed(url){
+    try{
+      const u = new URL(url);
+      // youtu.be/ID
+      if(u.hostname.includes("youtu.be")) return "https://www.youtube.com/embed/" + u.pathname.replace("/","");
+      // youtube.com/watch?v=ID
+      const id = u.searchParams.get("v");
+      if(id) return "https://www.youtube.com/embed/" + id;
+      // already embed
+      if(u.pathname.includes("/embed/")) return url;
+      return url;
+    }catch{
+      return url;
+    }
+  }
+
+  async function load(){
+    sub.textContent = `الكورس: ${selectedCourse.title} — ${selectedCourse.subject}`;
+
+    // fetch videos gated by approval
+    const res = await fetch(`/.netlify/functions/public_videos?user_id=${me.id}&course_id=${selectedCourse.id}`);
+    const data = await res.json().catch(()=>({}));
+
+    if(!res.ok || !data.ok){
+      state.innerHTML = `
+        <div class="muted">
+          الفيديوهات مقفولة لحد ما الأدمن يوافق على الدفع.<br>
+          لو أنت دافع بالفعل: روح صفحة الدفع وسجل رقم العملية، أو كلمنا واتساب.
+        </div>
+        <div class="row" style="margin-top:10px">
+          <a href="payment.html">صفحة الدفع</a>
+          <a href="admin-payments.html" style="opacity:.7">لوحة الدفع (للأدمن)</a>
+        </div>
+      `;
+      list.innerHTML = "";
+      return;
+    }
+
+    const videos = data.videos || [];
+    state.innerHTML = `<div class="muted">✅ الدفع Approved — الفيديوهات مفتوحة.</div>`;
+
+    if(videos.length === 0){
+      list.innerHTML = `<div class="box"><div class="muted">مفيش فيديوهات لسه للكورس ده.</div></div>`;
+      return;
+    }
+
+    list.innerHTML = "";
+    videos.forEach(v=>{
+      const div = document.createElement("div");
+      div.className = "v";
+      div.innerHTML = `
+        <h3>${escapeHtml(v.title)}</h3>
+        <div class="muted" style="margin-bottom:10px">${escapeHtml(v.subject)} — ${escapeHtml(v.grade)}</div>
+        <iframe src="${ytEmbed(v.youtube_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function escapeHtml(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
+</script>
+</body>
+</html>
