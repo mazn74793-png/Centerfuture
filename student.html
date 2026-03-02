@@ -6,77 +6,184 @@
   <title>Make Future | Student</title>
   <style>
     :root{color-scheme:dark}
-    body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;display:grid;place-items:center;padding:20px}
-    .card{width:min(860px,100%);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+    body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;padding:20px}
+    .wrap{max-width:1050px;margin:0 auto}
+    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
     .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
     .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:grid;place-items:center;font-weight:900}
-    .muted{opacity:.85;font-size:13px;line-height:1.6}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:800}
     a:hover,button:hover{transform:translateY(-1px);background:rgba(255,255,255,.12)}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-    @media (max-width:900px){.grid{grid-template-columns:1fr}}
-    .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
+    .muted{opacity:.82;font-size:13px;line-height:1.6}
     .hr{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.14),transparent);margin:14px 0}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+    .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
     .tag{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);padding:6px 10px;border-radius:999px;font-size:12px}
+    .course{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);border-radius:16px;padding:14px;margin-top:10px}
+    .course h3{margin:0 0 8px;font-size:16px}
+    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.14);padding:6px 10px;border-radius:999px;font-size:12px;opacity:.9}
+    .sch{margin-top:10px;display:grid;gap:8px}
+    .schItem{padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.22);font-size:13px}
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="top">
-      <div class="row">
-        <div class="logo">MF</div>
-        <div>
-          <div style="font-size:18px;font-weight:900">Make Future</div>
-          <div class="muted">لوحة الطالب</div>
+  <div class="wrap">
+    <div class="card">
+      <div class="top">
+        <div class="row">
+          <div class="logo">MF</div>
+          <div>
+            <div style="font-size:18px;font-weight:900">Make Future</div>
+            <div class="muted">اختر كورسك وشوف المواعيد قبل الدفع</div>
+          </div>
+        </div>
+        <div class="row">
+          <a href="index.html">الرئيسية</a>
+          <a href="payment.html">الدفع</a>
+          <a href="https://wa.me/201210575530" target="_blank" rel="noreferrer">واتساب الدعم</a>
+          <button onclick="logout()">خروج</button>
         </div>
       </div>
-      <div class="row">
-        <a href="index.html">الرئيسية</a>
-        <a href="payment.html">الدفع</a>
-        <a href="https://wa.me/201210575530" target="_blank" rel="noreferrer">واتساب الدعم</a>
-        <button onclick="logout()">خروج</button>
+
+      <div class="hr"></div>
+
+      <div class="grid">
+        <div class="box">
+          <div class="tag">👤 بياناتك</div>
+          <div class="muted" style="margin-top:10px" id="meBox">...</div>
+          <div class="row" style="margin-top:10px">
+            <button onclick="loadCourses()">تحديث الكورسات</button>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="tag">✅ الكورس المختار</div>
+          <div class="muted" style="margin-top:10px" id="selected">—</div>
+          <div class="row" style="margin-top:10px">
+            <button onclick="goPay()">ادفع للكورس ده</button>
+          </div>
+          <div class="muted" style="margin-top:10px">
+            الدفع: Vodafone Cash / InstaPay على <b>01210575530</b>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="hr"></div>
+      <div class="hr"></div>
 
-    <div class="grid">
       <div class="box">
-        <div class="tag">👤 بيانات الحساب</div>
-        <div style="margin-top:10px" id="who" class="muted">...</div>
-      </div>
-
-      <div class="box">
-        <div class="tag">🎓 الخطوة الجاية</div>
-        <div class="muted" style="margin-top:10px">
-          دلوقتي هنعمل: عرض كورسات السنة + حالة الدفع + فتح مكتبة الفيديوهات بعد الموافقة.
-        </div>
-        <div class="row" style="margin-top:12px">
-          <a href="payment.html">ارفع/تابع الدفع</a>
-          <a href="login.html">تسجيل بحساب تاني</a>
-        </div>
+        <div class="tag">🎓 الكورسات المتاحة</div>
+        <div id="courses" class="muted" style="margin-top:10px">Loading…</div>
       </div>
     </div>
   </div>
 
-  <script>
-    function logout(){
-      localStorage.removeItem("mf_user");
-      location.href = "login.html";
+<script>
+  function logout(){
+    localStorage.removeItem("mf_user");
+    location.href = "login.html";
+  }
+
+  const me = JSON.parse(localStorage.getItem("mf_user") || "null");
+  if(!me){ location.href="login.html"; }
+
+  const meBox = document.getElementById("meBox");
+  meBox.innerHTML =
+    "الاسم: <b>"+(me.full_name||"")+"</b><br>"+
+    "الموبايل: <b>"+(me.phone_student||"")+"</b><br>"+
+    "السنة: <b>"+(me.grade||"")+"</b><br>"+
+    "Role: <b>"+(me.role||"")+"</b>";
+
+  let selectedCourse = JSON.parse(localStorage.getItem("mf_selected_course") || "null");
+  renderSelected();
+
+  function renderSelected(){
+    const el = document.getElementById("selected");
+    if(!selectedCourse) el.innerHTML = "—";
+    else el.innerHTML = `ID: <b>${selectedCourse.id}</b> — <b>${escapeHtml(selectedCourse.title)}</b> — <span class="pill">${escapeHtml(selectedCourse.subject)}</span>`;
+  }
+
+  async function loadCourses(){
+    const wrap = document.getElementById("courses");
+    wrap.textContent = "Loading…";
+
+    const res = await fetch(`/.netlify/functions/public_courses?grade=${encodeURIComponent(me.grade)}`);
+    const data = await res.json().catch(()=>({}));
+
+    if(!res.ok || !data.ok){
+      wrap.textContent = data.error || "فشل تحميل الكورسات";
+      return;
     }
-    const u = JSON.parse(localStorage.getItem("mf_user") || "null");
-    const el = document.getElementById("who");
-    if(!u){
-      el.textContent = "مفيش Session — من فضلك اعمل Login تاني.";
-      setTimeout(()=> location.href="login.html", 800);
-    } else {
-      el.innerHTML =
-        "الاسم: <b>" + (u.full_name || "") + "</b><br>" +
-        "الموبايل: <b>" + (u.phone_student || "") + "</b><br>" +
-        "السنة: <b>" + (u.grade || "") + "</b><br>" +
-        "الصلاحية: <b>" + (u.role || "") + "</b>";
+
+    if(data.courses.length === 0){
+      wrap.textContent = "مفيش كورسات لسه للسنة دي.";
+      return;
     }
-  </script>
+
+    wrap.innerHTML = "";
+    for(const c of data.courses){
+      const div = document.createElement("div");
+      div.className = "course";
+      div.innerHTML = `
+        <h3>${escapeHtml(c.title)}</h3>
+        <div class="muted">
+          <span class="pill">👨‍🏫 ${escapeHtml(c.teacher_name)}</span>
+          <span class="pill">📘 ${escapeHtml(c.subject)}</span>
+        </div>
+        <div class="sch" id="sch_${c.id}">
+          <div class="muted" style="opacity:.8">Loading schedule…</div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button onclick='selectCourse(${c.id}, "${escapeAttr(c.title)}", "${escapeAttr(c.subject)}")'>اختيار الكورس</button>
+        </div>
+      `;
+      wrap.appendChild(div);
+
+      // load schedules لكل كورس
+      const schRes = await fetch(`/.netlify/functions/public_schedules?course_id=${c.id}`);
+      const schData = await schRes.json().catch(()=>({}));
+      const schWrap = document.getElementById(`sch_${c.id}`);
+
+      if(!schRes.ok || !schData.ok){
+        schWrap.innerHTML = `<div class="muted">مش قادر أجيب المواعيد</div>`;
+        continue;
+      }
+
+      if(schData.schedules.length === 0){
+        schWrap.innerHTML = `<div class="muted">مواعيد الكورس لسه ما اتحطتش</div>`;
+        continue;
+      }
+
+      schWrap.innerHTML = "";
+      schData.schedules.forEach(s => {
+        const it = document.createElement("div");
+        it.className = "schItem";
+        it.innerHTML = `🗓️ <b>${escapeHtml(s.day_of_week)}</b> — ${escapeHtml(s.start_time)} → ${escapeHtml(s.end_time)}${s.notes ? ` <span class="muted">(${escapeHtml(s.notes)})</span>` : ""}`;
+        schWrap.appendChild(it);
+      });
+    }
+  }
+
+  function selectCourse(id, title, subject){
+    selectedCourse = { id, title, subject };
+    localStorage.setItem("mf_selected_course", JSON.stringify(selectedCourse));
+    renderSelected();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function goPay(){
+    if(!selectedCourse){
+      alert("اختار كورس الأول");
+      return;
+    }
+    location.href = "payment.html";
+  }
+
+  function escapeHtml(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
+  function escapeAttr(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("\"","&quot;").replaceAll("'","&#39;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
+
+  // أول تحميل
+  loadCourses();
+</script>
 </body>
 </html>
