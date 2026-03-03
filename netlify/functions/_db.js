@@ -1,14 +1,18 @@
 import { neon } from "@netlify/neon";
 
-export const sql = neon(); 
-// sql بيستخدم تلقائيًا NETLIFY_DATABASE_URL اللي Netlify عمله لك
+/**
+ * Uses Netlify-provided Neon connection automatically:
+ * - NETLIFY_DATABASE_URL (preferred)
+ * - or DATABASE_URL (fallback)
+ */
+export const sql = neon(process.env.NETLIFY_DATABASE_URL || process.env.DATABASE_URL);
 
-export function json(statusCode, body, extraHeaders = {}) {
+export function json(statusCode, body) {
   return {
     statusCode,
     headers: {
       "content-type": "application/json; charset=utf-8",
-      ...extraHeaders,
+      "cache-control": "no-store",
     },
     body: JSON.stringify(body),
   };
