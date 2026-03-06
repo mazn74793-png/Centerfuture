@@ -315,7 +315,7 @@ async function api(fn,method,body,params){
   const opts={method:m,headers:h};
   if(body){h['Content-Type']='application/json';opts.body=JSON.stringify(body);}
   try{const r=await fetch(FN+'/'+fn+(params||''),opts);return await r.json();}
-  catch(e){console.error('api',fn,e);return {ok:false,error:String(e)};}
+  catch(e){console.error('api error:',fn,e);return {ok:false,error:'فشل الاتصال'};}
 }
 
 function openTab(id,btn){
@@ -324,7 +324,7 @@ function openTab(id,btn){
   document.getElementById(id).classList.add('on');
   btn.classList.add('on');
   if(id==='coupons') loadCoupons();
-  if(id==='comments') loadAllComments();
+  if(id==='comments') initComments();
 }
 
 // ===== DASHBOARD =====
@@ -393,7 +393,7 @@ async function saveCourse(){
   if(!title||!teacher){msg('err','⚠️ اكتب اسم الكورس والمدرس');return;}
   const body=id?{id:parseInt(id),title,teacher_name:teacher,is_active:active,price}:{grade,subject,title,teacher_name:teacher,is_active:active,price};
   const d=await api('admin-courses','POST',body);
-  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  if(!d.ok){msg('err','❌ '+(d.error&&!d.error.includes('TypeError')?d.error:'فشل الاتصال — حاول تاني'));return;}
   msg('ok',id?'✅ تم التعديل':'✅ تم الإضافة');
   clearCourseForm();loadCourses();
 }
@@ -401,7 +401,7 @@ async function saveCourse(){
 async function delCourse(id,title){
   if(!confirm(`تمسح الكورس "${title}"؟\nده هيمسح كل الفيديوهات والمواعيد بتاعته!`))return;
   const d=await api('admin-courses','DELETE',{id});
-  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  if(!d.ok){msg('err','❌ '+(d.error&&!d.error.includes('TypeError')?d.error:'فشل الاتصال — حاول تاني'));return;}
   msg('ok','✅ تم الحذف');loadCourses();
 }
 
@@ -436,7 +436,7 @@ async function loadSch(){
 function gv(id,k){return document.querySelector(`input[data-id="${id}"][data-k="${k}"]`)?.value.trim()||'';}
 async function saveSch(id){
   const d=await api('admin-schedules','POST',{id,course_id:selCId,day_of_week:gv(id,'day'),start_time:gv(id,'start'),end_time:gv(id,'end'),notes:gv(id,'notes')});
-  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  if(!d.ok){msg('err','❌ '+(d.error&&!d.error.includes('TypeError')?d.error:'فشل الاتصال — حاول تاني'));return;}
   msg('ok','✅ تم');loadSch();
 }
 async function delSch(id){
@@ -450,7 +450,7 @@ async function addSch(){
   const day=document.getElementById('nDay').value.trim(),start=document.getElementById('nStart').value.trim(),end=document.getElementById('nEnd').value.trim(),notes=document.getElementById('nNotes').value.trim();
   if(!day||!start||!end){msg('err','⚠️ اكتب اليوم + من + إلى');return;}
   const d=await api('admin-schedules','POST',{course_id:selCId,day_of_week:day,start_time:start,end_time:end,notes:notes||null});
-  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  if(!d.ok){msg('err','❌ '+(d.error&&!d.error.includes('TypeError')?d.error:'فشل الاتصال — حاول تاني'));return;}
   ['nDay','nStart','nEnd','nNotes'].forEach(id=>document.getElementById(id).value='');
   msg('ok','✅ اتضاف');loadSch();
 }
@@ -525,7 +525,7 @@ async function uploadVideoFile(videoId, courseId){
     const d=await fetch(FN+'/video-upload-url',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},
       body:JSON.stringify({video_id:videoId,course_id:courseId,filename:file.name,content_type:file.type})
     }).then(r=>r.json()).catch(()=>({}));
-    if(!d.ok){if(el) el.textContent='❌ '+(d.error||'فشل');return;}
+    if(!d.ok){if(el) el.textContent='❌ '+(d.error&&!d.error.includes('TypeError')?d.error:'فشل الاتصال — حاول تاني');return;}
     // Upload to storage
     const upRes=await fetch(d.signed_url,{method:'PUT',headers:{'Content-Type':file.type},body:file});
     if(!upRes.ok){if(el) el.textContent='❌ فشل الرفع';return;}
@@ -584,7 +584,7 @@ async function saveVideo(){
     if(!url.includes('youtube')&&!url.includes('youtu.be')){msg('err','⚠️ الرابط لازم يكون YouTube');return;}
     const body=id?{id:parseInt(id),title,youtube_url:url,description:desc||null,order_index:order,is_active:active,video_type:'youtube'}:{course_id:selCIdV,title,youtube_url:url,description:desc||null,order_index:order,is_active:active,video_type:'youtube'};
     const d=await api('course-videos','POST',body);
-    if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+    if(!d.ok){msg('err','❌ '+(d.error&&!d.error.includes('TypeError')?d.error:'فشل الاتصال — حاول تاني'));return;}
     msg('ok','✅ تم حفظ الفيديو');clearVidForm();loadVideos();
   }
 }
@@ -593,7 +593,7 @@ async function delVid(id){
   if(!confirm('تمسح الفيديو ده؟ هيتمسح من كل حتة!'))return;
   msg('ok','⏳ جاري المسح...');
   const d=await api('course-videos','DELETE',{id});
-  if(!d.ok){msg('err','❌ '+(d.error||'فشل المسح'));return;}
+  if(!d.ok){msg('err','❌ '+(d.error&&!d.error.includes('TypeError')?d.error:'فشل الحذف — حاول تاني'));return;}
   msg('ok','✅ اتمسح الفيديو');loadVideos();
 }
 
@@ -623,7 +623,7 @@ async function loadPay(status){
 
 async function payAct(id,action,phone){
   const d=await api('admin-payments','POST',{id,action});
-  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  if(!d.ok){msg('err','❌ '+(d.error&&!d.error.includes('TypeError')?d.error:'فشل الاتصال — حاول تاني'));return;}
   if(action==='approve'){
     msg('ok','✅ تم القبول — الطالب اتضاف للكورس تلقائياً!');
     // open whatsapp auto
@@ -663,7 +663,7 @@ async function createCoupon(){
   const exp=document.getElementById('cpExpiry').value;
   if(!code||!dval){msg('err','⚠️ اكتب الكود والقيمة');return;}
   const d=await api('coupons','POST',{code,discount_type:dtype,discount_value:dval,max_uses:max,expires_at:exp||null});
-  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  if(!d.ok){msg('err','❌ '+(d.error&&!d.error.includes('TypeError')?d.error:'فشل الاتصال — حاول تاني'));return;}
   msg('ok','✅ تم إنشاء الكوبون: '+code);
   ['cpCode','cpValue','cpExpiry'].forEach(id=>document.getElementById(id).value='');
   loadCoupons();
@@ -771,7 +771,7 @@ async function loadUsers(){
 }
 async function setRole(uid,role){
   const d=await api('admin-users','POST',{user_id:uid,role});
-  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  if(!d.ok){msg('err','❌ '+(d.error&&!d.error.includes('TypeError')?d.error:'فشل الاتصال — حاول تاني'));return;}
   msg('ok','✅ تم تغيير الدور');loadUsers();
 }
 async function resetPw(uid,name){
@@ -779,7 +779,7 @@ async function resetPw(uid,name){
   if(!pw)return;
   if(pw.length<6){msg('err','⚠️ الباسورد أقل من 6 أحرف');return;}
   const d=await api('admin-reset-password','POST',{user_id:uid,new_password:pw});
-  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  if(!d.ok){msg('err','❌ '+(d.error&&!d.error.includes('TypeError')?d.error:'فشل الاتصال — حاول تاني'));return;}
   msg('ok','✅ تم تغيير الباسورد');
 }
 
@@ -788,98 +788,7 @@ loadStats();
 try{loadCourses();}catch(e){}
 try{loadPay('pending');}catch(e){}
 try{loadCoupons();}catch(e){}
-try{initComments();}catch(e){}
-
-// ── COUPONS ──────────────────────────────────────────────
-async function loadCoupons(){
-  const el=document.getElementById('couponsList');
-  if(!el)return;
-  el.innerHTML='<div class="spin"></div>';
-  const d=await apiFetch('coupons','');
-  if(!d.ok||!d.coupons?.length){el.innerHTML='<div class="muted" style="padding:20px">لا توجد كوبونات</div>';return;}
-  el.innerHTML=d.coupons.map(function(c){
-    const typeLabel=c.discount_type==='percent'?c.discount_value+'%':c.discount_value+' ج';
-    const expLabel=c.expires_at?'📅 '+new Date(c.expires_at).toLocaleDateString('ar-EG'):'لا ينتهي';
-    return '<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">'
-      +'<div><div style="font-size:15px;font-weight:900;letter-spacing:1px">'+esc(c.code)+'</div>'
-      +'<div class="muted">خصم: '+typeLabel+' &nbsp;|&nbsp; استُخدم '+c.used_count+'/'+c.max_uses+' مرة &nbsp;|&nbsp; '+expLabel+'</div></div>'
-      +'<div style="display:flex;gap:8px"><span style="background:'+(c.is_active?'rgba(34,197,94,.15)':'rgba(239,68,68,.12)')+';border:1px solid '+(c.is_active?'rgba(34,197,94,.3)':'rgba(239,68,68,.25)')+';color:'+(c.is_active?'#4ade80':'#f87171')+';padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800">'+(c.is_active?'✅ فعال':'❌ موقوف')+'</span>'
-      +'<button class="btn" style="padding:6px 12px;font-size:12px" onclick="deleteCoupon('+c.id+')">🗑️ حذف</button></div>'
-      +'</div>';
-  }).join('');
-}
-
-function showAddCoupon(){document.getElementById('addCouponForm').style.display='block';}
-
-async function createCoupon(){
-  const code=document.getElementById('cpCode').value.trim().toUpperCase();
-  const type=document.getElementById('cpType').value;
-  const val=parseInt(document.getElementById('cpVal').value)||0;
-  const max=parseInt(document.getElementById('cpMax').value)||100;
-  const exp=document.getElementById('cpExp').value||null;
-  const msgEl=document.getElementById('cpMsg');
-  if(!code||!val){msgEl.innerHTML='<div style="color:#f87171;margin-top:8px">❌ اكتب الكود والقيمة</div>';return;}
-  const d=await fetch(FN+'/coupons',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},
-    body:JSON.stringify({code,discount_type:type,discount_value:val,max_uses:max,expires_at:exp})
-  }).then(r=>r.json()).catch(()=>({}));
-  if(!d.ok){msgEl.innerHTML='<div style="color:#f87171;margin-top:8px">❌ '+(d.error||'خطأ')+'</div>';return;}
-  msgEl.innerHTML='<div style="color:#4ade80;margin-top:8px">✅ تم إنشاء الكوبون!</div>';
-  setTimeout(function(){document.getElementById('addCouponForm').style.display='none';loadCoupons();},1000);
-}
-
-async function deleteCoupon(id){
-  if(!confirm('حذف الكوبون؟'))return;
-  await fetch(FN+'/coupons',{method:'DELETE',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({id})});
-  loadCoupons();
-}
-
-// ── COMMENTS ─────────────────────────────────────────────
-async function loadAllComments(){
-  const el=document.getElementById('commentsList');
-  if(!el)return;
-  // Get all comments from video_library - use admin-courses to get course list then fetch per course
-  el.innerHTML='<div class="spin"></div>';
-  const cd=await apiFetch('admin-courses','');
-  if(!cd.ok||!cd.courses?.length){el.innerHTML='<div class="muted" style="padding:20px">لا توجد كورسات</div>';return;}
-  // Fetch comments for all videos — use a general endpoint
-  el.innerHTML='<div class="muted" style="padding:10px;font-size:12px">جاري تحميل التعليقات...</div>';
-  const allComments=[];
-  for(const course of cd.courses){
-    const vd=await apiFetch('course-videos','?course_id='+course.id);
-    if(!vd.ok||!vd.videos?.length) continue;
-    for(const v of vd.videos){
-      const cmd=await apiFetch('video-comments','?video_id='+v.id);
-      if(!cmd.ok||!cmd.comments?.length) continue;
-      cmd.comments.forEach(function(cm){allComments.push({...cm,video_title:v.title,course_title:course.title});});
-    }
-  }
-  if(!allComments.length){el.innerHTML='<div class="muted" style="padding:20px;text-align:center">لا توجد تعليقات بعد</div>';return;}
-  el.innerHTML=allComments.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);}).map(function(cm){
-    return '<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px">'
-      +'<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px">'
-      +'<div><div style="font-size:13px;font-weight:800;color:#c4b5fd">👤 '+esc(cm.user_name)+'</div>'
-      +'<div style="font-size:11px;color:var(--muted)">'+esc(cm.video_title)+' — '+esc(cm.course_title)+'</div></div>'
-      +'<div style="font-size:11px;color:var(--muted)">'+new Date(cm.created_at).toLocaleDateString('ar-EG')+'</div>'
-      +'</div>'
-      +'<div style="font-size:13px;margin-bottom:8px">'+esc(cm.message)+'</div>'
-      +(cm.admin_reply?'<div style="background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);border-radius:9px;padding:8px;font-size:12px;color:#67e8f9;margin-bottom:8px">💬 ردك: '+esc(cm.admin_reply)+'</div>':'')
-      +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
-      +'<input id="rep_'+cm.id+'" placeholder="اكتب الرد..." style="flex:1;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.07);color:var(--text);font-family:Cairo,sans-serif;font-size:12px"/>'
-      +'<button class="btn btn-grad" style="padding:7px 14px;font-size:12px" onclick="replyComment('+cm.id+')">إرسال الرد</button>'
-      +'</div></div>';
-  }).join('');
-}
-
-async function replyComment(id){
-  const inp=document.getElementById('rep_'+id);
-  const reply=inp.value.trim();
-  if(!reply)return;
-  const d=await fetch(FN+'/video-comments',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},
-    body:JSON.stringify({comment_id:id,admin_reply:reply})
-  }).then(r=>r.json()).catch(()=>({}));
-  if(d.ok){inp.value='';loadAllComments();}
-}
-
+// Comments loaded lazily on tab open
 
 
 </script>
