@@ -46,6 +46,8 @@ nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(28px) saturate(180%);
   display:grid;grid-template-columns:1fr 300px;gap:18px}
 @media(max-width:840px){.wrap{grid-template-columns:1fr}}
 .fade-up{opacity:0;animation:fadeUp .55s cubic-bezier(.34,1.36,.64,1) forwards}
+/* show hidden cards with animation */
+#vidInfo.show,#progCard.show,#schedCard.show{animation:fadeUp .4s ease forwards}
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── VIDEO PLAYER ── */
@@ -86,7 +88,7 @@ nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(28px) saturate(180%);
   font-family:'Cairo',sans-serif;transition:all .25s;flex:1;text-align:center}
 .tbtn.on{background:var(--pg);color:#fff;box-shadow:0 4px 18px var(--glow1)}
 .tbtn:not(.on):hover{background:var(--card2);color:var(--text)}
-.tpane{display:none;animation:fadeUp .3s ease}.tpane.on{display:block}
+.tpane{display:none}.tpane.on{display:block}
 
 /* comments */
 .cmt-item{background:var(--card);border:1px solid var(--border);border-radius:14px;
@@ -210,7 +212,7 @@ nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(28px) saturate(180%);
   <div>
     <div id="playerArea" class="fade-up" style="animation-delay:.05s"></div>
 
-    <div class="vid-info fade-up" id="vidInfo" style="display:none;animation-delay:.1s">
+    <div class="vid-info" id="vidInfo" style="display:none">
       <div class="vid-title" id="vidTitle">—</div>
       <div class="vid-meta">
         <span class="vid-badge" id="vidTypeBadge">▶️ فيديو</span>
@@ -226,7 +228,7 @@ nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(28px) saturate(180%);
       <button class="tbtn" onclick="openTab('tabCmt',this)">💬 الأسئلة</button>
     </div>
 
-    <div id="tabDesc" class="tpane on fade-up" style="animation-delay:.2s">
+    <div id="tabDesc" class="tpane on">
       <div class="card">
         <div id="vidDesc" style="font-size:14px;line-height:1.95;color:var(--text)">
           <div class="empty-state"><div class="icon">🎬</div>اختار فيديو من القائمة لتبدأ</div>
@@ -234,7 +236,7 @@ nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(28px) saturate(180%);
       </div>
     </div>
 
-    <div id="tabCmt" class="tpane fade-up" style="animation-delay:.2s">
+    <div id="tabCmt" class="tpane">
       <div id="cmtMsg" class="msg"></div>
       <div id="cmtList"></div>
       <div class="cmt-form-wrap">
@@ -248,7 +250,7 @@ nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(28px) saturate(180%);
 
   <!-- SIDEBAR -->
   <div>
-    <div class="card fade-up" id="progCard" style="display:none;animation-delay:.1s">
+    <div class="card" id="progCard" style="display:none">
       <div class="card-header"><div class="card-icon">📊</div>تقدمك في الكورس</div>
       <div class="prog-ring-wrap">
         <div class="prog-ring">
@@ -269,7 +271,7 @@ nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(28px) saturate(180%);
       </div>
     </div>
 
-    <div id="certCard" style="display:none" class="fade-up">
+    <div id="certCard" style="display:none">
       <div class="cert-card">
         <h3>🎓 مبروك! أتممت الكورس</h3>
         <p id="certCode"></p>
@@ -282,7 +284,7 @@ nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(28px) saturate(180%);
       <div id="vidList"><div class="spin"></div></div>
     </div>
 
-    <div class="card fade-up" id="schedCard" style="display:none;animation-delay:.25s">
+    <div class="card" id="schedCard" style="display:none">
       <div class="card-header"><div class="card-icon">🗓️</div>مواعيد المجموعات</div>
       <div id="schedList"></div>
     </div>
@@ -419,7 +421,7 @@ async function playVideo(vid){
   document.getElementById('vidTypeBadge').textContent=vid.video_type==='upload'?'🎞️ مرفوع':'▶️ يوتيوب';
   const descEl=document.getElementById('vidDesc');
   if(vid.description&&vid.description.trim()){
-    descEl.textContent=vid.description;
+    descEl.innerHTML=esc(vid.description).replace(/\n/g,'<br>');
     descEl.style.color='var(--text)';
   } else {
     descEl.innerHTML='<div class="empty-state"><div class="icon">📝</div>مفيش وصف لهذا الفيديو لسه</div>';
