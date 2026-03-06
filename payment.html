@@ -1,138 +1,186 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Make Future | Payment</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Make Future | الدفع</title>
   <style>
     :root{color-scheme:dark}
+    *{box-sizing:border-box}
     body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;padding:20px;display:grid;place-items:center}
-    .card{width:min(720px,100%);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+    .card{width:min(700px,100%);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:24px;box-shadow:0 10px 40px rgba(0,0,0,.4)}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:800}
-    button.primary{border:none;background:linear-gradient(135deg,#7c3aed,#06b6d4)}
-    input,select,textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;outline:none}
-    textarea{min-height:80px}
-    .muted{opacity:.82;font-size:13px;line-height:1.6}
-    .hr{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.14),transparent);margin:14px 0}
-    .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
-    .msg{margin-top:10px;padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.14);display:none}
+    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13px}
+    a:hover,button:hover{background:rgba(255,255,255,.14)}
+    button.primary{border:none;background:linear-gradient(135deg,#7c3aed,#06b6d4);padding:13px 20px;font-size:15px;width:100%;margin-top:4px}
+    button.primary:disabled{opacity:.5;cursor:not-allowed}
+    input,select,textarea{width:100%;padding:10px 13px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:#fff;outline:none;font-size:14px;transition:border-color .2s}
+    input:focus,select:focus,textarea:focus{border-color:#7c3aed88}
+    select option{background:#1a1f35}
+    textarea{min-height:90px;resize:vertical}
+    .muted{opacity:.8;font-size:13px;line-height:1.7}
+    .hr{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.14),transparent);margin:16px 0}
+    .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px;margin-bottom:14px}
+    .label{font-size:12px;opacity:.75;margin-bottom:6px;display:block}
+    .field{margin-bottom:13px}
+    .badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800;background:linear-gradient(135deg,#7c3aed,#06b6d4)}
+    .msg{margin-top:14px;padding:12px 15px;border-radius:13px;font-size:13px;display:none}
     .msg.show{display:block}
+    .msg.err{background:#7f1d1d;border:1px solid #991b1b}
+    .msg.ok{background:#065f46;border:1px solid #047857}
+    .step{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);margin-bottom:8px}
+    .step-num{width:26px;height:26px;border-radius:999px;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:grid;place-items:center;font-weight:900;font-size:13px;flex-shrink:0}
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="row" style="justify-content:space-between">
-      <div>
-        <div style="font-size:18px;font-weight:900">الدفع</div>
-        <div class="muted">اختار طريقة الدفع وسجل رقم العملية/ملاحظة</div>
-      </div>
-      <div class="row">
-        <a href="student.html">رجوع</a>
-        <a href="https://wa.me/201210575530" target="_blank" rel="noreferrer">واتساب الدعم</a>
-      </div>
+<div class="card">
+
+  <!-- Header -->
+  <div class="row" style="justify-content:space-between;margin-bottom:16px">
+    <div>
+      <div style="font-size:20px;font-weight:900">💳 صفحة الدفع</div>
+      <div class="muted">سجّل طلب دفعك وهيتراجع من الأدمن</div>
     </div>
-
-    <div class="hr"></div>
-
-    <div class="box">
-      <div class="muted" id="courseBox">…</div>
-      <div class="muted" style="margin-top:8px">
-        Vodafone Cash / InstaPay على: <b>01210575530</b><br>
-        رقم تواصل إضافي: <b>01006693681</b>
-      </div>
-    </div>
-
-    <div class="hr"></div>
-
-    <div class="box">
-      <div class="muted">طريقة الدفع</div>
-      <select id="method" style="margin-top:8px">
-        <option value="vodafone">Vodafone Cash</option>
-        <option value="instapay">InstaPay</option>
-      </select>
-
-      <div class="muted" style="margin-top:10px">المبلغ (اختياري)</div>
-      <input id="amount" placeholder="مثال: 300" />
-
-      <div class="muted" style="margin-top:10px">رقم العملية / ملاحظة (مهم)</div>
-      <textarea id="note" placeholder="مثال: رقم التحويل / آخر 4 أرقام / وقت التحويل…"></textarea>
-
-      <div class="row" style="margin-top:12px">
-        <button class="primary" onclick="sendPayment()">تأكيد إرسال طلب الدفع</button>
-        <button onclick="openWhats()">مشكلة في الدفع؟</button>
-      </div>
-
-      <div id="msg" class="msg"></div>
+    <div class="row">
+      <a href="student.html">← رجوع</a>
+      <a href="https://wa.me/201210575530" target="_blank">واتساب</a>
     </div>
   </div>
 
+  <!-- الكورس المختار -->
+  <div class="box">
+    <div class="muted" style="margin-bottom:8px;font-weight:700">🎓 الكورس المختار</div>
+    <div id="courseBox" class="muted">جاري التحميل…</div>
+  </div>
+
+  <!-- خطوات الدفع -->
+  <div class="box">
+    <div class="muted" style="font-weight:700;margin-bottom:10px">📋 خطوات الدفع</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="muted">حوّل المبلغ على <b>Vodafone Cash</b> أو <b>InstaPay</b><br>على الرقم: <b style="font-size:15px">01210575530</b></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="muted">سجّل رقم العملية أو آخر 4 أرقام من الرقم اللي حولت منه</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="muted">اضغط "إرسال طلب الدفع" وانتظر موافقة الأدمن — هتوصلك إشعار ✅</div>
+    </div>
+  </div>
+
+  <!-- فورم الدفع -->
+  <div class="box">
+    <div class="field">
+      <span class="label">طريقة الدفع</span>
+      <select id="method">
+        <option value="vodafone">💜 Vodafone Cash</option>
+        <option value="instapay">🔵 InstaPay</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <span class="label">المبلغ المدفوع (جنيه)</span>
+      <input id="amount" type="number" placeholder="مثال: 300" min="0"/>
+    </div>
+
+    <div class="field">
+      <span class="label">رقم العملية / التحويل <span style="color:#f87171">*</span></span>
+      <input id="transaction_id" placeholder="مثال: 4567 أو رقم الإيصال"/>
+    </div>
+
+    <div class="field">
+      <span class="label">ملاحظة إضافية (اختياري)</span>
+      <textarea id="note" placeholder="مثال: حولت الساعة 3 العصر من رقم 012xxxxxxxx…"></textarea>
+    </div>
+
+    <button class="primary" id="btnPay" onclick="sendPayment()">📤 إرسال طلب الدفع</button>
+    <button style="margin-top:10px;width:100%;text-align:center" onclick="openWhats()">❓ مشكلة في الدفع؟ تواصل واتساب</button>
+
+    <div id="msg" class="msg"></div>
+  </div>
+
+</div>
+
 <script>
-  const me = JSON.parse(localStorage.getItem("mf_user") || "null");
-  if(!me) location.href="login.html";
+const FN  = "https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4";
 
-  const selectedCourse = JSON.parse(localStorage.getItem("mf_selected_course") || "null");
-  const courseBox = document.getElementById("courseBox");
-  if(!selectedCourse){
-    courseBox.innerHTML = "مفيش كورس مختار — ارجع للطالب واختار كورس.";
-  } else {
-    courseBox.innerHTML = `الكورس: <b>${escapeHtml(selectedCourse.title)}</b> — <b>${escapeHtml(selectedCourse.subject)}</b> (ID: ${selectedCourse.id})`;
+const me = JSON.parse(localStorage.getItem("mf_user")||"null");
+if(!me) location.href="login.html";
+
+const selectedCourse = JSON.parse(localStorage.getItem("mf_selected_course")||"null");
+const courseBox = document.getElementById("courseBox");
+
+if(!selectedCourse){
+  courseBox.innerHTML = `<span style="color:#f87171">⚠️ مفيش كورس مختار — <a href="student.html" style="color:#c4b5fd">ارجع واختار كورس الأول</a></span>`;
+  document.getElementById("btnPay").disabled = true;
+} else {
+  courseBox.innerHTML = `
+    <b>${esc(selectedCourse.title)}</b>
+    <span class="badge" style="margin-right:8px">${esc(selectedCourse.subject)}</span><br>
+    <span class="muted">السعر: <b>${selectedCourse.price||0} جنيه</b></span>`;
+  // ضع المبلغ تلقائياً
+  if(selectedCourse.price) document.getElementById("amount").value = selectedCourse.price;
+}
+
+function showMsg(type, text){
+  const m = document.getElementById("msg");
+  m.className = "msg show " + type;
+  m.textContent = text;
+}
+
+async function sendPayment(){
+  if(!selectedCourse){ showMsg("err","⚠️ اختار كورس الأول"); return; }
+
+  const transaction_id = document.getElementById("transaction_id").value.trim();
+  const note           = document.getElementById("note").value.trim();
+  const method         = document.getElementById("method").value;
+  const amount         = document.getElementById("amount").value;
+
+  if(!transaction_id){ showMsg("err","⚠️ اكتب رقم العملية عشان الأدمن يقدر يتأكد"); return; }
+
+  const btn = document.getElementById("btnPay");
+  btn.disabled = true;
+  btn.textContent = "جاري الإرسال…";
+  showMsg("ok","⏳ جاري إرسال الطلب…");
+
+  const res = await fetch(`${FN}/create-payment`,{
+    method:"POST",
+    headers:{"apikey":KEY,"Content-Type":"application/json"},
+    body: JSON.stringify({
+      user_id:       me.id,
+      course_id:     selectedCourse.id,
+      method,
+      amount:        parseInt(amount)||0,
+      transaction_id,
+      receipt_note:  note||null
+    })
+  });
+
+  const data = await res.json().catch(()=>({}));
+  btn.disabled = false;
+  btn.textContent = "📤 إرسال طلب الدفع";
+
+  if(!data.ok){
+    showMsg("err","❌ " + (data.error||"حصل خطأ"));
+    return;
   }
 
-  function show(text){
-    const m = document.getElementById("msg");
-    m.textContent = text;
-    m.className = "msg show";
-  }
+  showMsg("ok","✅ تم إرسال طلب الدفع بنجاح! هيتراجع من الأدمن وهتوصلك إشعار.");
+  localStorage.removeItem("mf_selected_course");
+  setTimeout(()=> location.href="student.html", 2000);
+}
 
-  async function sendPayment(){
-    if(!selectedCourse){
-      show("اختار كورس الأول من صفحة الطالب.");
-      return;
-    }
-    const payload = {
-      user_id: me.id,
-      course_id: selectedCourse.id,
-      method: document.getElementById("method").value,
-      amount: document.getElementById("amount").value.trim() || null,
-      receipt_note: document.getElementById("note").value.trim()
-    };
+function openWhats(){
+  const text = encodeURIComponent(
+    `مرحباً، عندي مشكلة في الدفع - Make Future\nالاسم: ${me.name||""}\nالموبايل: ${me.phone||""}\nالكورس: ${selectedCourse?.title||"—"}`
+  );
+  window.open(`https://wa.me/201210575530?text=${text}`, "_blank");
+}
 
-    if(!payload.receipt_note){
-      show("اكتب رقم العملية / ملاحظة عشان الأدمن يقدر يراجع.");
-      return;
-    }
-
-    show("جاري إرسال الطلب…");
-
-    const res = await fetch("/.netlify/functions/create_payment", {
-      method: "POST",
-      headers: {"content-type":"application/json"},
-      body: JSON.stringify(payload)
-    });
-
-    const data = await res.json().catch(()=>({}));
-
-    if(!res.ok || !data.ok){
-      show(data.error || "حصل خطأ");
-      return;
-    }
-
-    show("تم إرسال طلب الدفع ✅ (Pending) — هيتراجع عند الأدمن.");
-    setTimeout(()=> location.href="student.html", 900);
-  }
-
-  function openWhats(){
-    // يفتح واتساب مع رسالة جاهزة
-    const text = encodeURIComponent(`عندي مشكلة في الدفع - Make Future
-الاسم: ${me.full_name || ""}
-موبايل: ${me.phone_student || ""}
-الكورس: ${selectedCourse ? selectedCourse.title : "-"}
-`);
-    location.href = `https://wa.me/201210575530?text=${text}`;
-  }
-
-  function escapeHtml(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
+function esc(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
 </script>
 </body>
 </html>
