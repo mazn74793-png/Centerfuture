@@ -112,7 +112,7 @@ nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(22px);background:rgba
       <div id="selBox" class="muted">—</div>
       <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn btn-grad" onclick="goPay()">💳 ادفع الآن</button>
-        <a id="btnOpen" href="#" class="btn-open" style="display:none">▶️ افتح الكورس</a>
+        <button id="btnOpen" class="btn-open" style="display:none">▶️ افتح الكورس</button>
       </div>
       <div class="muted" style="margin-top:8px">Vodafone Cash / InstaPay: <b>01210575530</b></div>
     </div>
@@ -169,7 +169,7 @@ function renderSel(){
   if(!selC){box.innerHTML='—';btn.style.display='none';return;}
   box.innerHTML='<b>'+esc(selC.title)+'</b><br><span class="tag">'+esc(selC.subject)+'</span> <span class="price-badge">'+(selC.price||0)+' جنيه</span>';
   apiFetch('check-enrollment','?user_id='+me.id+'&course_id='+selC.id).then(function(d){
-    if(d.enrolled){btn.style.display='inline-block';btn.href='course.html?id='+selC.id;}
+    if(d.enrolled){btn.style.display='inline-block';btn.onclick=()=>openCourse(selC.id,selC.title,selC.subject,selC.price||0);}
   });
 }
 renderSel();
@@ -202,7 +202,7 @@ async function loadCerts(){
     return '<div class="cert-card"><div style="font-size:32px">🏆</div>'
       +'<div style="flex:1"><div style="font-size:14px;font-weight:800">'+esc(c.course_title||'')+'</div>'
       +'<div class="muted">'+esc(c.subject||'')+' · '+esc(c.teacher||'')+'</div></div>'
-      +'<a href="course.html?id='+c.course_id+'" class="btn-open" style="font-size:12px;padding:6px 12px">🏆 عرض</a></div>';
+      +'<button class="btn-open" style="font-size:12px;padding:6px 12px" onclick="openCourse('+c.course_id+',\''+escA(c.course_title||'')+'\',\''+escA(c.subject||'')+'\',0)">🏆 عرض</button></div>';
   }).join('');
 }
 
@@ -228,7 +228,7 @@ async function loadCourses(){
       c.schedules.forEach(function(s){schHtml+='<div class="sch-item">🗓️ <b>'+esc(s.day_of_week)+'</b> — '+esc(s.start_time)+' → '+esc(s.end_time)+(s.notes?' ('+esc(s.notes)+')':'')+'</div>';});
     } else {schHtml='<div class="muted" style="font-size:11px;margin-top:4px">مواعيد لسه ما اتحطتش</div>';}
     var actionBtns='';
-    if(isEnrolled) actionBtns+='<a href="course.html?id='+c.id+'" class="btn-open">▶️ فتح الكورس</a>';
+    if(isEnrolled) actionBtns+='<button class="btn-open" onclick="openCourse('+c.id+',\''+escA(c.title)+'\',\''+escA(c.subject)+'\','+(c.price||0)+')">▶️ فتح الكورس</button>';
     if(isPending)  actionBtns+='<span class="pending-tag">⏳ قيد المراجعة</span>';
     var div=document.createElement('div');
     div.className='course-card';
@@ -253,6 +253,15 @@ function selCourse(id,title,subject,price){
   localStorage.setItem('mf_selected_course',JSON.stringify(selC));
   renderSel();
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// تهريب الـ strings عشان تتحط في onclick attributes
+function escA(s){return String(s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');}
+
+// فتح الكورس — بيحفظ في localStorage الأول ثم بينتقل
+function openCourse(id,title,subject,price){
+  localStorage.setItem('mf_selected_course',JSON.stringify({id,title,subject,price:price||0}));
+  location.href='course.html';
 }
 
 loadNotifs();
