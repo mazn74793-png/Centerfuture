@@ -1,446 +1,532 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Make Future | لوحة الأدمن</title>
-  <style>
-    :root{color-scheme:dark}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;padding:20px}
-    .card{max-width:1200px;margin:0 auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
-    .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
-    .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:grid;place-items:center;font-weight:900;font-size:13px}
-    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:9px 13px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13px}
-    a:hover,button:hover{background:rgba(255,255,255,.14)}
-    button.ok{border:none;background:linear-gradient(135deg,#16a34a,#06b6d4)}
-    button.bad{border:none;background:linear-gradient(135deg,#dc2626,#7c3aed)}
-    .muted{opacity:.8;font-size:13px;line-height:1.7}
-    .hr{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.14),transparent);margin:14px 0}
-    .tabs{display:flex;gap:8px;flex-wrap:wrap}
-    .tabBtn.active{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.3)}
-    .tab{display:none;margin-top:14px}
-    .tab.active{display:block}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media(max-width:760px){.grid{grid-template-columns:1fr}}
-    .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
-    input,select{width:100%;padding:9px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;outline:none;font-size:13px}
-    table{width:100%;border-collapse:collapse;margin-top:10px}
-    th,td{border-bottom:1px solid rgba(255,255,255,.1);padding:10px 8px;font-size:13px;vertical-align:top}
-    th{text-align:right;opacity:.75;font-weight:600}
-    .msg{margin-top:10px;padding:10px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);display:none;font-size:13px}
-    .msg.show{display:block}
-    .pill{display:inline-flex;gap:6px;align-items:center;border:1px solid rgba(255,255,255,.14);padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700}
-    .btnSm{padding:7px 11px;border-radius:10px;font-size:12px}
-  </style>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Make Future | لوحة الأدمن</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07091a;--bg2:#0d1230;--card:rgba(255,255,255,.055);--border:rgba(255,255,255,.1);--text:#eef0ff;--muted:rgba(238,240,255,.5);--grad:linear-gradient(135deg,#7c3aed,#06b6d4);--r:18px;color-scheme:dark}
+[data-theme=light]{--bg:#f2f4ff;--bg2:#e6eaff;--card:rgba(255,255,255,.8);--border:rgba(0,0,0,.09);--text:#0d1230;--muted:rgba(13,18,48,.5);color-scheme:light}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .35s,color .35s}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 65% 50% at 10% 10%,rgba(124,58,237,.07) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 88% 88%,rgba(6,182,212,.05) 0%,transparent 55%);pointer-events:none;z-index:0}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.a0{opacity:0;animation:up .5s ease forwards}.a1{animation-delay:.07s}.a2{animation-delay:.14s}.a3{animation-delay:.21s}.a4{animation-delay:.28s}
+nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(22px);background:rgba(7,9,26,.84);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;animation:fi .4s ease}
+[data-theme=light] nav{background:rgba(242,244,255,.9)}
+.nav-logo{font-size:18px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.nb{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);padding:7px 13px;border-radius:11px;text-decoration:none;font-weight:700;font-size:13px;font-family:'Cairo',sans-serif;transition:all .2s}
+.nb:hover{background:rgba(124,58,237,.18);border-color:#7c3aed77;transform:translateY(-1px)}
+.thbtn{cursor:pointer;border:1px solid var(--border);background:var(--card);width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:15px;transition:all .25s}
+.thbtn:hover{transform:rotate(22deg) scale(1.12)}
+.wrap{max-width:1250px;margin:0 auto;padding:20px 18px;position:relative;z-index:1}
+.box{background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px}
+[data-theme=light] .box{background:rgba(255,255,255,.6)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:740px){.grid2{grid-template-columns:1fr}}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-flex;gap:5px;align-items:center;border:1px solid var(--border);padding:4px 11px;border-radius:999px;font-size:12px;font-weight:700}
+.hr{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:14px 0}
+.muted{color:var(--muted);font-size:13px;line-height:1.75}
+input,select,textarea{width:100%;padding:9px 13px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text);font-size:13px;font-family:'Cairo',sans-serif;outline:none;transition:all .2s}
+[data-theme=light] input,[data-theme=light] select,[data-theme=light] textarea{background:rgba(0,0,0,.04)}
+input:focus,select:focus,textarea:focus{border-color:#7c3aed88}
+select option{background:var(--bg2)}
+textarea{min-height:72px;resize:vertical}
+.flabel{font-size:12px;color:var(--muted);margin-bottom:5px;display:block}
+.field{margin-bottom:12px}
+.btn{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);padding:9px 14px;border-radius:12px;font-weight:800;font-size:13px;font-family:'Cairo',sans-serif;transition:all .2s}
+.btn:hover{background:rgba(255,255,255,.12);transform:translateY(-1px)}
+.bsm{padding:6px 11px;border-radius:10px;font-size:12px}
+.bok{border:none;background:linear-gradient(135deg,#16a34a,#06b6d4);color:#fff}
+.bbad{border:none;background:linear-gradient(135deg,#dc2626,#7c3aed);color:#fff}
+.bwarn{border:none;background:linear-gradient(135deg,#d97706,#f59e0b);color:#fff}
+.bgrad{border:none;background:var(--grad);color:#fff}
+/* Tabs */
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.tbtn{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--muted);padding:9px 16px;border-radius:13px;font-weight:700;font-size:13px;font-family:'Cairo',sans-serif;transition:all .22s}
+.tbtn:hover{background:rgba(124,58,237,.14);color:var(--text)}
+.tbtn.on{background:rgba(124,58,237,.2);border-color:#7c3aed88;color:#c4b5fd}
+.tpane{display:none;animation:up .35s ease}.tpane.on{display:block}
+.msgbar{padding:10px 14px;border-radius:13px;font-size:13px;display:none;margin:10px 0}
+.msgbar.show{display:block}.msgbar.ok{background:#064e3b;border:1px solid #047857}.msgbar.err{background:#7f1d1d;border:1px solid #991b1b}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border-bottom:1px solid var(--border);padding:10px 8px;font-size:13px;vertical-align:top}
+th{text-align:right;color:var(--muted);font-weight:600}
+.spin{width:36px;height:36px;border-radius:50%;border:3px solid var(--border);border-top-color:#7c3aed;animation:spin 1s linear infinite;margin:20px auto}
+/* Stats */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:10px}
+.stat-item{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);border-radius:14px;padding:14px;text-align:center}
+.stat-num{font-size:28px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:12px;color:var(--muted);margin-top:4px}
+/* Video items */
+.vid-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;margin-top:8px;display:flex;gap:10px;align-items:flex-start;transition:all .22s}
+.vid-item:hover{border-color:#7c3aed55}
+.vid-num{width:30px;height:30px;flex-shrink:0;border-radius:9px;background:var(--grad);display:grid;place-items:center;font-weight:900;font-size:12px;color:#fff}
+.vid-meta{flex:1;min-width:0}
+.vid-meta h4{font-size:14px;font-weight:700;margin-bottom:3px}
+.vid-meta p{font-size:12px;color:var(--muted)}
+</style>
 </head>
 <body>
-<div class="card">
-  <div class="top">
-    <div class="row">
-      <div class="logo">MF</div>
-      <div>
-        <div style="font-size:18px;font-weight:900">لوحة الأدمن</div>
-        <div class="muted">Courses · Schedules · Payments</div>
-      </div>
+<nav>
+  <div class="nav-logo">MF — لوحة الأدمن</div>
+  <div class="nav-row">
+    <a href="student.html" class="nb">👁️ طالب</a>
+    <a href="change-password.html" class="nb">🔑 الباسورد</a>
+    <div class="thbtn" id="thb" onclick="toggleTheme()">🌙</div>
+    <button class="nb" onclick="logout()">خروج</button>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div id="msgbar" class="msgbar a0 a1"></div>
+
+  <div class="tabs a0 a2">
+    <button class="tbtn on" onclick="openTab('dash',this)">📊 Dashboard</button>
+    <button class="tbtn" onclick="openTab('courses',this)">🎓 الكورسات</button>
+    <button class="tbtn" onclick="openTab('sched',this)">🗓️ المواعيد</button>
+    <button class="tbtn" onclick="openTab('videos',this)">🎬 الفيديوهات</button>
+    <button class="tbtn" onclick="openTab('pay',this)">💳 الدفع</button>
+    <button class="tbtn" onclick="openTab('users',this)">👥 المستخدمين</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dash" class="tpane on">
+    <div class="box a0 a3">
+      <div class="pill">📊 إحصائيات سريعة</div>
+      <div id="statGrid" class="stat-grid"><div class="spin"></div></div>
+      <button class="btn bsm" style="margin-top:12px" onclick="loadStats()">🔄 تحديث</button>
     </div>
-    <div class="row">
-      <a href="index.html">الرئيسية</a>
-      <a href="student.html">الطالب</a>
-      <a href="admin-payments.html">طلبات الدفع</a>
-      <a href="change-password.html">🔑 تغيير الباسورد</a>
-      <button onclick="logout()">خروج</button>
+    <div class="grid2">
+      <div class="box a0 a4">
+        <div class="pill">🧾 آخر مدفوعات</div>
+        <div id="latestPay" class="muted" style="margin-top:8px">…</div>
+      </div>
+      <div class="box a0 a4" style="animation-delay:.35s">
+        <div class="pill">🧑‍🎓 آخر تسجيلات</div>
+        <div id="latestUsers" class="muted" style="margin-top:8px">…</div>
+      </div>
     </div>
   </div>
 
-  <div id="msg" class="msg"></div>
-  <div class="hr"></div>
-
-  <div class="tabs">
-    <button class="tabBtn active" onclick="openTab('dash',this)">📊 Dashboard</button>
-    <button class="tabBtn" onclick="openTab('courses',this)">🎓 Courses</button>
-    <button class="tabBtn" onclick="openTab('sched',this)">🗓️ Schedules</button>
-    <button class="tabBtn" onclick="openTab('pay',this)">💳 Payments</button>
-    <button class="tabBtn" onclick="openTab('users',this)">👥 المستخدمين</button>
-  </div>
-
-  <!-- ===== DASHBOARD ===== -->
-  <div id="dash" class="tab active">
-    <div class="grid">
-      <div class="box">
-        <div class="pill">📌 أرقام سريعة</div>
-        <div id="stats" class="muted" style="margin-top:10px">Loading…</div>
-        <div class="row" style="margin-top:10px">
-          <button class="btnSm" onclick="loadStats()">تحديث</button>
-        </div>
-      </div>
-      <div class="box">
-        <div class="pill">🧾 آخر طلبات دفع</div>
-        <div id="latestPay" class="muted" style="margin-top:10px">Loading…</div>
-      </div>
-    </div>
-    <div class="box" style="margin-top:12px">
-      <div class="pill">🧑‍🎓 آخر تسجيلات</div>
-      <div id="latestUsers" class="muted" style="margin-top:10px">Loading…</div>
-    </div>
-  </div>
-
-  <!-- ===== COURSES ===== -->
-  <div id="courses" class="tab">
+  <!-- COURSES -->
+  <div id="courses" class="tpane">
     <div class="box">
-      <div class="pill">🔍 فلترة</div>
-      <div class="row" style="margin-top:10px">
-        <div style="flex:1;min-width:160px">
-          <div class="muted" style="margin-bottom:5px">السنة</div>
-          <select id="grade">
-            <option value="">الكل</option>
-            <option value="3prep">3 إعدادي</option>
-            <option value="1sec">1 ثانوي</option>
-            <option value="2sec">2 ثانوي</option>
-            <option value="3sec">3 ثانوي</option>
-          </select>
+      <div class="pill" style="margin-bottom:12px">🔍 فلترة وعرض</div>
+      <div class="row">
+        <div style="flex:1;min-width:140px">
+          <span class="flabel">السنة</span>
+          <select id="fGrade"><option value="">الكل</option><option value="3prep">3 إعدادي</option><option value="1sec">1 ثانوي</option><option value="2sec">2 ثانوي</option><option value="3sec">3 ثانوي</option></select>
         </div>
-        <div style="flex:1;min-width:160px">
-          <div class="muted" style="margin-bottom:5px">المادة</div>
-          <select id="subject">
-            <option value="">الكل</option>
-            <option value="Math">Math</option>
-            <option value="English">English</option>
-          </select>
+        <div style="flex:1;min-width:140px">
+          <span class="flabel">المادة</span>
+          <select id="fSubject"><option value="">الكل</option><option value="Math">Math</option><option value="English">English</option></select>
         </div>
-        <button class="btnSm" onclick="loadCourses()" style="align-self:flex-end">تحديث</button>
+        <button class="btn bsm" onclick="loadCourses()" style="align-self:flex-end">تحديث</button>
       </div>
-      <table id="coursesTable">
-        <thead><tr><th>الكورس</th><th>المدرس</th><th>السنة</th><th>السعر</th><th>Active</th><th>مواعيد</th></tr></thead>
+      <table id="tCourses">
+        <thead><tr><th>الكورس</th><th>المدرس</th><th>السنة</th><th>السعر</th><th>Active</th><th>إجراء</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
-    <div class="box" style="margin-top:12px">
-      <div class="pill">➕ إضافة كورس</div>
-      <div class="grid" style="margin-top:12px">
-        <div>
-          <div class="muted" style="margin-bottom:5px">اسم الكورس</div>
-          <input id="cTitle" placeholder="مثال: Algebra 1"/>
-        </div>
-        <div>
-          <div class="muted" style="margin-bottom:5px">المدرس</div>
-          <input id="cTeacher" placeholder="مثال: Mr. Karim"/>
-        </div>
-        <div>
-          <div class="muted" style="margin-bottom:5px">السنة</div>
-          <select id="cGrade">
-            <option value="3prep">3 إعدادي</option>
-            <option value="1sec">1 ثانوي</option>
-            <option value="2sec">2 ثانوي</option>
-            <option value="3sec">3 ثانوي</option>
-          </select>
-        </div>
-        <div>
-          <div class="muted" style="margin-bottom:5px">المادة</div>
-          <select id="cSubject">
-            <option value="Math">Math</option>
-            <option value="English">English</option>
-          </select>
-        </div>
-        <div>
-          <div class="muted" style="margin-bottom:5px">السعر (جنيه)</div>
-          <input id="cPrice" type="number" placeholder="0"/>
-        </div>
+    <div class="box">
+      <div class="pill" style="margin-bottom:12px">➕ إضافة / تعديل كورس</div>
+      <input type="hidden" id="cId"/>
+      <div class="grid2">
+        <div class="field"><span class="flabel">اسم الكورس</span><input id="cTitle" placeholder="مثال: Algebra 1"/></div>
+        <div class="field"><span class="flabel">المدرس</span><input id="cTeacher" placeholder="مثال: Mr. Karim"/></div>
+        <div class="field"><span class="flabel">السنة</span><select id="cGrade"><option value="3prep">3 إعدادي</option><option value="1sec">1 ثانوي</option><option value="2sec">2 ثانوي</option><option value="3sec">3 ثانوي</option></select></div>
+        <div class="field"><span class="flabel">المادة</span><select id="cSubject"><option value="Math">Math</option><option value="English">English</option></select></div>
+        <div class="field"><span class="flabel">السعر (جنيه)</span><input id="cPrice" type="number" placeholder="0"/></div>
       </div>
-      <div class="row" style="margin-top:10px">
-        <label class="muted" style="display:flex;gap:8px;align-items:center;border:none;background:none;padding:0">
-          <input type="checkbox" id="cActive" checked style="width:auto"/> Active
-        </label>
-        <button class="btnSm" onclick="createCourse()">💾 حفظ</button>
+      <div class="row">
+        <label style="display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer"><input type="checkbox" id="cActive" checked style="width:auto"/> Active</label>
+        <button class="btn bgrad" onclick="saveCourse()">💾 حفظ الكورس</button>
+        <button class="btn bsm" onclick="clearCourseForm()" id="btnCancelC" style="display:none">إلغاء</button>
       </div>
     </div>
   </div>
 
-  <!-- ===== SCHEDULES ===== -->
-  <div id="sched" class="tab">
+  <!-- SCHEDULES -->
+  <div id="sched" class="tpane">
     <div class="box">
       <div class="pill">📌 الكورس المختار</div>
-      <div id="selectedCourse" class="muted" style="margin-top:10px">اختار كورس من تبويب Courses واضغط "مواعيد"</div>
+      <div id="selCourse" class="muted" style="margin-top:8px">اختار كورس من تبويب الكورسات واضغط "مواعيد"</div>
     </div>
-    <div class="box" style="margin-top:12px">
-      <div class="pill">🗓️ المواعيد</div>
-      <table id="schTable">
-        <thead><tr><th>اليوم</th><th>من</th><th>إلى</th><th>ملاحظات</th><th>إجراء</th></tr></thead>
-        <tbody></tbody>
-      </table>
+    <div class="box">
+      <div class="pill" style="margin-bottom:10px">🗓️ المواعيد الحالية</div>
+      <table id="tSch"><thead><tr><th>اليوم</th><th>من</th><th>إلى</th><th>ملاحظات</th><th>إجراء</th></tr></thead><tbody></tbody></table>
       <div class="hr"></div>
-      <div class="pill">➕ إضافة موعد</div>
-      <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:10px">
-        <div>
-          <div class="muted" style="margin-bottom:5px">اليوم</div>
-          <input id="nDay" placeholder="مثال: السبت"/>
-        </div>
-        <div>
-          <div class="muted" style="margin-bottom:5px">ملاحظات</div>
-          <input id="nNotes" placeholder="اختياري"/>
-        </div>
-        <div>
-          <div class="muted" style="margin-bottom:5px">من</div>
-          <input id="nStart" placeholder="5:00 PM"/>
-        </div>
-        <div>
-          <div class="muted" style="margin-bottom:5px">إلى</div>
-          <input id="nEnd" placeholder="6:30 PM"/>
-        </div>
+      <div class="pill" style="margin-bottom:10px">➕ إضافة موعد</div>
+      <div class="grid2">
+        <div class="field"><span class="flabel">اليوم</span><input id="nDay" placeholder="السبت"/></div>
+        <div class="field"><span class="flabel">ملاحظات</span><input id="nNotes" placeholder="اختياري"/></div>
+        <div class="field"><span class="flabel">من</span><input id="nStart" placeholder="5:00 PM"/></div>
+        <div class="field"><span class="flabel">إلى</span><input id="nEnd" placeholder="6:30 PM"/></div>
       </div>
-      <div class="row" style="margin-top:10px">
-        <button class="btnSm" onclick="addSchedule()">➕ إضافة</button>
-      </div>
+      <button class="btn bgrad bsm" onclick="addSch()">➕ إضافة</button>
     </div>
   </div>
 
-  <!-- ===== PAYMENTS ===== -->
-  <div id="pay" class="tab">
+  <!-- VIDEOS -->
+  <div id="videos" class="tpane">
     <div class="box">
-      <div class="pill">💳 طلبات الدفع</div>
-      <div class="row" style="margin-top:10px">
-        <button class="btnSm" onclick="loadPayments('pending')">⏳ Pending</button>
-        <button class="btnSm ok" onclick="loadPayments('approved')">✅ Approved</button>
-        <button class="btnSm bad" onclick="loadPayments('rejected')">❌ Rejected</button>
-      </div>
-      <table>
-        <thead><tr><th>طالب</th><th>كورس</th><th>تفاصيل الدفع</th><th>إجراء</th></tr></thead>
-        <tbody id="payBody"></tbody>
-      </table>
+      <div class="pill">📌 الكورس المختار للفيديوهات</div>
+      <div id="selCourseVid" class="muted" style="margin-top:8px">اختار كورس من تبويب الكورسات واضغط "فيديوهات"</div>
     </div>
-  </div>
-
-  <!-- ===== USERS ===== -->
-  <div id="users" class="tab">
     <div class="box">
-      <div class="pill">👥 كل المستخدمين</div>
-      <div class="row" style="margin-top:10px">
-        <button class="btnSm" onclick="loadUsers()">🔄 تحديث</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+        <div class="pill">🎬 الفيديوهات الحالية</div>
+        <button class="btn bsm" onclick="loadVideos()">🔄 تحديث</button>
       </div>
-      <table>
-        <thead><tr><th>الاسم</th><th>الموبايل</th><th>السنة</th><th>الدور الحالي</th><th>تغيير الدور</th></tr></thead>
-        <tbody id="usersBody"></tbody>
-      </table>
+      <div id="vidList"><div class="muted">اختار كورس الأول</div></div>
+    </div>
+    <div class="box">
+      <div class="pill" style="margin-bottom:12px">➕ إضافة فيديو يوتيوب</div>
+      <input type="hidden" id="vId"/>
+      <div class="grid2">
+        <div class="field"><span class="flabel">عنوان الفيديو</span><input id="vTitle" placeholder="مثال: الدرس الأول - المقدمة"/></div>
+        <div class="field"><span class="flabel">رابط يوتيوب</span><input id="vUrl" placeholder="https://youtube.com/watch?v=..."/></div>
+        <div class="field"><span class="flabel">ترتيب الفيديو</span><input id="vOrder" type="number" placeholder="1" value="1"/></div>
+      </div>
+      <div class="field"><span class="flabel">وصف الفيديو (اختياري)</span><textarea id="vDesc" placeholder="اكتب وصف مختصر للفيديو…"></textarea></div>
+      <div class="row">
+        <label style="display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer"><input type="checkbox" id="vActive" checked style="width:auto"/> Active</label>
+        <button class="btn bgrad" onclick="saveVideo()">💾 حفظ الفيديو</button>
+        <button class="btn bsm" onclick="clearVidForm()" id="btnCancelV" style="display:none">إلغاء</button>
+      </div>
     </div>
   </div>
 
+  <!-- PAYMENTS -->
+  <div id="pay" class="tpane">
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+        <div class="pill">💳 طلبات الدفع</div>
+        <div class="row">
+          <button class="btn bsm" onclick="loadPay('pending')">⏳ Pending</button>
+          <button class="btn bsm bok" onclick="loadPay('approved')">✅ Approved</button>
+          <button class="btn bsm bbad" onclick="loadPay('rejected')">❌ Rejected</button>
+        </div>
+      </div>
+      <table><thead><tr><th>الطالب</th><th>الكورس</th><th>التفاصيل</th><th>إجراء</th></tr></thead><tbody id="tbPay"></tbody></table>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div id="users" class="tpane">
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+        <div class="pill">👥 المستخدمين</div>
+        <button class="btn bsm" onclick="loadUsers()">🔄 تحديث</button>
+      </div>
+      <table><thead><tr><th>الاسم</th><th>الموبايل</th><th>السنة</th><th>الدور</th><th>إجراءات</th></tr></thead><tbody id="tbUsers"></tbody></table>
+    </div>
+  </div>
 </div>
 
 <script>
-const FN  = "https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1";
-const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4";
+(function(){var t=localStorage.getItem('mf_theme')||'dark';if(t==='light')document.documentElement.setAttribute('data-theme','light');document.getElementById('thb').textContent=t==='light'?'☀️':'🌙';})();
+function toggleTheme(){var c=document.documentElement.getAttribute('data-theme')||'dark',n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('mf_theme',n);document.getElementById('thb').textContent=n==='light'?'☀️':'🌙';}
 
-// Guard
-const me = JSON.parse(localStorage.getItem("mf_user")||"null");
-if(!me||!["admin","superadmin"].includes(me.role)) location.href="login.html";
+const FN="https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1";
+const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4";
+const gradeMap={"3prep":"3 إعدادي","1sec":"1 ثانوي","2sec":"2 ثانوي","3sec":"3 ثانوي"};
+const roleClr={student:'#6ee7b7',admin:'#93c5fd',superadmin:'#f9a8d4'};
 
-function logout(){
-  ["mf_user","mf_access_token","mf_refresh_token"].forEach(k=>localStorage.removeItem(k));
-  location.href="login.html";
+const me=JSON.parse(localStorage.getItem('mf_user')||'null');
+if(!me||!['admin','superadmin'].includes(me.role))location.href='login.html';
+
+function logout(){['mf_user','mf_access_token','mf_refresh_token'].forEach(k=>localStorage.removeItem(k));location.href='login.html';}
+function esc(s){return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');}
+function escA(s){return String(s||'').replaceAll('"','&quot;').replaceAll("'",'&#39;').replaceAll('<','&lt;');}
+
+const msgEl=document.getElementById('msgbar');
+function msg(type,t){msgEl.className='msgbar show '+type;msgEl.textContent=t;setTimeout(()=>msgEl.className='msgbar',3500);}
+
+async function api(fn,method,body,params){
+  const opts={method:method||'GET',headers:{apikey:KEY,'Content-Type':'application/json'}};
+  if(body)opts.body=JSON.stringify(body);
+  const r=await fetch(FN+'/'+fn+(params||''),opts);
+  return r.json().catch(()=>({}));
 }
+
 function openTab(id,btn){
-  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-  document.querySelectorAll(".tabBtn").forEach(x=>x.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  btn.classList.add("active");
-}
-const msgEl=document.getElementById("msg");
-function msg(t){ msgEl.textContent=t; msgEl.className="msg show"; setTimeout(()=>msgEl.className="msg",3000); }
-
-async function apiFetch(fn,method="GET",body=null,params=""){
-  const opts={method,headers:{"apikey":KEY,"Content-Type":"application/json"}};
-  if(body) opts.body=JSON.stringify(body);
-  const res=await fetch(`${FN}/${fn}${params}`,opts);
-  return res.json();
+  document.querySelectorAll('.tpane').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.tbtn').forEach(x=>x.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
 }
 
 // ===== DASHBOARD =====
 async function loadStats(){
-  document.getElementById("stats").textContent="Loading…";
-  document.getElementById("latestUsers").textContent="Loading…";
-  document.getElementById("latestPay").textContent="Loading…";
-  const data=await apiFetch("admin-stats");
-  if(!data.ok){ document.getElementById("stats").textContent=data.error||"فشل"; return; }
-  document.getElementById("stats").innerHTML=
-    `Profiles: <b>${data.counts.users}</b> | Courses: <b>${data.counts.courses}</b> | Schedules: <b>${data.counts.schedules}</b><br>
-     Pending: <b>${data.counts.pending}</b> · Approved: <b>${data.counts.approved}</b> · Rejected: <b>${data.counts.rejected}</b>`;
-  document.getElementById("latestUsers").innerHTML=(data.latestUsers||[]).map(u=>
-    `• <b>${esc(u.full_name)}</b> — ${esc(u.phone_student||"")} — ${esc(u.grade||"")} — <span class="muted">${esc(u.role)}</span>`
-  ).join("<br>")||"—";
-  document.getElementById("latestPay").innerHTML=(data.latestPayments||[]).map(p=>
-    `• <b>${esc(p.full_name||"")}</b> — ${esc(p.course_title||"—")} — <b>${esc(p.status||"")}</b> — ${esc(p.method||"")}`
-  ).join("<br>")||"—";
+  document.getElementById('statGrid').innerHTML='<div class="spin"></div>';
+  const d=await api('admin-stats');
+  if(!d.ok){document.getElementById('statGrid').innerHTML='<div class="muted">فشل التحميل</div>';return;}
+  const c=d.counts;
+  document.getElementById('statGrid').innerHTML=`
+    <div class="stat-item"><div class="stat-num">${c.users}</div><div class="stat-label">طالب</div></div>
+    <div class="stat-item"><div class="stat-num">${c.courses}</div><div class="stat-label">كورس</div></div>
+    <div class="stat-item"><div class="stat-num" style="color:#fde68a">${c.pending}</div><div class="stat-label">انتظار</div></div>
+    <div class="stat-item"><div class="stat-num" style="color:#6ee7b7">${c.approved}</div><div class="stat-label">مقبول</div></div>
+    <div class="stat-item"><div class="stat-num" style="color:#fca5a5">${c.rejected}</div><div class="stat-label">مرفوض</div></div>`;
+  document.getElementById('latestUsers').innerHTML=(d.latestUsers||[]).map(u=>`• <b>${esc(u.full_name)}</b> — ${esc(u.phone_student||'')} — <span style="color:${roleClr[u.role]||'#fff'}">${esc(u.role)}</span>`).join('<br>')||'—';
+  document.getElementById('latestPay').innerHTML=(d.latestPayments||[]).map(p=>`• <b>${esc(p.full_name||'')}</b> — ${esc(p.course_title||'—')} — <b>${esc(p.status||'')}</b>`).join('<br>')||'—';
 }
 
 // ===== COURSES =====
-let selCourseId=null, selCourseTitle="";
+let selCId=null,selCTitle='';
 async function loadCourses(){
-  const grade=document.getElementById("grade").value;
-  const subject=document.getElementById("subject").value;
-  const data=await apiFetch("admin-courses","GET",null,`?grade=${encodeURIComponent(grade)}&subject=${encodeURIComponent(subject)}`);
-  const tbody=document.querySelector("#coursesTable tbody");
-  tbody.innerHTML="";
-  if(!data.ok){ msg(data.error||"فشل"); return; }
-  if(!data.courses?.length){ tbody.innerHTML=`<tr><td colspan="6" class="muted">مفيش كورسات</td></tr>`; return; }
-  data.courses.forEach(c=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td><b>${esc(c.title)}</b></td><td>${esc(c.teacher_name)}</td><td>${esc(c.grade)}</td><td>${c.price||0} جنيه</td><td>${c.is_active?"✅":"❌"}</td>
-      <td><button class="btnSm" onclick="selectCourse(${c.id},'${escAttr(c.title)}')">🗓️ مواعيد</button></td>`;
-    tbody.appendChild(tr);
+  const grade=document.getElementById('fGrade').value,subject=document.getElementById('fSubject').value;
+  const d=await api('admin-courses','GET',null,`?grade=${encodeURIComponent(grade)}&subject=${encodeURIComponent(subject)}`);
+  const tb=document.querySelector('#tCourses tbody');tb.innerHTML='';
+  if(!d.ok||!d.courses?.length){tb.innerHTML='<tr><td colspan="6" class="muted" style="text-align:center">مفيش كورسات</td></tr>';return;}
+  d.courses.forEach(c=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><b>${esc(c.title)}</b></td><td>${esc(c.teacher_name)}</td><td>${esc(gradeMap[c.grade]||c.grade)}</td><td>${c.price||0} ج</td><td>${c.is_active?'✅':'❌'}</td>
+      <td><div class="row">
+        <button class="btn bsm" onclick="editCourse(${c.id},'${escA(c.title)}','${escA(c.teacher_name)}','${c.grade}','${escA(c.subject)}',${c.price||0},${c.is_active})">✏️</button>
+        <button class="btn bsm" onclick="selForSch(${c.id},'${escA(c.title)}')">🗓️</button>
+        <button class="btn bsm" onclick="selForVid(${c.id},'${escA(c.title)}')">🎬</button>
+        <button class="btn bsm bbad" onclick="delCourse(${c.id},'${escA(c.title)}')">🗑️</button>
+      </div></td>`;
+    tb.appendChild(tr);
   });
-  msg("تم ✅");
+  msg('ok','✅ تم تحميل الكورسات');
 }
-async function createCourse(){
-  const title=document.getElementById("cTitle").value.trim();
-  const teacher=document.getElementById("cTeacher").value.trim();
-  const grade=document.getElementById("cGrade").value;
-  const subject=document.getElementById("cSubject").value;
-  const price=parseInt(document.getElementById("cPrice").value)||0;
-  const is_active=document.getElementById("cActive").checked;
-  if(!title||!teacher){ msg("اكتب اسم الكورس والمدرس"); return; }
-  const data=await apiFetch("admin-courses","POST",{grade,subject,title,teacher_name:teacher,is_active,price});
-  if(!data.ok){ msg(data.error||"فشل"); return; }
-  document.getElementById("cTitle").value="";
-  document.getElementById("cTeacher").value="";
-  document.getElementById("cPrice").value="";
-  msg("اتحفظ ✅"); loadCourses();
+
+function editCourse(id,title,teacher,grade,subject,price,active){
+  document.getElementById('cId').value=id;
+  document.getElementById('cTitle').value=title;
+  document.getElementById('cTeacher').value=teacher;
+  document.getElementById('cGrade').value=grade;
+  document.getElementById('cSubject').value=subject;
+  document.getElementById('cPrice').value=price;
+  document.getElementById('cActive').checked=active;
+  document.getElementById('btnCancelC').style.display='';
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
-function selectCourse(id,title){
-  selCourseId=id; selCourseTitle=title;
-  document.getElementById("selectedCourse").innerHTML=`<b>${esc(title)}</b> (ID: ${id})`;
-  openTab("sched",document.querySelectorAll(".tabBtn")[2]);
-  loadSchedules();
+
+function clearCourseForm(){
+  ['cId','cTitle','cTeacher','cPrice'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cActive').checked=true;
+  document.getElementById('btnCancelC').style.display='none';
+}
+
+async function saveCourse(){
+  const id=document.getElementById('cId').value;
+  const title=document.getElementById('cTitle').value.trim();
+  const teacher=document.getElementById('cTeacher').value.trim();
+  const grade=document.getElementById('cGrade').value;
+  const subject=document.getElementById('cSubject').value;
+  const price=parseInt(document.getElementById('cPrice').value)||0;
+  const active=document.getElementById('cActive').checked;
+  if(!title||!teacher){msg('err','⚠️ اكتب اسم الكورس والمدرس');return;}
+  const body=id?{id:parseInt(id),title,teacher_name:teacher,is_active:active,price}:{grade,subject,title,teacher_name:teacher,is_active:active,price};
+  const d=await api('admin-courses','POST',body);
+  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  msg('ok',id?'✅ تم التعديل':'✅ تم الإضافة');
+  clearCourseForm();loadCourses();
+}
+
+async function delCourse(id,title){
+  if(!confirm(`تمسح الكورس "${title}"؟\nده هيمسح كل الفيديوهات والمواعيد بتاعته!`))return;
+  const d=await api('admin-courses','DELETE',{id});
+  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  msg('ok','✅ تم الحذف');loadCourses();
 }
 
 // ===== SCHEDULES =====
-async function loadSchedules(){
-  if(!selCourseId){ msg("اختار كورس الأول"); return; }
-  const data=await apiFetch("admin-schedules","GET",null,`?course_id=${selCourseId}`);
-  const tbody=document.querySelector("#schTable tbody");
-  tbody.innerHTML="";
-  if(!data.ok){ msg(data.error||"فشل"); return; }
-  if(!data.schedules?.length){ tbody.innerHTML=`<tr><td colspan="5" class="muted">مفيش مواعيد لسه</td></tr>`; return; }
-  data.schedules.forEach(s=>{
-    const tr=document.createElement("tr");
+function selForSch(id,title){
+  selCId=id;selCTitle=title;
+  document.getElementById('selCourse').innerHTML=`<b>${esc(title)}</b> (ID: ${id})`;
+  openTab('sched',document.querySelectorAll('.tbtn')[2]);
+  loadSch();
+}
+
+async function loadSch(){
+  if(!selCId){msg('err','اختار كورس');return;}
+  const d=await api('admin-schedules','GET',null,`?course_id=${selCId}`);
+  const tb=document.querySelector('#tSch tbody');tb.innerHTML='';
+  if(!d.ok||!d.schedules?.length){tb.innerHTML='<tr><td colspan="5" class="muted">مفيش مواعيد</td></tr>';return;}
+  d.schedules.forEach(s=>{
+    const tr=document.createElement('tr');
     tr.innerHTML=`
-      <td><input value="${escAttr(s.day_of_week)}" data-k="day" data-id="${s.id}"></td>
-      <td><input value="${escAttr(s.start_time)}" data-k="start" data-id="${s.id}"></td>
-      <td><input value="${escAttr(s.end_time)}" data-k="end" data-id="${s.id}"></td>
-      <td><input value="${escAttr(s.notes||"")}" data-k="notes" data-id="${s.id}"></td>
-      <td class="row">
-        <button class="btnSm" onclick="saveSchedule(${s.id})">💾</button>
-        <button class="btnSm bad" onclick="delSchedule(${s.id})">🗑️</button>
-      </td>`;
-    tbody.appendChild(tr);
+      <td><input value="${escA(s.day_of_week)}" data-k="day" data-id="${s.id}"/></td>
+      <td><input value="${escA(s.start_time)}" data-k="start" data-id="${s.id}"/></td>
+      <td><input value="${escA(s.end_time)}" data-k="end" data-id="${s.id}"/></td>
+      <td><input value="${escA(s.notes||'')}" data-k="notes" data-id="${s.id}"/></td>
+      <td><div class="row">
+        <button class="btn bsm bok" onclick="saveSch(${s.id})">💾</button>
+        <button class="btn bsm bbad" onclick="delSch(${s.id})">🗑️</button>
+      </div></td>`;
+    tb.appendChild(tr);
   });
 }
-function val(id,k){ return document.querySelector(`input[data-id="${id}"][data-k="${k}"]`)?.value.trim()||""; }
-async function saveSchedule(id){
-  const data=await apiFetch("admin-schedules","POST",{id,course_id:selCourseId,day_of_week:val(id,"day"),start_time:val(id,"start"),end_time:val(id,"end"),notes:val(id,"notes")});
-  if(!data.ok){ msg(data.error||"فشل"); return; }
-  msg("اتحفظ ✅"); loadSchedules();
+
+function gv(id,k){return document.querySelector(`input[data-id="${id}"][data-k="${k}"]`)?.value.trim()||'';}
+async function saveSch(id){
+  const d=await api('admin-schedules','POST',{id,course_id:selCId,day_of_week:gv(id,'day'),start_time:gv(id,'start'),end_time:gv(id,'end'),notes:gv(id,'notes')});
+  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  msg('ok','✅ تم');loadSch();
 }
-async function delSchedule(id){
-  if(!confirm("تمسح الموعد ده؟")) return;
-  const data=await apiFetch("admin-schedules","DELETE",{id});
-  if(!data.ok){ msg(data.error||"فشل"); return; }
-  msg("اتمسح ✅"); loadSchedules();
+async function delSch(id){
+  if(!confirm('تمسح الموعد ده؟'))return;
+  const d=await api('admin-schedules','DELETE',{id});
+  if(!d.ok){msg('err','❌');return;}
+  msg('ok','✅ اتمسح');loadSch();
 }
-async function addSchedule(){
-  if(!selCourseId){ msg("اختار كورس الأول"); return; }
-  const day=document.getElementById("nDay").value.trim();
-  const start=document.getElementById("nStart").value.trim();
-  const end=document.getElementById("nEnd").value.trim();
-  const notes=document.getElementById("nNotes").value.trim();
-  if(!day||!start||!end){ msg("اكتب اليوم + من + إلى"); return; }
-  const data=await apiFetch("admin-schedules","POST",{course_id:selCourseId,day_of_week:day,start_time:start,end_time:end,notes:notes||null});
-  if(!data.ok){ msg(data.error||"فشل"); return; }
-  ["nDay","nStart","nEnd","nNotes"].forEach(id=>document.getElementById(id).value="");
-  msg("اتضاف ✅"); loadSchedules();
+async function addSch(){
+  if(!selCId){msg('err','اختار كورس');return;}
+  const day=document.getElementById('nDay').value.trim(),start=document.getElementById('nStart').value.trim(),end=document.getElementById('nEnd').value.trim(),notes=document.getElementById('nNotes').value.trim();
+  if(!day||!start||!end){msg('err','⚠️ اكتب اليوم + من + إلى');return;}
+  const d=await api('admin-schedules','POST',{course_id:selCId,day_of_week:day,start_time:start,end_time:end,notes:notes||null});
+  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  ['nDay','nStart','nEnd','nNotes'].forEach(id=>document.getElementById(id).value='');
+  msg('ok','✅ اتضاف');loadSch();
+}
+
+// ===== VIDEOS =====
+let selCIdV=null,selCTitleV='';
+function selForVid(id,title){
+  selCIdV=id;selCTitleV=title;
+  document.getElementById('selCourseVid').innerHTML=`<b>${esc(title)}</b> (ID: ${id})`;
+  openTab('videos',document.querySelectorAll('.tbtn')[3]);
+  loadVideos();
+}
+
+async function loadVideos(){
+  if(!selCIdV){document.getElementById('vidList').innerHTML='<div class="muted">اختار كورس الأول</div>';return;}
+  const d=await api('course-videos','GET',null,`?course_id=${selCIdV}`);
+  const el=document.getElementById('vidList');
+  if(!d.ok||!d.videos?.length){el.innerHTML='<div class="muted" style="padding:20px;text-align:center">📭 مفيش فيديوهات لسه — ضيفهم من الأسفل!</div>';return;}
+  el.innerHTML=d.videos.map((v,i)=>`
+    <div class="vid-item">
+      <div class="vid-num">${i+1}</div>
+      <div class="vid-meta">
+        <h4>${esc(v.title)}</h4>
+        <p>${esc(v.youtube_url||'')}</p>
+        ${v.description?`<p style="margin-top:3px">${esc(v.description)}</p>`:''}
+      </div>
+      <div class="row">
+        <button class="btn bsm" onclick="editVid(${v.id},'${escA(v.title)}','${escA(v.youtube_url||'')}','${escA(v.description||'')}',${v.order_index||0},${v.is_active})">✏️</button>
+        <button class="btn bsm bbad" onclick="delVid(${v.id})">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function editVid(id,title,url,desc,order,active){
+  document.getElementById('vId').value=id;
+  document.getElementById('vTitle').value=title;
+  document.getElementById('vUrl').value=url;
+  document.getElementById('vDesc').value=desc;
+  document.getElementById('vOrder').value=order;
+  document.getElementById('vActive').checked=active;
+  document.getElementById('btnCancelV').style.display='';
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+
+function clearVidForm(){
+  ['vId','vTitle','vUrl','vDesc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('vOrder').value='1';
+  document.getElementById('vActive').checked=true;
+  document.getElementById('btnCancelV').style.display='none';
+}
+
+async function saveVideo(){
+  if(!selCIdV){msg('err','اختار كورس من الكورسات');return;}
+  const id=document.getElementById('vId').value;
+  const title=document.getElementById('vTitle').value.trim();
+  const url=document.getElementById('vUrl').value.trim();
+  const desc=document.getElementById('vDesc').value.trim();
+  const order=parseInt(document.getElementById('vOrder').value)||1;
+  const active=document.getElementById('vActive').checked;
+  if(!title||!url){msg('err','⚠️ اكتب عنوان ورابط الفيديو');return;}
+  if(!url.includes('youtube')&&!url.includes('youtu.be')){msg('err','⚠️ الرابط لازم يكون YouTube');return;}
+  const body=id?{id:parseInt(id),title,youtube_url:url,description:desc||null,order_index:order,is_active:active}:{course_id:selCIdV,title,youtube_url:url,description:desc||null,order_index:order,is_active:active};
+  const d=await api('course-videos','POST',body);
+  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  msg('ok','✅ تم حفظ الفيديو');clearVidForm();loadVideos();
+}
+
+async function delVid(id){
+  if(!confirm('تمسح الفيديو ده؟'))return;
+  const d=await api('course-videos','DELETE',{id});
+  if(!d.ok){msg('err','❌ فشل');return;}
+  msg('ok','✅ اتمسح');loadVideos();
 }
 
 // ===== PAYMENTS =====
-async function loadPayments(status){
-  const tb=document.getElementById("payBody");
-  tb.innerHTML=`<tr><td colspan="4">Loading…</td></tr>`;
-  const data=await apiFetch("admin-payments","GET",null,`?status=${encodeURIComponent(status)}`);
-  tb.innerHTML="";
-  if(!data.ok){ tb.innerHTML=`<tr><td colspan="4">فشل التحميل</td></tr>`; return; }
-  if(!data.payments?.length){ tb.innerHTML=`<tr><td colspan="4" class="muted">مفيش طلبات</td></tr>`; return; }
-  data.payments.forEach(p=>{
-    const tr=document.createElement("tr");
+async function loadPay(status){
+  const tb=document.getElementById('tbPay');
+  tb.innerHTML='<tr><td colspan="4" style="text-align:center">Loading…</td></tr>';
+  const d=await api('admin-payments','GET',null,`?status=${encodeURIComponent(status)}`);
+  tb.innerHTML='';
+  if(!d.ok||!d.payments?.length){tb.innerHTML=`<tr><td colspan="4" class="muted" style="text-align:center">مفيش طلبات ${status}</td></tr>`;return;}
+  d.payments.forEach(p=>{
+    const tr=document.createElement('tr');
     tr.innerHTML=`
-      <td><b>${esc(p.full_name||"")}</b><br>${esc(p.phone_student||"")}<br><span class="muted">${esc(p.grade||"")}</span></td>
-      <td><b>${esc(p.course_title||"—")}</b><br>${esc(p.subject||"")} · ${esc(p.teacher_name||"")}</td>
-      <td>طريقة: <b>${esc(p.method||"")}</b><br>المبلغ: <b>${p.amount||0} جنيه</b><br>رقم عملية: <b>${esc(p.transaction_id||"—")}</b><br><span class="muted">${esc(p.receipt_note||"")}</span></td>
+      <td><b>${esc(p.full_name||'')}</b><br>${esc(p.phone_student||'')}<br><span class="muted">${esc(gradeMap[p.grade]||p.grade||'')}</span></td>
+      <td><b>${esc(p.course_title||'—')}</b><br><span class="muted">${esc(p.subject||'')} · ${esc(p.teacher_name||'')}</span></td>
+      <td>طريقة: <b>${esc(p.method||'')}</b><br>مبلغ: <b>${p.amount||0} ج</b><br>رقم: <b>${esc(p.transaction_id||'—')}</b><br><span class="muted">${esc(p.receipt_note||'')}</span></td>
       <td><div class="row">
-        <button class="btnSm ok" onclick="payAct(${p.id},'approve')">✅ قبول</button>
-        <button class="btnSm bad" onclick="payAct(${p.id},'reject')">❌ رفض</button>
+        <button class="btn bsm bok" onclick="payAct(${p.id},'approve')">✅ قبول</button>
+        <button class="btn bsm bbad" onclick="payAct(${p.id},'reject')">❌ رفض</button>
       </div></td>`;
     tb.appendChild(tr);
   });
 }
 async function payAct(id,action){
-  const data=await apiFetch("admin-payments","POST",{id,action});
-  if(!data.ok){ msg(data.error||"فشل"); return; }
-  msg("تم ✅"); loadPayments("pending");
+  const d=await api('admin-payments','POST',{id,action});
+  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  msg('ok',action==='approve'?'✅ تم القبول — الطالب اتضاف للكورس تلقائياً':'❌ تم الرفض');
+  loadPay('pending');
 }
-
-function esc(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
-function escAttr(s){ return String(s||"").replaceAll('"',"&quot;").replaceAll("'","&#39;").replaceAll("<","&lt;"); }
-
-loadStats();
-loadCourses();
 
 // ===== USERS =====
 async function loadUsers(){
-  const tb=document.getElementById("usersBody");
-  tb.innerHTML='<tr><td colspan="5">Loading…</td></tr>';
-  const data=await apiFetch("admin-users","GET",null,"");
-  tb.innerHTML="";
-  if(!data.ok){ tb.innerHTML=`<tr><td colspan="5">فشل التحميل</td></tr>`; return; }
-  if(!data.users?.length){ tb.innerHTML=`<tr><td colspan="5" class="muted">مفيش مستخدمين</td></tr>`; return; }
-  const gradeMap={"3prep":"3 إعدادي","1sec":"1 ثانوي","2sec":"2 ثانوي","3sec":"3 ثانوي"};
-  const roleColor={"student":"#6ee7b7","admin":"#93c5fd","superadmin":"#f9a8d4"};
-  data.users.forEach(u=>{
-    const isSelf = u.phone_student===me.phone;
-    const tr=document.createElement("tr");
+  const tb=document.getElementById('tbUsers');
+  tb.innerHTML='<tr><td colspan="5" style="text-align:center">Loading…</td></tr>';
+  const d=await api('admin-users');
+  tb.innerHTML='';
+  if(!d.ok||!d.users?.length){tb.innerHTML='<tr><td colspan="5" class="muted">مفيش مستخدمين</td></tr>';return;}
+  d.users.forEach(u=>{
+    const isSelf=u.id===me.id;
+    const tr=document.createElement('tr');
     tr.innerHTML=`
-      <td><b>${esc(u.full_name||"")}</b></td>
-      <td>${esc(u.phone_student||"")}</td>
-      <td>${esc(gradeMap[u.grade]||u.grade||"")}</td>
-      <td><span style="color:${roleColor[u.role]||'#fff'};font-weight:800">${esc(u.role||"")}</span></td>
-      <td>${isSelf?'<span class="muted">أنت</span>':`
-        <div class="row">
-          ${u.role!=='superadmin'?`<button class="btnSm ok" onclick="setRole('${u.id}','superadmin')">Super</button>`:''}
-          ${u.role!=='admin'?`<button class="btnSm" onclick="setRole('${u.id}','admin')">Admin</button>`:''}
-          ${u.role!=='student'?`<button class="btnSm bad" onclick="setRole('${u.id}','student')">Student</button>`:''}
-          <button class="btnSm" style="border-color:#f59e0b;color:#f59e0b" onclick="resetPass('${u.id}','${esc(u.full_name||'')}')">🔑 Reset</button>
-        </div>`}
-      </td>`;
+      <td><b>${esc(u.full_name||'')}</b></td>
+      <td>${esc(u.phone_student||'')}</td>
+      <td>${esc(gradeMap[u.grade]||u.grade||'')}</td>
+      <td><span style="color:${roleClr[u.role]||'#fff'};font-weight:800">${esc(u.role||'')}</span></td>
+      <td>${isSelf?'<span class="muted">أنت 👑</span>':`<div class="row">
+        ${u.role!=='superadmin'?`<button class="btn bsm" onclick="setRole('${u.id}','superadmin')">Super</button>`:''}
+        ${u.role!=='admin'?`<button class="btn bsm bok" onclick="setRole('${u.id}','admin')">Admin</button>`:''}
+        ${u.role!=='student'?`<button class="btn bsm bbad" onclick="setRole('${u.id}','student')">Student</button>`:''}
+        <button class="btn bsm bwarn" onclick="resetPw('${u.id}','${escA(u.full_name||'')}')">🔑</button>
+      </div>`}</td>`;
     tb.appendChild(tr);
   });
 }
-
-async function resetPass(userId, name){
-  const newPass = prompt(`باسورد جديد لـ "${name}":\n(6 أحرف على الأقل)`);
-  if(!newPass) return;
-  if(newPass.length < 6){ msg("⚠️ الباسورد أقل من 6 أحرف"); return; }
-  const data = await apiFetch("admin-reset-password","POST",{user_id:userId,new_password:newPass});
-  if(!data.ok){ msg("❌ "+(data.error||"فشل")); return; }
-  msg(`✅ تم تغيير باسورد ${name} بنجاح!`);
+async function setRole(uid,role){
+  const d=await api('admin-users','POST',{user_id:uid,role});
+  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  msg('ok','✅ تم تغيير الدور');loadUsers();
+}
+async function resetPw(uid,name){
+  const pw=prompt(`باسورد جديد لـ "${name}":\n(6 أحرف على الأقل)`);
+  if(!pw)return;
+  if(pw.length<6){msg('err','⚠️ الباسورد أقل من 6 أحرف');return;}
+  const d=await api('admin-reset-password','POST',{user_id:uid,new_password:pw});
+  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  msg('ok','✅ تم تغيير الباسورد');
 }
 
-async function setRole(userId, role){
-  const data=await apiFetch("admin-users","POST",{user_id:userId,role});
-  if(!data.ok){ msg(data.error||"فشل"); return; }
-  msg("تم تغيير الدور ✅"); loadUsers();
-}
-
-
-loadStats();
-loadCourses();
+// Init
+loadStats();loadCourses();loadPay('pending');
 </script>
 </body>
 </html>
