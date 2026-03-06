@@ -416,11 +416,22 @@ async function loadUsers(){
           ${u.role!=='superadmin'?`<button class="btnSm ok" onclick="setRole('${u.id}','superadmin')">Super</button>`:''}
           ${u.role!=='admin'?`<button class="btnSm" onclick="setRole('${u.id}','admin')">Admin</button>`:''}
           ${u.role!=='student'?`<button class="btnSm bad" onclick="setRole('${u.id}','student')">Student</button>`:''}
+          <button class="btnSm" style="border-color:#f59e0b;color:#f59e0b" onclick="resetPass('${u.id}','${esc(u.full_name||'')}')">🔑 Reset</button>
         </div>`}
       </td>`;
     tb.appendChild(tr);
   });
 }
+
+async function resetPass(userId, name){
+  const newPass = prompt(`باسورد جديد لـ "${name}":\n(6 أحرف على الأقل)`);
+  if(!newPass) return;
+  if(newPass.length < 6){ msg("⚠️ الباسورد أقل من 6 أحرف"); return; }
+  const data = await apiFetch("admin-reset-password","POST",{user_id:userId,new_password:newPass});
+  if(!data.ok){ msg("❌ "+(data.error||"فشل")); return; }
+  msg(`✅ تم تغيير باسورد ${name} بنجاح!`);
+}
+
 async function setRole(userId, role){
   const data=await apiFetch("admin-users","POST",{user_id:userId,role});
   if(!data.ok){ msg(data.error||"فشل"); return; }
