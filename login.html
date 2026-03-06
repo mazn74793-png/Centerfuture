@@ -116,6 +116,7 @@
       <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
     </div>
     <button class="btn" id="btnLogin" onclick="login()">دخول ←</button>
+    <button type="button" onclick="forgotPassword()" style="margin-top:10px;width:100%;cursor:pointer;border:none;background:none;color:#a78bfa;font-size:13px;text-decoration:underline;padding:4px">نسيت كلمة المرور؟</button>
   </div>
 
   <!-- SIGNUP -->
@@ -245,6 +246,16 @@ async function login(){
     if(role === "admin" || role === "superadmin") location.href = "admin.html";
     else location.href = "student.html";
   }, 700);
+}
+
+function forgotPassword(){
+  const phone = document.getElementById("loginValue").value.trim();
+  const text = encodeURIComponent(
+    phone && /^01[0-9]{9}$/.test(phone)
+      ? `مرحباً، نسيت كلمة المرور - Make Future\nرقم موبايلي: ${phone}\nأرجو مساعدتي في إعادة تعيين كلمة المرور 🙏`
+      : `مرحباً، نسيت كلمة المرور - Make Future\nأرجو مساعدتي في إعادة تعيين كلمة المرور 🙏`
+  );
+  window.open(`https://wa.me/201210575530?text=${text}`, "_blank");
 }
 </script>
 </body>
