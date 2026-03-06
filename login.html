@@ -68,7 +68,10 @@ select option{background:var(--bg2)}
     </div>
     <div class="field" style="animation-delay:.38s">
       <span class="flabel">كلمة المرور</span>
-      <input id="lp" type="password" placeholder="••••••••"/>
+      <div style="position:relative">
+        <input id="lp" type="password" placeholder="••••••••" style="padding-left:42px"/>
+        <button type="button" onclick="togglePw('lp','eyeL')" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);border:none;background:none;color:var(--muted);cursor:pointer;font-size:16px;padding:0;line-height:1" id="eyeL">👁️</button>
+      </div>
     </div>
     <button class="btn-main" id="btnL" onclick="doLogin()">دخول ←</button>
     <button class="btn-ghost" onclick="forgotPw()">نسيت كلمة المرور؟</button>
@@ -98,7 +101,10 @@ select option{background:var(--bg2)}
     </div>
     <div class="field" style="animation-delay:.44s">
       <span class="flabel">كلمة المرور</span>
-      <input id="spw" type="password" placeholder="6 أحرف على الأقل"/>
+      <div style="position:relative">
+        <input id="spw" type="password" placeholder="6 أحرف على الأقل" style="padding-left:42px"/>
+        <button type="button" onclick="togglePw('spw','eyeS')" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);border:none;background:none;color:var(--muted);cursor:pointer;font-size:16px;padding:0;line-height:1" id="eyeS">👁️</button>
+      </div>
     </div>
     <button class="btn-main" id="btnS" onclick="doSignup()">إنشاء الحساب ✓</button>
   </div>
@@ -137,9 +143,9 @@ async function doLogin(){
   if(!d.ok){msg('err','❌ '+(d.error||'بيانات الدخول غلط'));return;}
   localStorage.setItem('mf_access_token',d.access_token);
   localStorage.setItem('mf_refresh_token',d.refresh_token);
-  localStorage.setItem('mf_user',JSON.stringify({id:d.user.id,name:d.profile?.full_name||'',phone:d.profile?.phone_student||'',grade:d.profile?.grade||'',role:d.profile?.role||'student'}));
+  localStorage.setItem('mf_user',JSON.stringify({id:d.user.id,name:d.user.name||'',phone:d.user.phone||'',grade:d.user.grade||'',role:d.user.role||'student'}));
   msg('ok','✅ أهلاً! جاري الانتقال…');
-  setTimeout(()=>location.href=['admin','superadmin'].includes(d.profile?.role)?'admin.html':'student.html',700);
+  setTimeout(()=>location.href=['admin','superadmin'].includes(d.user.role)?'admin.html':'student.html',700);
 }
 
 async function doSignup(){
@@ -161,6 +167,13 @@ function forgotPw(){
   const p=document.getElementById('lv').value.trim();
   const t=encodeURIComponent(/^01[0-9]{9}$/.test(p)?`مرحباً، نسيت كلمة المرور - Make Future\nرقم موبايلي: ${p}\nأرجو المساعدة 🙏`:`مرحباً، نسيت كلمة المرور - Make Future\nأرجو مساعدتي 🙏`);
   window.open('https://wa.me/201210575530?text='+t,'_blank');
+}
+
+function togglePw(inputId, btnId){
+  const inp=document.getElementById(inputId);
+  const btn=document.getElementById(btnId);
+  if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
+  else{inp.type='password';btn.textContent='👁️';}
 }
 document.addEventListener('keydown',e=>{if(e.key==='Enter'){if(document.getElementById('pLogin').style.display!=='none')doLogin();else doSignup();}});
 </script>
