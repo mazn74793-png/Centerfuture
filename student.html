@@ -5,11 +5,11 @@
 <title>Make Future | الطالب</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07091a;--bg2:#0d1230;--card:rgba(255,255,255,.055);--border:rgba(255,255,255,.1);--text:#eef0ff;--muted:rgba(238,240,255,.5);--grad:linear-gradient(135deg,#7c3aed,#06b6d4);--r:18px;color-scheme:dark}
-[data-theme=light]{--bg:#f2f4ff;--bg2:#e6eaff;--card:rgba(255,255,255,.8);--border:rgba(0,0,0,.09);--text:#0d1230;--muted:rgba(13,18,48,.5);color-scheme:light}
+:root{--bg:#07091a;--card:rgba(255,255,255,.055);--border:rgba(255,255,255,.1);--text:#eef0ff;--muted:rgba(238,240,255,.5);--grad:linear-gradient(135deg,#7c3aed,#06b6d4);--r:18px;color-scheme:dark}
+[data-theme=light]{--bg:#f2f4ff;--card:rgba(255,255,255,.8);--border:rgba(0,0,0,.09);--text:#0d1230;--muted:rgba(13,18,48,.5);color-scheme:light}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .35s,color .35s}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 55% at 10% 10%,rgba(124,58,237,.08) 0%,transparent 55%),radial-gradient(ellipse 55% 45% at 88% 88%,rgba(6,182,212,.06) 0%,transparent 55%);pointer-events:none;z-index:0}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 55% at 10% 10%,rgba(124,58,237,.08),transparent 55%),radial-gradient(ellipse 55% 45% at 88% 88%,rgba(6,182,212,.06),transparent 55%);pointer-events:none;z-index:0}
 @keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fi{from{opacity:0}to{opacity:1}}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -19,14 +19,20 @@ nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(22px);background:rgba
 .nav-logo{font-size:18px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .nav-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
 .nb{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);padding:7px 13px;border-radius:11px;text-decoration:none;font-weight:700;font-size:13px;font-family:'Cairo',sans-serif;transition:all .2s}
-.nb:hover{background:rgba(124,58,237,.18);border-color:#7c3aed77;transform:translateY(-1px)}
+.nb:hover{background:rgba(124,58,237,.18);border-color:#7c3aed77}
 .thbtn{cursor:pointer;border:1px solid var(--border);background:var(--card);width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:15px;transition:all .25s}
 .thbtn:hover{transform:rotate(22deg) scale(1.12)}
 .wrap{max-width:1100px;margin:0 auto;padding:22px 18px;position:relative;z-index:1}
-.hero{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;backdrop-filter:blur(12px)}
-.hero-name{font-size:22px;font-weight:900;margin-bottom:3px}
-.hero-sub{font-size:13px;color:var(--muted)}
-.grade-badge{display:inline-block;background:var(--grad);color:#fff;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:800;margin-top:8px}
+.hero{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;backdrop-filter:blur(12px);display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.hero-avatar{width:56px;height:56px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-size:22px;font-weight:900;color:#fff;flex-shrink:0}
+.hero-name{font-size:20px;font-weight:900}
+.hero-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.grade-badge{display:inline-block;background:var(--grad);color:#fff;padding:3px 12px;border-radius:999px;font-size:11px;font-weight:800;margin-top:6px}
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;backdrop-filter:blur(8px)}
+.stat-num{font-size:28px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:11px;color:var(--muted);margin-top:2px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:720px){.grid2{grid-template-columns:1fr}}
 .box{background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:16px;padding:16px}
@@ -37,13 +43,13 @@ nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(22px);background:rgba
 .price-badge{background:var(--grad);color:#fff;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:900}
 .course-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-top:12px;transition:all .25s;backdrop-filter:blur(8px)}
 .course-card:hover{border-color:#7c3aed66;transform:translateY(-2px);box-shadow:0 12px 40px rgba(124,58,237,.15)}
-.course-title{font-size:16px;font-weight:800;margin-bottom:8px}
-.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.tag{background:rgba(255,255,255,.07);border:1px solid var(--border);padding:4px 10px;border-radius:999px;font-size:12px}
+.course-title{font-size:15px;font-weight:800;margin-bottom:6px}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tag{background:rgba(255,255,255,.07);border:1px solid var(--border);padding:3px 10px;border-radius:999px;font-size:12px}
 [data-theme=light] .tag{background:rgba(0,0,0,.05)}
-.sch-item{padding:8px 12px;border-radius:11px;border:1px solid var(--border);background:rgba(0,0,0,.18);font-size:13px;margin-top:6px}
+.sch-item{padding:7px 12px;border-radius:11px;border:1px solid var(--border);background:rgba(0,0,0,.18);font-size:12px;margin-top:5px}
 [data-theme=light] .sch-item{background:rgba(0,0,0,.04)}
-.notif{padding:11px 14px;border-radius:12px;border:1px solid rgba(124,58,237,.2);background:rgba(124,58,237,.08);font-size:13px;margin-top:8px}
+.notif{padding:10px 14px;border-radius:12px;border:1px solid rgba(124,58,237,.2);background:rgba(124,58,237,.08);font-size:13px;margin-top:8px}
 .notif.unread{border-color:rgba(124,58,237,.45);background:rgba(124,58,237,.15)}
 .btn{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);padding:9px 14px;border-radius:12px;font-weight:800;font-size:13px;font-family:'Cairo',sans-serif;transition:all .2s}
 .btn:hover{background:rgba(255,255,255,.12);transform:translateY(-1px)}
@@ -51,6 +57,11 @@ nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(22px);background:rgba
 .btn-open{border:none;background:linear-gradient(135deg,#06b6d4,#7c3aed);color:#fff;padding:8px 16px;border-radius:11px;font-weight:800;font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
 .btn-open:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(6,182,212,.4)}
 .pending-tag{background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.3);color:#fbbf24;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800}
+/* Progress mini bar */
+.mini-prog{background:rgba(255,255,255,.07);border-radius:999px;height:5px;margin-top:8px;overflow:hidden}
+.mini-prog-fill{height:100%;background:var(--grad);border-radius:999px;transition:width .4s}
+/* Cert card */
+.cert-card{background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(6,182,212,.1));border:1px solid rgba(124,58,237,.3);border-radius:14px;padding:14px;margin-top:10px;display:flex;align-items:center;gap:12px}
 .spin{width:36px;height:36px;border-radius:50%;border:3px solid var(--border);border-top-color:#7c3aed;animation:spin 1s linear infinite;margin:20px auto}
 </style>
 </head>
@@ -65,50 +76,65 @@ nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(22px);background:rgba
     <button class="nb" onclick="logout()">خروج</button>
   </div>
 </nav>
-
 <div class="wrap">
-  <div class="hero a0 a1" style="margin-bottom:16px">
-    <div class="hero-name" id="hName">أهلاً 👋</div>
-    <div class="hero-sub" id="hSub"></div>
-    <div id="hBadge"></div>
+  <!-- Hero -->
+  <div class="hero a0 a1" style="margin-bottom:14px">
+    <div class="hero-avatar" id="hAvatar">؟</div>
+    <div>
+      <div class="hero-name" id="hName">أهلاً 👋</div>
+      <div class="hero-sub" id="hSub"></div>
+      <div id="hBadge"></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row a0 a2" style="margin-bottom:14px">
+    <div class="stat-card"><div class="stat-num" id="stCourses">—</div><div class="stat-label">كورساتي</div></div>
+    <div class="stat-card"><div class="stat-num" id="stVids">—</div><div class="stat-label">فيديو اتمكملهم</div></div>
+    <div class="stat-card"><div class="stat-num" id="stCerts">—</div><div class="stat-label">شهاداتي</div></div>
+    <div class="stat-card"><div class="stat-num" id="stPending">—</div><div class="stat-label">قيد المراجعة</div></div>
   </div>
 
   <!-- Pending Banner -->
-  <div id="pendingBanner" style="display:none;margin-bottom:16px" class="a0 a2">
-    <div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-      <div style="font-size:30px">⏳</div>
-      <div style="flex:1">
-        <div style="font-size:15px;font-weight:800;color:#fbbf24;margin-bottom:3px">طلب اشتراكك قيد المراجعة</div>
-        <div id="pendingDetail" class="muted"></div>
-      </div>
+  <div id="pendingBanner" style="display:none;margin-bottom:14px" class="a0 a2">
+    <div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="font-size:28px">⏳</div>
+      <div style="flex:1"><div style="font-size:14px;font-weight:800;color:#fbbf24">طلب اشتراكك قيد المراجعة</div>
+      <div id="pendingDetail" class="muted"></div></div>
       <span class="pending-tag">Pending</span>
     </div>
   </div>
 
-  <div class="grid2" style="margin-bottom:16px">
-    <div class="a0 a2">
-      <div class="sel-card">
-        <div class="pill" style="margin-bottom:10px">✅ الكورس المختار</div>
-        <div id="selBox" class="muted">—</div>
-        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-grad" onclick="goPay()">💳 ادفع الآن</button>
-          <a id="btnOpen" href="#" class="btn-open" style="display:none">▶️ افتح الكورس</a>
-        </div>
-        <div class="muted" style="margin-top:8px">Vodafone Cash / InstaPay: <b>01210575530</b></div>
+  <!-- Grid: selected + notifs -->
+  <div class="grid2 a0 a3" style="margin-bottom:14px">
+    <div class="sel-card">
+      <div class="pill" style="margin-bottom:10px">✅ الكورس المختار</div>
+      <div id="selBox" class="muted">—</div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-grad" onclick="goPay()">💳 ادفع الآن</button>
+        <a id="btnOpen" href="#" class="btn-open" style="display:none">▶️ افتح الكورس</a>
       </div>
+      <div class="muted" style="margin-top:8px">Vodafone Cash / InstaPay: <b>01210575530</b></div>
     </div>
-    <div class="a0 a3">
-      <div class="box">
-        <div class="pill" style="margin-bottom:10px">🔔 الإشعارات</div>
-        <div id="notifsList" class="muted">جاري التحميل…</div>
-      </div>
+    <div class="box">
+      <div class="pill" style="margin-bottom:10px">🔔 الإشعارات</div>
+      <div id="notifsList" class="muted">جاري التحميل…</div>
     </div>
   </div>
 
+  <!-- Certificates -->
+  <div id="certsSection" style="display:none" class="a0 a4">
+    <div class="box" style="margin-bottom:14px">
+      <div class="pill" style="margin-bottom:10px">🏆 شهاداتي</div>
+      <div id="certsList"></div>
+    </div>
+  </div>
+
+  <!-- Courses -->
   <div class="a0 a4">
     <div class="box">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-        <div class="pill">🎓 الكورسات المتاحة لسنتك</div>
+        <div class="pill">🎓 الكورسات المتاحة</div>
         <button class="btn" onclick="loadCourses()">🔄 تحديث</button>
       </div>
       <div id="coursesList" style="margin-top:10px"><div class="spin"></div></div>
@@ -117,174 +143,121 @@ nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(22px);background:rgba
 </div>
 
 <script>
-(function(){
-  var t=localStorage.getItem('mf_theme')||'dark';
-  if(t==='light') document.documentElement.setAttribute('data-theme','light');
-  document.getElementById('thb').textContent=t==='light'?'☀️':'🌙';
-})();
+(function(){var t=localStorage.getItem('mf_theme')||'dark';if(t==='light')document.documentElement.setAttribute('data-theme','light');document.getElementById('thb').textContent=t==='light'?'☀️':'🌙';})();
+function toggleTheme(){var c=document.documentElement.getAttribute('data-theme')||'dark',n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('mf_theme',n);document.getElementById('thb').textContent=n==='light'?'☀️':'🌙';}
 
-function toggleTheme(){
-  var c=document.documentElement.getAttribute('data-theme')||'dark';
-  var n=c==='light'?'dark':'light';
-  document.documentElement.setAttribute('data-theme',n);
-  localStorage.setItem('mf_theme',n);
-  document.getElementById('thb').textContent=n==='light'?'☀️':'🌙';
-}
+const FN='https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4';
+const GRADE_MAP={'3prep':'3 إعدادي','1sec':'1 ثانوي','2sec':'2 ثانوي','3sec':'3 ثانوي'};
 
-const FN  = 'https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1';
-const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4';
-const GRADE_MAP = {'3prep':'3 إعدادي','1sec':'1 ثانوي','2sec':'2 ثانوي','3sec':'3 ثانوي'};
+function logout(){['mf_user','mf_access_token','mf_refresh_token','mf_selected_course'].forEach(k=>localStorage.removeItem(k));location.href='login.html';}
+function esc(s){return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');}
+async function apiFetch(fn,qs){try{const r=await fetch(FN+'/'+fn+(qs||''),{headers:{apikey:KEY}});return await r.json();}catch(e){return{ok:false};}}
 
-function logout(){
-  ['mf_user','mf_access_token','mf_refresh_token','mf_selected_course'].forEach(k=>localStorage.removeItem(k));
-  location.href='login.html';
-}
+const me=JSON.parse(localStorage.getItem('mf_user')||'null');
+if(!me||(me.id&&!me.phone)){['mf_user','mf_access_token','mf_refresh_token'].forEach(k=>localStorage.removeItem(k));location.href='login.html';throw new Error('r');}
 
-function esc(s){ return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+const nameInitial=(me.name||'؟')[0];
+document.getElementById('hAvatar').textContent=nameInitial;
+document.getElementById('hName').textContent='أهلاً، '+(me.name||'طالب')+'! 👋';
+document.getElementById('hSub').textContent='📱 '+esc(me.phone||'');
+document.getElementById('hBadge').innerHTML='<span class="grade-badge">'+esc(GRADE_MAP[me.grade]||me.grade)+'</span>';
 
-async function apiFetch(slug, params){
-  try{
-    const r = await fetch(FN+'/'+slug+(params||''), {headers:{apikey:KEY}});
-    return await r.json();
-  } catch(e){ return {ok:false,error:String(e)}; }
-}
-
-// ── Auth check ──────────────────────────────────────────────
-const me = JSON.parse(localStorage.getItem('mf_user')||'null');
-if(!me || (!me.phone && me.id)){
-  ['mf_user','mf_access_token','mf_refresh_token'].forEach(k=>localStorage.removeItem(k));
-  location.href='login.html';
-  throw new Error('redirect'); // STOP JS execution
-}
-
-// ── Hero ─────────────────────────────────────────────────────
-document.getElementById('hName').textContent = 'أهلاً، ' + (me.name||'طالب') + '! 👋';
-document.getElementById('hSub').textContent  = 'موبايل: ' + (me.phone||'');
-document.getElementById('hBadge').innerHTML  = '<span class="grade-badge">' + esc(GRADE_MAP[me.grade]||me.grade) + '</span>';
-
-// ── Selected course ──────────────────────────────────────────
-let selC = JSON.parse(localStorage.getItem('mf_selected_course')||'null');
-
+let selC=JSON.parse(localStorage.getItem('mf_selected_course')||'null');
 function renderSel(){
-  const box = document.getElementById('selBox');
-  const btn = document.getElementById('btnOpen');
-  if(!selC){ box.innerHTML='—'; btn.style.display='none'; return; }
-  box.innerHTML = '<b>'+esc(selC.title)+'</b><br>'
-    + '<span class="tag">'+esc(selC.subject)+'</span> '
-    + '<span class="price-badge">'+( selC.price||0)+' جنيه</span>';
-  apiFetch('check-enrollment','?user_id='+me.id+'&course_id='+selC.id).then(d=>{
-    if(d.enrolled){ btn.style.display='inline-block'; btn.href='course.html?id='+selC.id; }
+  const box=document.getElementById('selBox'),btn=document.getElementById('btnOpen');
+  if(!selC){box.innerHTML='—';btn.style.display='none';return;}
+  box.innerHTML='<b>'+esc(selC.title)+'</b><br><span class="tag">'+esc(selC.subject)+'</span> <span class="price-badge">'+(selC.price||0)+' جنيه</span>';
+  apiFetch('check-enrollment','?user_id='+me.id+'&course_id='+selC.id).then(function(d){
+    if(d.enrolled){btn.style.display='inline-block';btn.href='course.html?id='+selC.id;}
   });
 }
 renderSel();
+function goPay(){if(!selC){alert('اختار كورس الأول');return;}location.href='payment.html';}
 
-function goPay(){
-  if(!selC){ alert('اختار كورس الأول'); return; }
-  location.href='payment.html';
-}
-
-// ── Notifications ────────────────────────────────────────────
 async function loadNotifs(){
-  const el = document.getElementById('notifsList');
-  const d  = await apiFetch('user-notifications','?user_id='+me.id);
-  if(!d.ok || !d.notifications || !d.notifications.length){
-    el.textContent='لا توجد إشعارات'; return;
-  }
-  el.innerHTML = d.notifications.map(n=>
-    '<div class="notif '+(n.is_read?'':'unread')+'">'
-    +'<b>'+esc(n.title)+'</b><br>'
-    +'<span class="muted">'+esc(n.message)+'</span></div>'
-  ).join('');
+  const el=document.getElementById('notifsList');
+  const d=await apiFetch('user-notifications','?user_id='+me.id);
+  if(!d.ok||!d.notifications||!d.notifications.length){el.textContent='لا توجد إشعارات';return;}
+  el.innerHTML=d.notifications.map(function(n){return '<div class="notif '+(n.is_read?'':'unread')+'"><b>'+esc(n.title)+'</b><br><span class="muted">'+esc(n.message)+'</span></div>';}).join('');
 }
 
-// ── Payment Status ───────────────────────────────────────────
 async function loadPaymentStatus(){
-  const d = await apiFetch('student-payments','?user_id='+me.id);
-  if(!d.ok || !d.payments) return;
-  const pending = d.payments.filter(p=>p.status==='pending');
-  if(!pending.length) return;
-  const p = pending[0];
+  const d=await apiFetch('student-payments','?user_id='+me.id);
+  if(!d.ok||!d.payments)return;
+  const pending=d.payments.filter(function(p){return p.status==='pending';});
+  document.getElementById('stPending').textContent=pending.length;
+  if(!pending.length)return;
+  const p=pending[0];
   document.getElementById('pendingBanner').style.display='block';
-  document.getElementById('pendingDetail').textContent =
-    'كورس: '+(p.course_title||'') + ' — طريقة: '+(p.method||'') + ' — المبلغ: '+(p.amount||0)+' ج';
+  document.getElementById('pendingDetail').textContent='كورس: '+(p.course_title||'')+' — '+p.method+' — '+(p.amount||0)+' ج';
 }
 
-// ── Courses ──────────────────────────────────────────────────
+async function loadCerts(){
+  const d=await apiFetch('certificates','?user_id='+me.id);
+  if(!d.ok||!d.certificates||!d.certificates.length){document.getElementById('stCerts').textContent='0';return;}
+  document.getElementById('stCerts').textContent=d.certificates.length;
+  document.getElementById('certsSection').style.display='block';
+  document.getElementById('certsList').innerHTML=d.certificates.map(function(c){
+    return '<div class="cert-card"><div style="font-size:32px">🏆</div>'
+      +'<div style="flex:1"><div style="font-size:14px;font-weight:800">'+esc(c.course_title||'')+'</div>'
+      +'<div class="muted">'+esc(c.subject||'')+' · '+esc(c.teacher||'')+'</div></div>'
+      +'<a href="course.html?id='+c.course_id+'" class="btn-open" style="font-size:12px;padding:6px 12px">🏆 عرض</a></div>';
+  }).join('');
+}
+
 async function loadCourses(){
-  const el = document.getElementById('coursesList');
-  el.innerHTML = '<div class="spin"></div>';
-  const d = await apiFetch('student-courses','?grade='+encodeURIComponent(me.grade||'')+'&user_id='+me.id);
-  if(!d.ok || !d.courses || !d.courses.length){
+  const el=document.getElementById('coursesList');
+  el.innerHTML='<div class="spin"></div>';
+  const d=await apiFetch('student-courses','?grade='+encodeURIComponent(me.grade||'')+'&user_id='+me.id);
+  if(!d.ok||!d.courses||!d.courses.length){
     el.innerHTML='<div class="muted" style="padding:20px;text-align:center">مفيش كورسات لسنتك لسه 📭</div>';
     return;
   }
+  const enrolled=d.courses.filter(function(c){return c.enrolled;});
+  document.getElementById('stCourses').textContent=enrolled.length;
+  // sum completed vids across courses (needs progress per course - show placeholder)
+  document.getElementById('stVids').textContent='—';
+
   el.innerHTML='';
   d.courses.forEach(function(c){
-    var enrolled = c.enrolled;
-    var pending  = c.payment_status==='pending';
-    var safeTitle   = esc(c.title||'');
-    var safeSubject = esc(c.subject||'');
-    var safeTeacher = esc(c.teacher_name||'');
-    var price = c.price||0;
-
-    var schHtml = '';
-    if(c.schedules && c.schedules.length){
-      c.schedules.forEach(function(s){
-        schHtml += '<div class="sch-item">🗓️ <b>'+esc(s.day_of_week)+'</b> — '+esc(s.start_time)+' → '+esc(s.end_time)
-          +(s.notes?' <span class="muted">('+esc(s.notes)+')</span>':'')+'</div>';
-      });
-    } else {
-      schHtml = '<div class="muted" style="font-size:12px;margin-top:6px">مواعيد لسه ما اتحطتش</div>';
-    }
-
-    var statusTag = enrolled
-      ? '<span class="tag">✅ مسجل</span>'
-      : (pending
-          ? '<span class="tag">⏳ في الانتظار</span>'
-          : '<span class="tag">🔓 غير مسجل</span>');
-
-    var actionBtns = '';
-    if(enrolled)  actionBtns += '<a href="course.html?id='+c.id+'" class="btn-open">▶️ فتح الكورس</a>';
-    if(pending)   actionBtns += '<span class="pending-tag">⏳ قيد المراجعة</span>';
-
-    var div = document.createElement('div');
-    div.className = 'course-card';
-    div.innerHTML =
-      '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">'
-        +'<div class="course-title">'+safeTitle+'</div>'
-        +'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
-          +'<span class="price-badge">'+price+' جنيه</span>'
-          +actionBtns
-        +'</div>'
+    const isEnrolled=c.enrolled;
+    const isPending=c.payment_status==='pending';
+    var schHtml='';
+    if(c.schedules&&c.schedules.length){
+      c.schedules.forEach(function(s){schHtml+='<div class="sch-item">🗓️ <b>'+esc(s.day_of_week)+'</b> — '+esc(s.start_time)+' → '+esc(s.end_time)+(s.notes?' ('+esc(s.notes)+')':'')+'</div>';});
+    } else {schHtml='<div class="muted" style="font-size:11px;margin-top:4px">مواعيد لسه ما اتحطتش</div>';}
+    var actionBtns='';
+    if(isEnrolled) actionBtns+='<a href="course.html?id='+c.id+'" class="btn-open">▶️ فتح الكورس</a>';
+    if(isPending)  actionBtns+='<span class="pending-tag">⏳ قيد المراجعة</span>';
+    var div=document.createElement('div');
+    div.className='course-card';
+    div.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">'
+      +'<div class="course-title">'+esc(c.title)+'</div>'
+      +'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="price-badge">'+(c.price||0)+' جنيه</span>'+actionBtns+'</div>'
       +'</div>'
-      +'<div class="tag-row">'
-        +'<span class="tag">👨‍🏫 '+safeTeacher+'</span>'
-        +'<span class="tag">📘 '+safeSubject+'</span>'
-        +statusTag
-      +'</div>'
+      +'<div class="tag-row"><span class="tag">👨‍🏫 '+esc(c.teacher_name)+'</span>'
+      +'<span class="tag">📘 '+esc(c.subject)+'</span>'
+      +'<span class="tag">'+(isEnrolled?'✅ مسجل':isPending?'⏳ انتظار':'🔓 غير مسجل')+'</span></div>'
       +schHtml
-      +'<div style="margin-top:10px">'
-        +'<button class="btn" id="selbtn_'+c.id+'">اختيار هذا الكورس</button>'
-      +'</div>';
-
+      +'<div style="margin-top:10px"><button class="btn" id="sel_'+c.id+'">اختيار هذا الكورس</button></div>';
     el.appendChild(div);
-
-    document.getElementById('selbtn_'+c.id).addEventListener('click', function(){
-      selCourse(c.id, c.title||'', c.subject||'', price);
+    document.getElementById('sel_'+c.id).addEventListener('click',function(){
+      selCourse(c.id,c.title||'',c.subject||'',c.price||0);
     });
   });
 }
 
-function selCourse(id, title, subject, price){
-  selC = {id:id, title:title, subject:subject, price:price};
-  localStorage.setItem('mf_selected_course', JSON.stringify(selC));
+function selCourse(id,title,subject,price){
+  selC={id,title,subject,price};
+  localStorage.setItem('mf_selected_course',JSON.stringify(selC));
   renderSel();
-  window.scrollTo({top:0, behavior:'smooth'});
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// ── Init ─────────────────────────────────────────────────────
 loadNotifs();
 loadPaymentStatus();
+loadCerts();
 loadCourses();
 </script>
 </body>
