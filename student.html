@@ -130,6 +130,11 @@ async function api(fn,params){const r=await fetch(FN+'/'+fn+(params||''),{header
 
 const me=JSON.parse(localStorage.getItem('mf_user')||'null');
 if(!me)location.href='login.html';
+// If phone is empty (old session before fix), force re-login
+if(!me.phone && me.id){
+  ['mf_user','mf_access_token','mf_refresh_token'].forEach(k=>localStorage.removeItem(k));
+  location.href='login.html';
+}
 
 // Hero
 document.getElementById('hName').textContent='أهلاً، '+esc(me.name||'طالب')+'! 👋';
