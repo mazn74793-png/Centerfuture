@@ -4,238 +4,309 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Make Future | Login</title>
-
   <style>
-    :root{color-scheme:dark}
-    body{
-      margin:0;
-      font-family:system-ui;
-      background:#0b1020;
-      color:#e8ecff;
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      padding:20px
+    :root { color-scheme: dark }
+    * { box-sizing: border-box }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0b1020;
+      color: #e8ecff;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
     }
-    .card{
-      width:min(560px,100%);
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:18px;
-      padding:20px;
-      box-shadow:0 10px 40px rgba(0,0,0,.35)
+    .card {
+      width: min(520px, 100%);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      padding: 28px 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.4);
     }
-    h2{margin:0 0 6px}
-    .muted{opacity:.8;font-size:13px}
-    .tabs{display:flex;gap:8px;margin-top:12px}
-    .tab{
-      cursor:pointer;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(255,255,255,.08);
-      padding:8px 14px;
-      border-radius:12px;
-      font-weight:700
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+      background: linear-gradient(135deg,#7c3aed,#06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
     }
-    .tab.active{background:rgba(255,255,255,.15)}
-    label{font-size:12px;opacity:.85}
-    input,select{
-      width:100%;
-      padding:10px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(255,255,255,.06);
-      color:#fff;
-      margin-top:6px
+    h2 { margin: 0 0 4px; font-size: 18px; }
+    .muted { opacity: .6; font-size: 13px; margin-bottom: 16px; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+    .tab {
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      padding: 8px 20px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: background .2s;
     }
-    button{
-      cursor:pointer;
-      border:none;
-      background:linear-gradient(135deg,#7c3aed,#06b6d4);
-      color:#fff;
-      padding:10px 16px;
-      border-radius:12px;
-      font-weight:800;
-      margin-top:12px
+    .tab.active {
+      background: linear-gradient(135deg,#7c3aed44,#06b6d444);
+      border-color: #7c3aed88;
     }
-    .msg{
-      margin-top:12px;
-      padding:10px;
-      border-radius:12px;
-      display:none
+    .field { margin-top: 12px; }
+    label { font-size: 12px; opacity: .8; display: block; margin-bottom: 5px; }
+    input, select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.07);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .2s;
     }
-    .msg.show{display:block}
-    .msg.err{background:#7f1d1d}
-    .msg.ok{background:#065f46}
+    input:focus, select:focus { border-color: #7c3aed88; }
+    select option { background: #1a1f35; }
+    button.btn {
+      cursor: pointer;
+      border: none;
+      background: linear-gradient(135deg,#7c3aed,#06b6d4);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 15px;
+      margin-top: 18px;
+      width: 100%;
+      transition: opacity .2s;
+    }
+    button.btn:disabled { opacity: .5; cursor: not-allowed; }
+    .msg {
+      margin-top: 14px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      display: none;
+    }
+    .msg.show { display: block; }
+    .msg.err { background: #7f1d1d; border: 1px solid #991b1b; }
+    .msg.ok  { background: #065f46; border: 1px solid #047857; }
   </style>
 </head>
-
 <body>
-<div class="card">
 
+<div class="card">
+  <div class="logo">MF</div>
   <h2 id="title">تسجيل الدخول</h2>
-  <div class="muted">Make Future Center</div>
+  <div class="muted">Make Future Center — منصة سنتر فرح</div>
 
   <div class="tabs">
-    <div class="tab active" onclick="switchMode('login')" id="tabLogin">Login</div>
-    <div class="tab" onclick="switchMode('signup')" id="tabSignup">Signup</div>
+    <div class="tab active" onclick="switchMode('login')"  id="tabLogin">دخول</div>
+    <div class="tab"        onclick="switchMode('signup')" id="tabSignup">حساب جديد</div>
   </div>
 
-  <!-- LOGIN -->
+  <!-- ===== LOGIN ===== -->
   <div id="loginBox">
-    <div style="margin-top:14px">
-      <label>موبايل أو يوزر</label>
-      <input id="loginValue" placeholder="01xxxxxxxxx أو username">
+    <div class="field">
+      <label>موبايل الطالب أو اسم المستخدم</label>
+      <input id="loginValue" placeholder="01xxxxxxxxx أو username" autocomplete="username">
     </div>
-
-    <div style="margin-top:10px">
-      <label>باسورد</label>
-      <input type="password" id="loginPass" placeholder="••••••••">
+    <div class="field">
+      <label>كلمة المرور</label>
+      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
     </div>
-
-    <button onclick="login()">دخول</button>
+    <button class="btn" id="btnLogin" onclick="login()">دخول ←</button>
   </div>
 
-  <!-- SIGNUP -->
+  <!-- ===== SIGNUP ===== -->
   <div id="signupBox" style="display:none">
-
-    <div style="margin-top:14px">
-      <label>اسم الطالب</label>
-      <input id="suName">
+    <div class="field">
+      <label>اسم الطالب الكامل <span style="color:#f87171">*</span></label>
+      <input id="suName" placeholder="مثال: أحمد محمد">
     </div>
-
-    <div style="margin-top:10px">
-      <label>السنة الدراسية</label>
+    <div class="field">
+      <label>السنة الدراسية <span style="color:#f87171">*</span></label>
       <select id="suGrade">
+        <option value="">-- اختر --</option>
         <option value="3prep">3 إعدادي</option>
         <option value="1sec">1 ثانوي</option>
         <option value="2sec">2 ثانوي</option>
         <option value="3sec">3 ثانوي</option>
       </select>
     </div>
-
-    <div style="margin-top:10px">
-      <label>موبايل الطالب</label>
-      <input id="suPhone">
+    <div class="field">
+      <label>موبايل الطالب <span style="color:#f87171">*</span></label>
+      <input id="suPhone" placeholder="01xxxxxxxxx" maxlength="11">
     </div>
-
-    <div style="margin-top:10px">
-      <label>موبايل ولي الأمر (اختياري)</label>
-      <input id="suParent">
+    <div class="field">
+      <label>موبايل ولي الأمر <span style="opacity:.5">(اختياري)</span></label>
+      <input id="suParent" placeholder="01xxxxxxxxx" maxlength="11">
     </div>
-
-    <div style="margin-top:10px">
-      <label>يوزر (اختياري)</label>
-      <input id="suUser">
+    <div class="field">
+      <label>اسم المستخدم <span style="opacity:.5">(اختياري)</span></label>
+      <input id="suUser" placeholder="username بالإنجليزي">
     </div>
-
-    <div style="margin-top:10px">
-      <label>باسورد</label>
-      <input type="password" id="suPass">
+    <div class="field">
+      <label>كلمة المرور <span style="color:#f87171">*</span></label>
+      <input type="password" id="suPass" placeholder="8 أحرف على الأقل" autocomplete="new-password">
     </div>
-
-    <button onclick="signup()">إنشاء حساب</button>
+    <button class="btn" id="btnSignup" onclick="signup()">إنشاء حساب ←</button>
   </div>
 
   <div id="msg" class="msg"></div>
-
 </div>
 
 <script>
+// ===== Supabase Config =====
+const SUPA_URL = "https://anlstahxxpbbfnwrwulu.supabase.co";
+const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4";
 
+// ===== MD5 (تشفير الباسورد زي ما عملناه في DB) =====
+function md5(d){var r=M(V(Y(X(d),8*d.length)));return r.toLowerCase()}function M(d){for(var _,m="0123456789ABCDEF",f="",r=0;r<d.length;r++)_=d.charCodeAt(r),f+=m.charAt(_>>>4&15)+m.charAt(15&_);return f}function X(d){for(var _=Array(d.length>>2),m=0;m<_.length;m++)_[m]=0;for(m=0;m<8*d.length;m+=8)_[m>>5]|=(255&d.charCodeAt(m/8))<<m%32;return _}function V(d){for(var _="",m=0;m<32*d.length;m+=8)_+=String.fromCharCode(d[m>>5]>>>m%32&255);return _}function Y(d,_){d[_>>5]|=128<<_%32,d[14+(_+64>>>9<<4)]=_;for(var m=1732584193,f=-271733879,r=-1732584194,i=271733878,n=0;n<d.length;n+=16){var h=m,t=f,g=r,e=i;f=md5_ii(f=md5_ii(f=md5_ii(f=md5_ii(f=md5_hh(f=md5_hh(f=md5_hh(f=md5_hh(f=md5_gg(f=md5_gg(f=md5_gg(f=md5_gg(f=md5_ff(f=md5_ff(f=md5_ff(f=md5_ff(f,r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+0],7,-680876936),f,r,d[n+1],12,-389564586),m,f,d[n+2],17,606105819),i,m,d[n+3],22,-1044525330),r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+4],7,-176418897),f,r,d[n+5],12,1200080426),m,f,d[n+6],17,-1473231341),i,m,d[n+7],22,-45705983),r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+8],7,1770035416),f,r,d[n+9],12,-1958414417),m,f,d[n+10],17,-42063),i,m,d[n+11],22,-1990404162),r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+12],7,1804603682),f,r,d[n+13],12,-40341101),m,f,d[n+14],17,-1502002290),i,m,d[n+15],22,1236535329),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+1],5,-165796510),f,r,d[n+6],9,-1069501632),m,f,d[n+11],14,643717713),i,m,d[n+0],20,-373897302),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+5],5,-701558691),f,r,d[n+10],9,38016083),m,f,d[n+15],14,-660478335),i,m,d[n+4],20,-405537848),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+9],5,568446438),f,r,d[n+14],9,-1019803690),m,f,d[n+3],14,-187363961),i,m,d[n+8],20,1163531501),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+13],5,-1444681467),f,r,d[n+2],9,-51403784),m,f,d[n+7],14,1735328473),i,m,d[n+12],20,-1926607734),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+5],4,-378558),f,r,d[n+8],11,-2022574463),m,f,d[n+11],16,1839030562),i,m,d[n+14],23,-35309556),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+1],4,-1530992060),f,r,d[n+4],11,1272893353),m,f,d[n+7],16,-155497632),i,m,d[n+10],23,-1094730640),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+13],4,681279174),f,r,d[n+0],11,-358537222),m,f,d[n+3],16,-722521979),i,m,d[n+6],23,76029189),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+9],4,-640364487),f,r,d[n+12],11,-421815835),m,f,d[n+15],16,530742520),i,m,d[n+2],23,-995338651),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+0],6,-198630844),f,r,d[n+7],10,1126891415),m,f,d[n+14],15,-1416354905),i,m,d[n+5],21,-57434055),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+12],6,1700485571),f,r,d[n+3],10,-1894986606),m,f,d[n+10],15,-1051523),i,m,d[n+1],21,-2054922799),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+8],6,1873313359),f,r,d[n+15],10,-30611744),m,f,d[n+6],15,-1560198380),i,m,d[n+13],21,1309151649),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+4],6,-145523070),f,r,d[n+11],10,-1120210379),m,f,d[n+2],15,718787259),i,m,d[n+9],21,-343485551),m=safe_add(m,h),f=safe_add(f,t),r=safe_add(r,g),i=safe_add(i,e)}return[m,f,r,i]}function md5_cmn(d,_,m,f,r,i){return safe_add(bit_rol(safe_add(safe_add(_,d),safe_add(f,i)),r),m)}function md5_ff(d,_,m,f,r,i,n){return md5_cmn(_&m|~_&f,d,_,r,i,n)}function md5_gg(d,_,m,f,r,i,n){return md5_cmn(_&f|m&~f,d,_,r,i,n)}function md5_hh(d,_,m,f,r,i,n){return md5_cmn(_^m^f,d,_,r,i,n)}function md5_ii(d,_,m,f,r,i,n){return md5_cmn(m^(_|~f),d,_,r,i,n)}function safe_add(d,_){var m=(65535&d)+(65535&_);return(d>>16)+(_>>16)+(m>>16)<<16|65535&m}function bit_rol(d,_){return d<<_|d>>>32-_}
+
+// ===== Helpers =====
+async function supaFetch(path, method="GET", body=null){
+  const opts = {
+    method,
+    headers: {
+      "apikey": SUPA_KEY,
+      "Authorization": "Bearer " + SUPA_KEY,
+      "Content-Type": "application/json",
+      "Prefer": method==="POST" ? "return=representation" : ""
+    }
+  };
+  if(body) opts.body = JSON.stringify(body);
+  const res = await fetch(SUPA_URL + path, opts);
+  const data = await res.json();
+  return { ok: res.ok, status: res.status, data };
+}
+
+function showMsg(type, text){
+  const m = document.getElementById("msg");
+  m.className = "msg show " + (type==="ok" ? "ok" : "err");
+  m.textContent = text;
+}
+function clearMsg(){
+  const m = document.getElementById("msg");
+  m.className = "msg";
+  m.textContent = "";
+}
 function switchMode(mode){
-  document.getElementById("loginBox").style.display = mode==="login"?"block":"none";
-  document.getElementById("signupBox").style.display = mode==="signup"?"block":"none";
-  document.getElementById("tabLogin").classList.toggle("active",mode==="login");
-  document.getElementById("tabSignup").classList.toggle("active",mode==="signup");
-  document.getElementById("title").textContent = mode==="login"?"تسجيل الدخول":"إنشاء حساب";
+  document.getElementById("loginBox").style.display  = mode==="login"  ? "block" : "none";
+  document.getElementById("signupBox").style.display = mode==="signup" ? "block" : "none";
+  document.getElementById("tabLogin").classList.toggle("active",  mode==="login");
+  document.getElementById("tabSignup").classList.toggle("active", mode==="signup");
+  document.getElementById("title").textContent = mode==="login" ? "تسجيل الدخول" : "إنشاء حساب";
   clearMsg();
 }
 
-function showMsg(type,text){
-  const m=document.getElementById("msg");
-  m.className="msg show "+(type==="ok"?"ok":"err");
-  m.textContent=text;
-}
-
-function clearMsg(){
-  const m=document.getElementById("msg");
-  m.className="msg";
-  m.textContent="";
-}
-
+// ===== SIGNUP =====
 async function signup(){
   clearMsg();
+  const name  = document.getElementById("suName").value.trim();
+  const grade = document.getElementById("suGrade").value;
+  const phone = document.getElementById("suPhone").value.trim();
+  const parent= document.getElementById("suParent").value.trim();
+  const user  = document.getElementById("suUser").value.trim();
+  const pass  = document.getElementById("suPass").value;
 
-  const payload={
-    full_name:suName.value.trim(),
-    phone_student:suPhone.value.trim(),
-    phone_parent:suParent.value.trim(),
-    grade:suGrade.value.trim(),
-    username:suUser.value.trim(),
-    password:suPass.value.trim()
+  if(!name || !grade || !phone || !pass){
+    showMsg("err","⚠️ اكمل البيانات المطلوبة"); return;
+  }
+  if(!/^01[0-9]{9}$/.test(phone)){
+    showMsg("err","⚠️ رقم موبايل الطالب غير صحيح"); return;
+  }
+  if(pass.length < 6){
+    showMsg("err","⚠️ كلمة المرور أقل من 6 أحرف"); return;
+  }
+
+  const btn = document.getElementById("btnSignup");
+  btn.disabled = true;
+  btn.textContent = "جاري التسجيل...";
+
+  // التحقق إن الرقم مش موجود
+  const check = await supaFetch(`/rest/v1/users?phone_student=eq.${phone}&select=id`);
+  if(check.data && check.data.length > 0){
+    showMsg("err","❌ رقم الموبايل ده مسجل قبل كده");
+    btn.disabled = false; btn.textContent = "إنشاء حساب ←"; return;
+  }
+
+  const hashed = md5(pass);
+  const payload = {
+    full_name: name,
+    grade,
+    phone_student: phone,
+    phone_parent: parent || null,
+    username: user || null,
+    password: hashed,
+    role: "student"
   };
 
-  if(!payload.full_name||!payload.phone_student||!payload.grade||!payload.password){
-    showMsg("err","املأ البيانات المطلوبة");
+  const res = await supaFetch("/rest/v1/users", "POST", payload);
+
+  btn.disabled = false;
+  btn.textContent = "إنشاء حساب ←";
+
+  if(!res.ok){
+    const errMsg = res.data?.message || res.data?.[0]?.message || "خطأ في التسجيل";
+    showMsg("err", "❌ " + errMsg);
     return;
   }
 
-  const res=await fetch("/.netlify/functions/signup",{
-    method:"POST",
-    headers:{"content-type":"application/json"},
-    body:JSON.stringify(payload)
-  });
-
-  const data=await res.json();
-
-  if(!res.ok||!data.ok){
-    showMsg("err",data.error||"خطأ في التسجيل");
-    return;
-  }
-
-  showMsg("ok","تم التسجيل بنجاح ✅ اعمل Login");
-  switchMode("login");
+  showMsg("ok","✅ تم التسجيل بنجاح! اضغط على 'دخول' الآن");
+  setTimeout(()=>switchMode("login"), 1500);
 }
 
+// ===== LOGIN =====
 async function login(){
   clearMsg();
+  const loginVal = document.getElementById("loginValue").value.trim();
+  const pass     = document.getElementById("loginPass").value;
 
-  const payload={
-    login:loginValue.value.trim(),
-    password:loginPass.value.trim()
-  };
-
-  if(!payload.login||!payload.password){
-    showMsg("err","اكتب البيانات");
-    return;
+  if(!loginVal || !pass){
+    showMsg("err","⚠️ اكتب البيانات"); return;
   }
 
-  const res=await fetch("/.netlify/functions/login",{
-    method:"POST",
-    headers:{"content-type":"application/json"},
-    body:JSON.stringify(payload)
-  });
+  const btn = document.getElementById("btnLogin");
+  btn.disabled = true;
+  btn.textContent = "جاري الدخول...";
 
-  const data=await res.json();
+  const hashed = md5(pass);
 
-  if(!res.ok||!data.ok){
-    showMsg("err",data.error||"بيانات الدخول غلط");
-    return;
+  // البحث بالموبايل أو بالـ username
+  const isPhone = /^01[0-9]{9}$/.test(loginVal);
+  const query = isPhone
+    ? `/rest/v1/users?phone_student=eq.${loginVal}&password=eq.${hashed}&select=*`
+    : `/rest/v1/users?username=eq.${loginVal}&password=eq.${hashed}&select=*`;
+
+  const res = await supaFetch(query);
+
+  btn.disabled = false;
+  btn.textContent = "دخول ←";
+
+  if(!res.ok || !res.data || res.data.length === 0){
+    showMsg("err","❌ بيانات الدخول غلط"); return;
   }
 
-  localStorage.setItem("mf_user",JSON.stringify(data.user));
+  const user = res.data[0];
 
-  showMsg("ok","تم تسجيل الدخول ✅");
+  // حفظ بيانات المستخدم في localStorage
+  localStorage.setItem("mf_user", JSON.stringify({
+    id:    user.id,
+    name:  user.full_name,
+    grade: user.grade,
+    phone: user.phone_student,
+    role:  user.role
+  }));
+
+  showMsg("ok","✅ أهلاً " + user.full_name + "!");
 
   setTimeout(()=>{
-    if(data.user.role==="superadmin"){
-      location.href="admin.html";
-    }else{
-      location.href="student.html";
+    if(user.role === "admin" || user.role === "superadmin"){
+      location.href = "admin.html";
+    } else {
+      location.href = "student.html";
     }
-  },600);
+  }, 700);
 }
-
 </script>
 </body>
 </html>
