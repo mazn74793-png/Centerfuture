@@ -331,12 +331,12 @@ const PHONE=me.phone_student||me.phone||'';
 let videos=[],progressMap={},curVid=null,saveTimer=null,wmTimer=null;
 
 async function api(fn,method,body,params){
-  const r=await fetch(FN+'/'+fn+(params||''),{
-    method:method||'GET',
-    headers:{apikey:KEY,'Content-Type':'application/json'},
-    ...(body?{body:JSON.stringify(body)}:{})
-  });
-  return r.json().catch(()=>({}));
+  const m=method||'GET';
+  const h={apikey:KEY};
+  const opts={method:m,headers:h};
+  if(body){h['Content-Type']='application/json';opts.body=JSON.stringify(body);}
+  try{const r=await fetch(FN+'/'+fn+(params||''),opts);return await r.json();}
+  catch(e){console.error('api error',fn,e);return {ok:false,error:String(e)};}
 }
 function esc(s){return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');}
 
