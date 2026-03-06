@@ -91,6 +91,8 @@ th{text-align:right;color:var(--muted);font-weight:600}
     <button class="tbtn" onclick="openTab('sched',this)">🗓️ المواعيد</button>
     <button class="tbtn" onclick="openTab('videos',this)">🎬 الفيديوهات</button>
     <button class="tbtn" onclick="openTab('pay',this)">💳 الدفع</button>
+    <button class="tbtn" onclick="openTab('coupons',this)">🎟️ الكوبونات</button>
+    <button class="tbtn" onclick="openTab('comments',this)">💬 التعليقات</button>
     <button class="tbtn" onclick="openTab('users',this)">👥 المستخدمين</button>
   </div>
 
@@ -186,17 +188,34 @@ th{text-align:right;color:var(--muted);font-weight:600}
       <div id="vidList"><div class="muted">اختار كورس الأول</div></div>
     </div>
     <div class="box">
-      <div class="pill" style="margin-bottom:12px">➕ إضافة فيديو يوتيوب</div>
+      <div class="pill" style="margin-bottom:12px">➕ إضافة فيديو</div>
       <input type="hidden" id="vId"/>
+      <div class="field">
+        <span class="flabel">نوع الفيديو</span>
+        <select id="vType" onchange="toggleVidType()">
+          <option value="youtube">▶️ يوتيوب</option>
+          <option value="upload">🎞️ رفع ملف من الجهاز</option>
+        </select>
+      </div>
       <div class="grid2">
-        <div class="field"><span class="flabel">عنوان الفيديو</span><input id="vTitle" placeholder="مثال: الدرس الأول - المقدمة"/></div>
-        <div class="field"><span class="flabel">رابط يوتيوب</span><input id="vUrl" placeholder="https://youtube.com/watch?v=..."/></div>
+        <div class="field"><span class="flabel">عنوان الفيديو</span><input id="vTitle" placeholder="مثال: الدرس الأول"/></div>
         <div class="field"><span class="flabel">ترتيب الفيديو</span><input id="vOrder" type="number" placeholder="1" value="1"/></div>
       </div>
-      <div class="field"><span class="flabel">وصف الفيديو (اختياري)</span><textarea id="vDesc" placeholder="اكتب وصف مختصر للفيديو…"></textarea></div>
+      <div id="ytSection" class="field"><span class="flabel">رابط يوتيوب</span><input id="vUrl" placeholder="https://youtube.com/watch?v=..."/></div>
+      <div id="uploadSection" style="display:none">
+        <div class="field">
+          <span class="flabel">ملف الفيديو (MP4, WebM — بحد أقصى 500MB)</span>
+          <input type="file" id="vFile" accept="video/mp4,video/webm,video/ogg" style="padding:8px"/>
+        </div>
+        <div id="uploadProgress" style="display:none;margin-bottom:10px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px">جاري الرفع… <span id="upPct">0%</span></div>
+          <div style="height:6px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden"><div id="upBar" style="height:100%;background:var(--grad);width:0%;transition:width .3s"></div></div>
+        </div>
+      </div>
+      <div class="field"><span class="flabel">وصف الفيديو (اختياري)</span><textarea id="vDesc" placeholder="وصف مختصر…"></textarea></div>
       <div class="row">
         <label style="display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer"><input type="checkbox" id="vActive" checked style="width:auto"/> Active</label>
-        <button class="btn bgrad" onclick="saveVideo()">💾 حفظ الفيديو</button>
+        <button class="btn bgrad" id="saveVidBtn" onclick="saveVideo()">💾 حفظ الفيديو</button>
         <button class="btn bsm" onclick="clearVidForm()" id="btnCancelV" style="display:none">إلغاء</button>
       </div>
     </div>
@@ -214,6 +233,43 @@ th{text-align:right;color:var(--muted);font-weight:600}
         </div>
       </div>
       <table><thead><tr><th>الطالب</th><th>الكورس</th><th>التفاصيل</th><th>إجراء</th></tr></thead><tbody id="tbPay"></tbody></table>
+    </div>
+  </div>
+
+  <!-- COUPONS -->
+  <div id="coupons" class="tpane">
+    <div class="box">
+      <div class="pill" style="margin-bottom:12px">🎟️ الكوبونات الحالية</div>
+      <button class="btn bsm" onclick="loadCoupons()" style="margin-bottom:10px">🔄 تحديث</button>
+      <div id="couponsList"><div class="spin"></div></div>
+    </div>
+    <div class="box">
+      <div class="pill" style="margin-bottom:12px">➕ كوبون جديد</div>
+      <div class="grid2">
+        <div class="field"><span class="flabel">كود الكوبون</span><input id="cpCode" placeholder="مثال: WELCOME20"/></div>
+        <div class="field">
+          <span class="flabel">نوع الخصم</span>
+          <select id="cpType"><option value="percent">نسبة مئوية %</option><option value="fixed">مبلغ ثابت جنيه</option></select>
+        </div>
+        <div class="field"><span class="flabel">قيمة الخصم</span><input id="cpValue" type="number" placeholder="20"/></div>
+        <div class="field"><span class="flabel">أقصى عدد استخدامات</span><input id="cpMax" type="number" placeholder="100" value="100"/></div>
+        <div class="field"><span class="flabel">تاريخ انتهاء (اختياري)</span><input id="cpExpiry" type="date"/></div>
+      </div>
+      <button class="btn bgrad" onclick="createCoupon()">💾 إنشاء الكوبون</button>
+    </div>
+  </div>
+
+  <!-- COMMENTS -->
+  <div id="comments" class="tpane">
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+        <div class="pill">💬 التعليقات والأسئلة</div>
+        <div class="row">
+          <select id="cmtCourseFilter" style="width:auto"></select>
+          <button class="btn bsm" onclick="loadAdminComments()">🔄 تحديث</button>
+        </div>
+      </div>
+      <div id="adminComments"><div class="spin"></div></div>
     </div>
   </div>
 
@@ -265,6 +321,8 @@ function openTab(id,btn){
   document.querySelectorAll('.tbtn').forEach(x=>x.classList.remove('on'));
   document.getElementById(id).classList.add('on');
   btn.classList.add('on');
+  if(id==='coupons') loadCoupons();
+  if(id==='comments') loadAllComments();
 }
 
 // ===== DASHBOARD =====
@@ -424,6 +482,12 @@ async function loadVideos(){
     </div>`).join('');
 }
 
+function toggleVidType(){
+  const t=document.getElementById('vType').value;
+  document.getElementById('ytSection').style.display = t==='youtube'?'':'none';
+  document.getElementById('uploadSection').style.display = t==='upload'?'':'none';
+}
+
 function editVid(id,title,url,desc,order,active){
   document.getElementById('vId').value=id;
   document.getElementById('vTitle').value=title;
@@ -431,6 +495,8 @@ function editVid(id,title,url,desc,order,active){
   document.getElementById('vDesc').value=desc;
   document.getElementById('vOrder').value=order;
   document.getElementById('vActive').checked=active;
+  document.getElementById('vType').value='youtube';
+  toggleVidType();
   document.getElementById('btnCancelV').style.display='';
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
@@ -440,22 +506,85 @@ function clearVidForm(){
   document.getElementById('vOrder').value='1';
   document.getElementById('vActive').checked=true;
   document.getElementById('btnCancelV').style.display='none';
+  document.getElementById('vType').value='youtube';
+  toggleVidType();
+}
+
+async function uploadVideoFile(videoId, courseId){
+  const fileInput = document.createElement('input');
+  fileInput.type='file';
+  fileInput.accept='video/mp4,video/webm,video/quicktime';
+  fileInput.onchange = async function(){
+    const file = fileInput.files[0];
+    if(!file) return;
+    const el = document.getElementById('vidUploadStatus');
+    if(el) el.textContent='⏳ جاري رفع الفيديو... ('+Math.round(file.size/1048576)+'MB)';
+    // Get signed upload URL
+    const d=await fetch(FN+'/video-upload-url',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({video_id:videoId,course_id:courseId,filename:file.name,content_type:file.type})
+    }).then(r=>r.json()).catch(()=>({}));
+    if(!d.ok){if(el) el.textContent='❌ '+(d.error||'فشل');return;}
+    // Upload to storage
+    const upRes=await fetch(d.signed_url,{method:'PUT',headers:{'Content-Type':file.type},body:file});
+    if(!upRes.ok){if(el) el.textContent='❌ فشل الرفع';return;}
+    if(el) el.textContent='✅ تم رفع الفيديو بنجاح!';
+    setTimeout(()=>loadVideos(courseId),1500);
+  };
+  fileInput.click();
 }
 
 async function saveVideo(){
   if(!selCIdV){msg('err','اختار كورس من الكورسات');return;}
   const id=document.getElementById('vId').value;
   const title=document.getElementById('vTitle').value.trim();
-  const url=document.getElementById('vUrl').value.trim();
+  const vtype=document.getElementById('vType').value;
   const desc=document.getElementById('vDesc').value.trim();
   const order=parseInt(document.getElementById('vOrder').value)||1;
   const active=document.getElementById('vActive').checked;
-  if(!title||!url){msg('err','⚠️ اكتب عنوان ورابط الفيديو');return;}
-  if(!url.includes('youtube')&&!url.includes('youtu.be')){msg('err','⚠️ الرابط لازم يكون YouTube');return;}
-  const body=id?{id:parseInt(id),title,youtube_url:url,description:desc||null,order_index:order,is_active:active}:{course_id:selCIdV,title,youtube_url:url,description:desc||null,order_index:order,is_active:active};
-  const d=await api('course-videos','POST',body);
-  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
-  msg('ok','✅ تم حفظ الفيديو');clearVidForm();loadVideos();
+  if(!title){msg('err','⚠️ اكتب عنوان الفيديو');return;}
+
+  if(vtype==='upload'){
+    const file=document.getElementById('vFile').files[0];
+    if(!file&&!id){msg('err','⚠️ اختار ملف الفيديو');return;}
+    if(file){
+      // file upload via fetch with progress via XHR
+      const btn=document.getElementById('saveVidBtn');
+      btn.disabled=true;btn.textContent='جاري الرفع…';
+      document.getElementById('uploadProgress').style.display='block';
+      const xhr=new XMLHttpRequest();
+      xhr.upload.onprogress=function(e){
+        if(e.lengthComputable){
+          const pct=Math.round(e.loaded/e.total*100);
+          document.getElementById('upPct').textContent=pct+'%';
+          document.getElementById('upBar').style.width=pct+'%';
+        }
+      };
+      xhr.onload=async function(){
+        btn.disabled=false;btn.textContent='💾 حفظ الفيديو';
+        document.getElementById('uploadProgress').style.display='none';
+        let r={};try{r=JSON.parse(xhr.responseText);}catch(e){}
+        if(!r.ok){msg('err','❌ '+(r.error||'فشل الرفع'));return;}
+        msg('ok','✅ تم رفع الفيديو بنجاح!');clearVidForm();loadVideos();
+      };
+      xhr.onerror=function(){btn.disabled=false;btn.textContent='💾 حفظ الفيديو';msg('err','❌ فشل الاتصال');};
+      xhr.open('POST',FN+'/video-upload');
+      xhr.setRequestHeader('apikey',KEY);
+      xhr.setRequestHeader('x-course-id',selCIdV);
+      xhr.setRequestHeader('x-title',encodeURIComponent(title));
+      xhr.setRequestHeader('x-order',order);
+      xhr.setRequestHeader('x-description',encodeURIComponent(desc||''));
+      xhr.send(file);
+      return;
+    }
+  } else {
+    const url=document.getElementById('vUrl').value.trim();
+    if(!url){msg('err','⚠️ اكتب رابط اليوتيوب');return;}
+    if(!url.includes('youtube')&&!url.includes('youtu.be')){msg('err','⚠️ الرابط لازم يكون YouTube');return;}
+    const body=id?{id:parseInt(id),title,youtube_url:url,description:desc||null,order_index:order,is_active:active,video_type:'youtube'}:{course_id:selCIdV,title,youtube_url:url,description:desc||null,order_index:order,is_active:active,video_type:'youtube'};
+    const d=await api('course-videos','POST',body);
+    if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+    msg('ok','✅ تم حفظ الفيديو');clearVidForm();loadVideos();
+  }
 }
 
 async function delVid(id){
@@ -474,22 +603,143 @@ async function loadPay(status){
   if(!d.ok||!d.payments?.length){tb.innerHTML=`<tr><td colspan="4" class="muted" style="text-align:center">مفيش طلبات ${status}</td></tr>`;return;}
   d.payments.forEach(p=>{
     const tr=document.createElement('tr');
+    const hasCoupon=p.coupon_id?'🎟️ كوبون':'';
+    const finalAmt = p.final_amount||p.amount||0;
     tr.innerHTML=`
       <td><b>${esc(p.full_name||'')}</b><br>${esc(p.phone_student||'')}<br><span class="muted">${esc(gradeMap[p.grade]||p.grade||'')}</span></td>
       <td><b>${esc(p.course_title||'—')}</b><br><span class="muted">${esc(p.subject||'')} · ${esc(p.teacher_name||'')}</span></td>
-      <td>طريقة: <b>${esc(p.method||'')}</b><br>مبلغ: <b>${p.amount||0} ج</b><br>رقم: <b>${esc(p.transaction_id||'—')}</b><br><span class="muted">${esc(p.receipt_note||'')}</span></td>
+      <td>طريقة: <b>${esc(p.method||'')}</b><br>مبلغ: <b>${finalAmt} ج</b> ${hasCoupon}<br>رقم: <b>${esc(p.transaction_id||'—')}</b><br><span class="muted">${esc(p.receipt_note||'')}</span></td>
       <td><div class="row">
-        <button class="btn bsm bok" onclick="payAct(${p.id},'approve')">✅ قبول</button>
-        <button class="btn bsm bbad" onclick="payAct(${p.id},'reject')">❌ رفض</button>
+        ${status==='pending'?`<button class="btn bsm bok" onclick="payAct(${p.id},'approve','${esc(p.phone_student||'')}')">✅ قبول</button>
+        <button class="btn bsm bbad" onclick="payAct(${p.id},'reject','')">❌ رفض</button>`:''}
+        ${p.phone_student?`<a href="https://wa.me/2${p.phone_student}" target="_blank" class="btn bsm" style="background:#22c55e;border:none;color:#fff;text-decoration:none">💬 واتساب</a>`:''}
       </div></td>`;
     tb.appendChild(tr);
   });
 }
-async function payAct(id,action){
+
+async function payAct(id,action,phone){
   const d=await api('admin-payments','POST',{id,action});
   if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
-  msg('ok',action==='approve'?'✅ تم القبول — الطالب اتضاف للكورس تلقائياً':'❌ تم الرفض');
+  if(action==='approve'){
+    msg('ok','✅ تم القبول — الطالب اتضاف للكورس تلقائياً!');
+    // open whatsapp auto
+    if(d.wa_url) window.open(d.wa_url,'_blank');
+  } else {
+    msg('ok','❌ تم الرفض');
+  }
   loadPay('pending');
+}
+
+// ===== COUPONS =====
+async function loadCoupons(){
+  const el=document.getElementById('couponsList');
+  el.innerHTML='<div class="spin"></div>';
+  const d=await api('coupons');
+  if(!d.ok||!d.coupons?.length){el.innerHTML='<div class="muted">مفيش كوبونات لسه</div>';return;}
+  el.innerHTML='<table><thead><tr><th>الكود</th><th>الخصم</th><th>الاستخدام</th><th>انتهاء</th><th>حالة</th><th>إجراء</th></tr></thead><tbody>'
+    +d.coupons.map(c=>`<tr>
+      <td><b>${esc(c.code)}</b></td>
+      <td>${c.discount_value}${c.discount_type==='percent'?'%':' ج'}</td>
+      <td>${c.used_count}/${c.max_uses}</td>
+      <td>${c.expires_at?new Date(c.expires_at).toLocaleDateString('ar-EG'):'∞'}</td>
+      <td><span style="color:${c.is_active?'#22c55e':'#ef4444'}">${c.is_active?'✅ فعال':'❌ موقوف'}</span></td>
+      <td><div class="row">
+        <button class="btn bsm ${c.is_active?'bbad':'bok'}" onclick="toggleCoupon(${c.id},${!c.is_active})">${c.is_active?'إيقاف':'تفعيل'}</button>
+        <button class="btn bsm bbad" onclick="delCoupon(${c.id})">🗑️</button>
+      </div></td>
+    </tr>`).join('')
+    +'</tbody></table>';
+}
+
+async function createCoupon(){
+  const code=document.getElementById('cpCode').value.trim().toUpperCase();
+  const dtype=document.getElementById('cpType').value;
+  const dval=parseInt(document.getElementById('cpValue').value)||0;
+  const max=parseInt(document.getElementById('cpMax').value)||100;
+  const exp=document.getElementById('cpExpiry').value;
+  if(!code||!dval){msg('err','⚠️ اكتب الكود والقيمة');return;}
+  const d=await api('coupons','POST',{code,discount_type:dtype,discount_value:dval,max_uses:max,expires_at:exp||null});
+  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+  msg('ok','✅ تم إنشاء الكوبون: '+code);
+  ['cpCode','cpValue','cpExpiry'].forEach(id=>document.getElementById(id).value='');
+  loadCoupons();
+}
+
+async function toggleCoupon(id,active){
+  await api('coupons','POST',{action:'toggle',id,is_active:active});
+  loadCoupons();
+}
+
+async function delCoupon(id){
+  if(!confirm('تمسح الكوبون ده؟'))return;
+  await api('coupons','POST',{action:'delete',id});
+  msg('ok','✅ تم الحذف');loadCoupons();
+}
+
+// ===== COMMENTS =====
+let allCoursesForComments=[];
+
+async function initComments(){
+  const d=await api('admin-courses','GET',null,'?grade=&subject=');
+  allCoursesForComments=d.courses||[];
+  const sel=document.getElementById('cmtCourseFilter');
+  sel.innerHTML='<option value="">كل الكورسات</option>'
+    +allCoursesForComments.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('');
+  loadAdminComments();
+}
+
+async function loadAdminComments(){
+  const el=document.getElementById('adminComments');
+  el.innerHTML='<div class="spin"></div>';
+  const courseId=document.getElementById('cmtCourseFilter').value;
+  // load comments per video — get all videos first
+  let vids=[];
+  if(courseId){
+    const v=await api('course-videos','GET',null,'?course_id='+courseId);
+    vids=v.videos||[];
+  } else {
+    for(const c of allCoursesForComments.slice(0,5)){
+      const v=await api('course-videos','GET',null,'?course_id='+c.id);
+      vids=[...vids,...(v.videos||[])];
+    }
+  }
+  if(!vids.length){el.innerHTML='<div class="muted">مفيش فيديوهات</div>';return;}
+  let allComments=[];
+  await Promise.all(vids.map(async v=>{
+    const c=await api('video-comments','GET',null,'?video_id='+v.id);
+    (c.comments||[]).forEach(cm=>{ allComments.push({...cm,vid_title:v.title}); });
+  }));
+  if(!allComments.length){el.innerHTML='<div class="muted">مفيش تعليقات لسه</div>';return;}
+  allComments.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+  el.innerHTML=allComments.map(c=>`
+    <div class="box" style="margin-bottom:10px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px">🎬 ${esc(c.vid_title)} — ${esc(c.user_name)} — ${new Date(c.created_at).toLocaleString('ar-EG')}</div>
+      <div style="font-size:13px;margin-bottom:8px">${esc(c.message)}</div>
+      ${c.reply?`<div style="background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);border-radius:10px;padding:8px;font-size:12px;margin-bottom:8px"><b style="color:#06b6d4">ردك:</b> ${esc(c.reply)}</div>`:''}
+      <div class="row">
+        <input id="rep_${c.id}" placeholder="اكتب رد…" style="flex:1" value="${c.reply?escA(c.reply):''}"/>
+        <button class="btn bsm bok" onclick="replyComment(${c.id})">💬 رد</button>
+        <button class="btn bsm ${c.is_pinned?'bwarn':''}bsm" onclick="pinComment(${c.id},${!c.is_pinned})">${c.is_pinned?'📍 إلغاء تثبيت':'📌 تثبيت'}</button>
+        <button class="btn bsm bbad" onclick="delComment(${c.id})">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+async function replyComment(id){
+  const txt=document.getElementById('rep_'+id).value.trim();
+  if(!txt) return;
+  await api('video-comments','POST',{action:'reply',id,reply:txt});
+  msg('ok','✅ تم الرد');loadAdminComments();
+}
+async function pinComment(id,pinned){
+  await api('video-comments','POST',{action:'pin',id,pinned});
+  loadAdminComments();
+}
+async function delComment(id){
+  if(!confirm('تمسح التعليق؟'))return;
+  await api('video-comments','POST',{action:'delete',id});
+  msg('ok','✅ تم الحذف');loadAdminComments();
 }
 
 // ===== USERS =====
@@ -534,6 +784,101 @@ async function resetPw(uid,name){
 loadStats();
 try{loadCourses();}catch(e){}
 try{loadPay('pending');}catch(e){}
+try{loadCoupons();}catch(e){}
+try{initComments();}catch(e){}
+
+// ── COUPONS ──────────────────────────────────────────────
+async function loadCoupons(){
+  const el=document.getElementById('couponsList');
+  if(!el)return;
+  el.innerHTML='<div class="spin"></div>';
+  const d=await apiFetch('coupons','');
+  if(!d.ok||!d.coupons?.length){el.innerHTML='<div class="muted" style="padding:20px">لا توجد كوبونات</div>';return;}
+  el.innerHTML=d.coupons.map(function(c){
+    const typeLabel=c.discount_type==='percent'?c.discount_value+'%':c.discount_value+' ج';
+    const expLabel=c.expires_at?'📅 '+new Date(c.expires_at).toLocaleDateString('ar-EG'):'لا ينتهي';
+    return '<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">'
+      +'<div><div style="font-size:15px;font-weight:900;letter-spacing:1px">'+esc(c.code)+'</div>'
+      +'<div class="muted">خصم: '+typeLabel+' &nbsp;|&nbsp; استُخدم '+c.used_count+'/'+c.max_uses+' مرة &nbsp;|&nbsp; '+expLabel+'</div></div>'
+      +'<div style="display:flex;gap:8px"><span style="background:'+(c.is_active?'rgba(34,197,94,.15)':'rgba(239,68,68,.12)')+';border:1px solid '+(c.is_active?'rgba(34,197,94,.3)':'rgba(239,68,68,.25)')+';color:'+(c.is_active?'#4ade80':'#f87171')+';padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800">'+(c.is_active?'✅ فعال':'❌ موقوف')+'</span>'
+      +'<button class="btn" style="padding:6px 12px;font-size:12px" onclick="deleteCoupon('+c.id+')">🗑️ حذف</button></div>'
+      +'</div>';
+  }).join('');
+}
+
+function showAddCoupon(){document.getElementById('addCouponForm').style.display='block';}
+
+async function createCoupon(){
+  const code=document.getElementById('cpCode').value.trim().toUpperCase();
+  const type=document.getElementById('cpType').value;
+  const val=parseInt(document.getElementById('cpVal').value)||0;
+  const max=parseInt(document.getElementById('cpMax').value)||100;
+  const exp=document.getElementById('cpExp').value||null;
+  const msgEl=document.getElementById('cpMsg');
+  if(!code||!val){msgEl.innerHTML='<div style="color:#f87171;margin-top:8px">❌ اكتب الكود والقيمة</div>';return;}
+  const d=await fetch(FN+'/coupons',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({code,discount_type:type,discount_value:val,max_uses:max,expires_at:exp})
+  }).then(r=>r.json()).catch(()=>({}));
+  if(!d.ok){msgEl.innerHTML='<div style="color:#f87171;margin-top:8px">❌ '+(d.error||'خطأ')+'</div>';return;}
+  msgEl.innerHTML='<div style="color:#4ade80;margin-top:8px">✅ تم إنشاء الكوبون!</div>';
+  setTimeout(function(){document.getElementById('addCouponForm').style.display='none';loadCoupons();},1000);
+}
+
+async function deleteCoupon(id){
+  if(!confirm('حذف الكوبون؟'))return;
+  await fetch(FN+'/coupons',{method:'DELETE',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({id})});
+  loadCoupons();
+}
+
+// ── COMMENTS ─────────────────────────────────────────────
+async function loadAllComments(){
+  const el=document.getElementById('commentsList');
+  if(!el)return;
+  // Get all comments from video_library - use admin-courses to get course list then fetch per course
+  el.innerHTML='<div class="spin"></div>';
+  const cd=await apiFetch('admin-courses','');
+  if(!cd.ok||!cd.courses?.length){el.innerHTML='<div class="muted" style="padding:20px">لا توجد كورسات</div>';return;}
+  // Fetch comments for all videos — use a general endpoint
+  el.innerHTML='<div class="muted" style="padding:10px;font-size:12px">جاري تحميل التعليقات...</div>';
+  const allComments=[];
+  for(const course of cd.courses){
+    const vd=await apiFetch('course-videos','?course_id='+course.id);
+    if(!vd.ok||!vd.videos?.length) continue;
+    for(const v of vd.videos){
+      const cmd=await apiFetch('video-comments','?video_id='+v.id);
+      if(!cmd.ok||!cmd.comments?.length) continue;
+      cmd.comments.forEach(function(cm){allComments.push({...cm,video_title:v.title,course_title:course.title});});
+    }
+  }
+  if(!allComments.length){el.innerHTML='<div class="muted" style="padding:20px;text-align:center">لا توجد تعليقات بعد</div>';return;}
+  el.innerHTML=allComments.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);}).map(function(cm){
+    return '<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px">'
+      +'<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px">'
+      +'<div><div style="font-size:13px;font-weight:800;color:#c4b5fd">👤 '+esc(cm.user_name)+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+esc(cm.video_title)+' — '+esc(cm.course_title)+'</div></div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+new Date(cm.created_at).toLocaleDateString('ar-EG')+'</div>'
+      +'</div>'
+      +'<div style="font-size:13px;margin-bottom:8px">'+esc(cm.message)+'</div>'
+      +(cm.admin_reply?'<div style="background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);border-radius:9px;padding:8px;font-size:12px;color:#67e8f9;margin-bottom:8px">💬 ردك: '+esc(cm.admin_reply)+'</div>':'')
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+      +'<input id="rep_'+cm.id+'" placeholder="اكتب الرد..." style="flex:1;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.07);color:var(--text);font-family:Cairo,sans-serif;font-size:12px"/>'
+      +'<button class="btn btn-grad" style="padding:7px 14px;font-size:12px" onclick="replyComment('+cm.id+')">إرسال الرد</button>'
+      +'</div></div>';
+  }).join('');
+}
+
+async function replyComment(id){
+  const inp=document.getElementById('rep_'+id);
+  const reply=inp.value.trim();
+  if(!reply)return;
+  const d=await fetch(FN+'/video-comments',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({comment_id:id,admin_reply:reply})
+  }).then(r=>r.json()).catch(()=>({}));
+  if(d.ok){inp.value='';loadAllComments();}
+}
+
+
+
 </script>
 </body>
 </html>
