@@ -228,7 +228,7 @@ nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(28px) saturate(180%);
 
     <div id="tabDesc" class="tpane on fade-up" style="animation-delay:.2s">
       <div class="card">
-        <div id="vidDesc" style="font-size:13px;line-height:1.9;color:var(--muted)">
+        <div id="vidDesc" style="font-size:14px;line-height:1.95;color:var(--text)">
           <div class="empty-state"><div class="icon">🎬</div>اختار فيديو من القائمة لتبدأ</div>
         </div>
       </div>
@@ -417,7 +417,13 @@ async function playVideo(vid){
   // info panel
   document.getElementById('vidTitle').textContent=vid.title;
   document.getElementById('vidTypeBadge').textContent=vid.video_type==='upload'?'🎞️ مرفوع':'▶️ يوتيوب';
-  document.getElementById('vidDesc').textContent=vid.description||'مفيش وصف لهذا الفيديو.';
+  const descEl=document.getElementById('vidDesc');
+  if(vid.description&&vid.description.trim()){
+    descEl.textContent=vid.description;
+    descEl.style.color='var(--text)';
+  } else {
+    descEl.innerHTML='<div class="empty-state"><div class="icon">📝</div>مفيش وصف لهذا الفيديو لسه</div>';
+  }
   document.getElementById('vidInfo').style.display='block';
 
   // progress bar للفيديو
