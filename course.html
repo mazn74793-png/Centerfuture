@@ -451,7 +451,7 @@ async function playVideo(vid){
 
     area.innerHTML=`
       <div class="player-container" oncontextmenu="return false" id="playerBox">
-        <video id="mainVid" controlsList="nodownload" disablePictureInPicture playsinline preload="metadata" src="${urlRes.url}"></video>
+        <video id="mainVid" controls controlsList="nodownload nofullscreen" disablePictureInPicture playsinline preload="metadata" src="${urlRes.url}"></video>
         <div id="vidWatermark">${esc(PHONE)}</div>
       </div>`;
 
@@ -600,7 +600,11 @@ async function loadComments(videoId){
   const el=document.getElementById('cmtList');
   el.innerHTML='<div class="spin"></div>';
   const d=await api('video-comments','GET',null,`?video_id=${videoId}`);
-  if(!d.ok||!d.comments?.length){
+  if(!d.ok){
+    el.innerHTML=`<div class="empty-state"><div class="icon">⚠️</div>خطأ في تحميل التعليقات: ${d.error||'unknown'}</div>`;
+    return;
+  }
+  if(!d.comments||!d.comments.length){
     el.innerHTML='<div class="empty-state"><div class="icon">💬</div>مفيش أسئلة لسه — كن أول واحد!</div>';
     return;
   }
