@@ -45,6 +45,7 @@ textarea{min-height:72px;resize:vertical}
 .bbad{border:none;background:linear-gradient(135deg,#dc2626,#7c3aed);color:#fff}
 .bwarn{border:none;background:linear-gradient(135deg,#d97706,#f59e0b);color:#fff}
 .bgrad{border:none;background:var(--grad);color:#fff}
+/* Tabs */
 .tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
 .tbtn{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--muted);padding:9px 16px;border-radius:13px;font-weight:700;font-size:13px;font-family:'Cairo',sans-serif;transition:all .22s}
 .tbtn:hover{background:rgba(124,58,237,.14);color:var(--text)}
@@ -56,10 +57,12 @@ table{width:100%;border-collapse:collapse;margin-top:10px}
 th,td{border-bottom:1px solid var(--border);padding:10px 8px;font-size:13px;vertical-align:top}
 th{text-align:right;color:var(--muted);font-weight:600}
 .spin{width:36px;height:36px;border-radius:50%;border:3px solid var(--border);border-top-color:#7c3aed;animation:spin 1s linear infinite;margin:20px auto}
+/* Stats */
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:10px}
 .stat-item{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);border-radius:14px;padding:14px;text-align:center}
 .stat-num{font-size:28px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .stat-label{font-size:12px;color:var(--muted);margin-top:4px}
+/* Video items */
 .vid-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;margin-top:8px;display:flex;gap:10px;align-items:flex-start;transition:all .22s}
 .vid-item:hover{border-color:#7c3aed55}
 .vid-num{width:30px;height:30px;flex-shrink:0;border-radius:9px;background:var(--grad);display:grid;place-items:center;font-weight:900;font-size:12px;color:#fff}
@@ -306,12 +309,13 @@ function escA(s){return String(s||'').replaceAll('"','&quot;').replaceAll("'",'&
 const msgEl=document.getElementById('msgbar');
 function msg(type,t){msgEl.className='msgbar show '+type;msgEl.textContent=t;setTimeout(()=>msgEl.className='msgbar',3500);}
 
-// ── دالة API موحدة ──────────────────────────────────────
-async function api(fn, method, body, params){
-  const opts={method:method||'GET',headers:{apikey:KEY,'Content-Type':'application/json'}};
-  if(body) opts.body=JSON.stringify(body);
-  const r=await fetch(FN+'/'+fn+(params||''),opts);
-  return r.json().catch(()=>({}));
+async function api(fn,method,body,params){
+  const m=method||'GET';
+  const h={apikey:KEY};
+  const opts={method:m,headers:h};
+  if(body){h['Content-Type']='application/json';opts.body=JSON.stringify(body);}
+  try{const r=await fetch(FN+'/'+fn+(params||''),opts);return await r.json();}
+  catch(e){console.error('api',fn,e);return {ok:false,error:String(e)};}
 }
 
 function openTab(id,btn){
@@ -320,8 +324,7 @@ function openTab(id,btn){
   document.getElementById(id).classList.add('on');
   btn.classList.add('on');
   if(id==='coupons') loadCoupons();
-  if(id==='comments') initComments();
-  if(id==='users') loadUsers();
+  if(id==='comments') loadAllComments();
 }
 
 // ===== DASHBOARD =====
@@ -370,7 +373,6 @@ function editCourse(id,title,teacher,grade,subject,price,active){
   document.getElementById('cPrice').value=price;
   document.getElementById('cActive').checked=active;
   document.getElementById('btnCancelC').style.display='';
-  openTab('courses',document.querySelectorAll('.tbtn')[1]);
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
 
@@ -472,11 +474,11 @@ async function loadVideos(){
       <div class="vid-num">${i+1}</div>
       <div class="vid-meta">
         <h4>${esc(v.title)}</h4>
-        <p>${v.video_type==='upload'?'🎞️ مرفوع من الجهاز':'▶️ '+esc(v.youtube_url||'')}</p>
+        <p>${esc(v.youtube_url||'')}</p>
         ${v.description?`<p style="margin-top:3px">${esc(v.description)}</p>`:''}
       </div>
       <div class="row">
-        <button class="btn bsm" onclick="editVid(${v.id},'${escA(v.title)}','${escA(v.youtube_url||'')}','${escA(v.description||'')}',${v.order_index||0},${v.is_active},'${v.video_type||'youtube'}')">✏️</button>
+        <button class="btn bsm" onclick="editVid(${v.id},'${escA(v.title)}','${escA(v.youtube_url||'')}','${escA(v.description||'')}',${v.order_index||0},${v.is_active})">✏️</button>
         <button class="btn bsm bbad" onclick="delVid(${v.id})">🗑️</button>
       </div>
     </div>`).join('');
@@ -484,18 +486,18 @@ async function loadVideos(){
 
 function toggleVidType(){
   const t=document.getElementById('vType').value;
-  document.getElementById('ytSection').style.display=t==='youtube'?'':'none';
-  document.getElementById('uploadSection').style.display=t==='upload'?'':'none';
+  document.getElementById('ytSection').style.display = t==='youtube'?'':'none';
+  document.getElementById('uploadSection').style.display = t==='upload'?'':'none';
 }
 
-function editVid(id,title,url,desc,order,active,vtype){
+function editVid(id,title,url,desc,order,active){
   document.getElementById('vId').value=id;
   document.getElementById('vTitle').value=title;
   document.getElementById('vUrl').value=url;
   document.getElementById('vDesc').value=desc;
   document.getElementById('vOrder').value=order;
   document.getElementById('vActive').checked=active;
-  document.getElementById('vType').value=vtype||'youtube';
+  document.getElementById('vType').value='youtube';
   toggleVidType();
   document.getElementById('btnCancelV').style.display='';
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
@@ -508,6 +510,29 @@ function clearVidForm(){
   document.getElementById('btnCancelV').style.display='none';
   document.getElementById('vType').value='youtube';
   toggleVidType();
+}
+
+async function uploadVideoFile(videoId, courseId){
+  const fileInput = document.createElement('input');
+  fileInput.type='file';
+  fileInput.accept='video/mp4,video/webm,video/quicktime';
+  fileInput.onchange = async function(){
+    const file = fileInput.files[0];
+    if(!file) return;
+    const el = document.getElementById('vidUploadStatus');
+    if(el) el.textContent='⏳ جاري رفع الفيديو... ('+Math.round(file.size/1048576)+'MB)';
+    // Get signed upload URL
+    const d=await fetch(FN+'/video-upload-url',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({video_id:videoId,course_id:courseId,filename:file.name,content_type:file.type})
+    }).then(r=>r.json()).catch(()=>({}));
+    if(!d.ok){if(el) el.textContent='❌ '+(d.error||'فشل');return;}
+    // Upload to storage
+    const upRes=await fetch(d.signed_url,{method:'PUT',headers:{'Content-Type':file.type},body:file});
+    if(!upRes.ok){if(el) el.textContent='❌ فشل الرفع';return;}
+    if(el) el.textContent='✅ تم رفع الفيديو بنجاح!';
+    setTimeout(()=>loadVideos(courseId),1500);
+  };
+  fileInput.click();
 }
 
 async function saveVideo(){
@@ -524,6 +549,7 @@ async function saveVideo(){
     const file=document.getElementById('vFile').files[0];
     if(!file&&!id){msg('err','⚠️ اختار ملف الفيديو');return;}
     if(file){
+      // file upload via fetch with progress via XHR
       const btn=document.getElementById('saveVidBtn');
       btn.disabled=true;btn.textContent='جاري الرفع…';
       document.getElementById('uploadProgress').style.display='block';
@@ -552,25 +578,23 @@ async function saveVideo(){
       xhr.send(file);
       return;
     }
+  } else {
+    const url=document.getElementById('vUrl').value.trim();
+    if(!url){msg('err','⚠️ اكتب رابط اليوتيوب');return;}
+    if(!url.includes('youtube')&&!url.includes('youtu.be')){msg('err','⚠️ الرابط لازم يكون YouTube');return;}
+    const body=id?{id:parseInt(id),title,youtube_url:url,description:desc||null,order_index:order,is_active:active,video_type:'youtube'}:{course_id:selCIdV,title,youtube_url:url,description:desc||null,order_index:order,is_active:active,video_type:'youtube'};
+    const d=await api('course-videos','POST',body);
+    if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
+    msg('ok','✅ تم حفظ الفيديو');clearVidForm();loadVideos();
   }
-
-  // YouTube
-  const url=document.getElementById('vUrl').value.trim();
-  if(!url){msg('err','⚠️ اكتب رابط اليوتيوب');return;}
-  if(!url.includes('youtube')&&!url.includes('youtu.be')){msg('err','⚠️ الرابط لازم يكون YouTube');return;}
-  const body=id
-    ?{id:parseInt(id),title,youtube_url:url,description:desc||null,order_index:order,is_active:active,video_type:'youtube'}
-    :{course_id:selCIdV,title,youtube_url:url,description:desc||null,order_index:order,is_active:active,video_type:'youtube'};
-  const d=await api('course-videos','POST',body);
-  if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
-  msg('ok','✅ تم حفظ الفيديو');clearVidForm();loadVideos();
 }
 
 async function delVid(id){
-  if(!confirm('تمسح الفيديو ده؟'))return;
+  if(!confirm('تمسح الفيديو ده؟ هيتمسح من كل حتة!'))return;
+  msg('ok','⏳ جاري المسح...');
   const d=await api('course-videos','DELETE',{id});
-  if(!d.ok){msg('err','❌ فشل');return;}
-  msg('ok','✅ اتمسح');loadVideos();
+  if(!d.ok){msg('err','❌ '+(d.error||'فشل المسح'));return;}
+  msg('ok','✅ اتمسح الفيديو');loadVideos();
 }
 
 // ===== PAYMENTS =====
@@ -583,25 +607,26 @@ async function loadPay(status){
   d.payments.forEach(p=>{
     const tr=document.createElement('tr');
     const hasCoupon=p.coupon_id?'🎟️ كوبون':'';
-    const finalAmt=p.final_amount||p.amount||0;
+    const finalAmt = p.final_amount||p.amount||0;
     tr.innerHTML=`
       <td><b>${esc(p.full_name||'')}</b><br>${esc(p.phone_student||'')}<br><span class="muted">${esc(gradeMap[p.grade]||p.grade||'')}</span></td>
       <td><b>${esc(p.course_title||'—')}</b><br><span class="muted">${esc(p.subject||'')} · ${esc(p.teacher_name||'')}</span></td>
       <td>طريقة: <b>${esc(p.method||'')}</b><br>مبلغ: <b>${finalAmt} ج</b> ${hasCoupon}<br>رقم: <b>${esc(p.transaction_id||'—')}</b><br><span class="muted">${esc(p.receipt_note||'')}</span></td>
       <td><div class="row">
-        ${status==='pending'?`<button class="btn bsm bok" onclick="payAct(${p.id},'approve')">✅ قبول</button>
-        <button class="btn bsm bbad" onclick="payAct(${p.id},'reject')">❌ رفض</button>`:''}
+        ${status==='pending'?`<button class="btn bsm bok" onclick="payAct(${p.id},'approve','${esc(p.phone_student||'')}')">✅ قبول</button>
+        <button class="btn bsm bbad" onclick="payAct(${p.id},'reject','')">❌ رفض</button>`:''}
         ${p.phone_student?`<a href="https://wa.me/2${p.phone_student}" target="_blank" class="btn bsm" style="background:#22c55e;border:none;color:#fff;text-decoration:none">💬 واتساب</a>`:''}
       </div></td>`;
     tb.appendChild(tr);
   });
 }
 
-async function payAct(id,action){
+async function payAct(id,action,phone){
   const d=await api('admin-payments','POST',{id,action});
   if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
   if(action==='approve'){
     msg('ok','✅ تم القبول — الطالب اتضاف للكورس تلقائياً!');
+    // open whatsapp auto
     if(d.wa_url) window.open(d.wa_url,'_blank');
   } else {
     msg('ok','❌ تم الرفض');
@@ -612,7 +637,6 @@ async function payAct(id,action){
 // ===== COUPONS =====
 async function loadCoupons(){
   const el=document.getElementById('couponsList');
-  if(!el) return;
   el.innerHTML='<div class="spin"></div>';
   const d=await api('coupons');
   if(!d.ok||!d.coupons?.length){el.innerHTML='<div class="muted">مفيش كوبونات لسه</div>';return;}
@@ -672,6 +696,7 @@ async function loadAdminComments(){
   const el=document.getElementById('adminComments');
   el.innerHTML='<div class="spin"></div>';
   const courseId=document.getElementById('cmtCourseFilter').value;
+  // load comments per video — get all videos first
   let vids=[];
   if(courseId){
     const v=await api('course-videos','GET',null,'?course_id='+courseId);
@@ -686,18 +711,19 @@ async function loadAdminComments(){
   let allComments=[];
   await Promise.all(vids.map(async v=>{
     const c=await api('video-comments','GET',null,'?video_id='+v.id);
-    (c.comments||[]).forEach(cm=>{allComments.push({...cm,vid_title:v.title});});
+    (c.comments||[]).forEach(cm=>{ allComments.push({...cm,vid_title:v.title}); });
   }));
   if(!allComments.length){el.innerHTML='<div class="muted">مفيش تعليقات لسه</div>';return;}
   allComments.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
   el.innerHTML=allComments.map(c=>`
     <div class="box" style="margin-bottom:10px">
-      <div style="font-size:11px;color:var(--muted);margin-bottom:4px">🎬 ${esc(c.vid_title)} — ${esc(c.user_name||'')} — ${new Date(c.created_at).toLocaleString('ar-EG')}</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px">🎬 ${esc(c.vid_title)} — ${esc(c.user_name)} — ${new Date(c.created_at).toLocaleString('ar-EG')}</div>
       <div style="font-size:13px;margin-bottom:8px">${esc(c.message)}</div>
       ${c.reply?`<div style="background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);border-radius:10px;padding:8px;font-size:12px;margin-bottom:8px"><b style="color:#06b6d4">ردك:</b> ${esc(c.reply)}</div>`:''}
       <div class="row">
         <input id="rep_${c.id}" placeholder="اكتب رد…" style="flex:1" value="${c.reply?escA(c.reply):''}"/>
         <button class="btn bsm bok" onclick="replyComment(${c.id})">💬 رد</button>
+        <button class="btn bsm ${c.is_pinned?'bwarn':''}bsm" onclick="pinComment(${c.id},${!c.is_pinned})">${c.is_pinned?'📍 إلغاء تثبيت':'📌 تثبيت'}</button>
         <button class="btn bsm bbad" onclick="delComment(${c.id})">🗑️</button>
       </div>
     </div>`).join('');
@@ -709,7 +735,10 @@ async function replyComment(id){
   await api('video-comments','POST',{action:'reply',id,reply:txt});
   msg('ok','✅ تم الرد');loadAdminComments();
 }
-
+async function pinComment(id,pinned){
+  await api('video-comments','POST',{action:'pin',id,pinned});
+  loadAdminComments();
+}
 async function delComment(id){
   if(!confirm('تمسح التعليق؟'))return;
   await api('video-comments','POST',{action:'delete',id});
@@ -740,26 +769,119 @@ async function loadUsers(){
     tb.appendChild(tr);
   });
 }
-
 async function setRole(uid,role){
   const d=await api('admin-users','POST',{user_id:uid,role});
   if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
   msg('ok','✅ تم تغيير الدور');loadUsers();
 }
-
 async function resetPw(uid,name){
-  const pw=prompt(`باسورد جديد لـ "${name}":\n(8 أحرف على الأقل)`);
-  if(!pw) return;
-  if(pw.length<8){msg('err','⚠️ الباسورد أقل من 8 أحرف');return;}
+  const pw=prompt(`باسورد جديد لـ "${name}":\n(6 أحرف على الأقل)`);
+  if(!pw)return;
+  if(pw.length<6){msg('err','⚠️ الباسورد أقل من 6 أحرف');return;}
   const d=await api('admin-reset-password','POST',{user_id:uid,new_password:pw});
   if(!d.ok){msg('err','❌ '+(d.error||'فشل'));return;}
   msg('ok','✅ تم تغيير الباسورد');
 }
 
-// ── Init ──────────────────────────────────────────────────
+// Init
 loadStats();
-loadCourses();
-loadPay('pending');
+try{loadCourses();}catch(e){}
+try{loadPay('pending');}catch(e){}
+try{loadCoupons();}catch(e){}
+try{initComments();}catch(e){}
+
+// ── COUPONS ──────────────────────────────────────────────
+async function loadCoupons(){
+  const el=document.getElementById('couponsList');
+  if(!el)return;
+  el.innerHTML='<div class="spin"></div>';
+  const d=await apiFetch('coupons','');
+  if(!d.ok||!d.coupons?.length){el.innerHTML='<div class="muted" style="padding:20px">لا توجد كوبونات</div>';return;}
+  el.innerHTML=d.coupons.map(function(c){
+    const typeLabel=c.discount_type==='percent'?c.discount_value+'%':c.discount_value+' ج';
+    const expLabel=c.expires_at?'📅 '+new Date(c.expires_at).toLocaleDateString('ar-EG'):'لا ينتهي';
+    return '<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">'
+      +'<div><div style="font-size:15px;font-weight:900;letter-spacing:1px">'+esc(c.code)+'</div>'
+      +'<div class="muted">خصم: '+typeLabel+' &nbsp;|&nbsp; استُخدم '+c.used_count+'/'+c.max_uses+' مرة &nbsp;|&nbsp; '+expLabel+'</div></div>'
+      +'<div style="display:flex;gap:8px"><span style="background:'+(c.is_active?'rgba(34,197,94,.15)':'rgba(239,68,68,.12)')+';border:1px solid '+(c.is_active?'rgba(34,197,94,.3)':'rgba(239,68,68,.25)')+';color:'+(c.is_active?'#4ade80':'#f87171')+';padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800">'+(c.is_active?'✅ فعال':'❌ موقوف')+'</span>'
+      +'<button class="btn" style="padding:6px 12px;font-size:12px" onclick="deleteCoupon('+c.id+')">🗑️ حذف</button></div>'
+      +'</div>';
+  }).join('');
+}
+
+function showAddCoupon(){document.getElementById('addCouponForm').style.display='block';}
+
+async function createCoupon(){
+  const code=document.getElementById('cpCode').value.trim().toUpperCase();
+  const type=document.getElementById('cpType').value;
+  const val=parseInt(document.getElementById('cpVal').value)||0;
+  const max=parseInt(document.getElementById('cpMax').value)||100;
+  const exp=document.getElementById('cpExp').value||null;
+  const msgEl=document.getElementById('cpMsg');
+  if(!code||!val){msgEl.innerHTML='<div style="color:#f87171;margin-top:8px">❌ اكتب الكود والقيمة</div>';return;}
+  const d=await fetch(FN+'/coupons',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({code,discount_type:type,discount_value:val,max_uses:max,expires_at:exp})
+  }).then(r=>r.json()).catch(()=>({}));
+  if(!d.ok){msgEl.innerHTML='<div style="color:#f87171;margin-top:8px">❌ '+(d.error||'خطأ')+'</div>';return;}
+  msgEl.innerHTML='<div style="color:#4ade80;margin-top:8px">✅ تم إنشاء الكوبون!</div>';
+  setTimeout(function(){document.getElementById('addCouponForm').style.display='none';loadCoupons();},1000);
+}
+
+async function deleteCoupon(id){
+  if(!confirm('حذف الكوبون؟'))return;
+  await fetch(FN+'/coupons',{method:'DELETE',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({id})});
+  loadCoupons();
+}
+
+// ── COMMENTS ─────────────────────────────────────────────
+async function loadAllComments(){
+  const el=document.getElementById('commentsList');
+  if(!el)return;
+  // Get all comments from video_library - use admin-courses to get course list then fetch per course
+  el.innerHTML='<div class="spin"></div>';
+  const cd=await apiFetch('admin-courses','');
+  if(!cd.ok||!cd.courses?.length){el.innerHTML='<div class="muted" style="padding:20px">لا توجد كورسات</div>';return;}
+  // Fetch comments for all videos — use a general endpoint
+  el.innerHTML='<div class="muted" style="padding:10px;font-size:12px">جاري تحميل التعليقات...</div>';
+  const allComments=[];
+  for(const course of cd.courses){
+    const vd=await apiFetch('course-videos','?course_id='+course.id);
+    if(!vd.ok||!vd.videos?.length) continue;
+    for(const v of vd.videos){
+      const cmd=await apiFetch('video-comments','?video_id='+v.id);
+      if(!cmd.ok||!cmd.comments?.length) continue;
+      cmd.comments.forEach(function(cm){allComments.push({...cm,video_title:v.title,course_title:course.title});});
+    }
+  }
+  if(!allComments.length){el.innerHTML='<div class="muted" style="padding:20px;text-align:center">لا توجد تعليقات بعد</div>';return;}
+  el.innerHTML=allComments.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);}).map(function(cm){
+    return '<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px">'
+      +'<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px">'
+      +'<div><div style="font-size:13px;font-weight:800;color:#c4b5fd">👤 '+esc(cm.user_name)+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+esc(cm.video_title)+' — '+esc(cm.course_title)+'</div></div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+new Date(cm.created_at).toLocaleDateString('ar-EG')+'</div>'
+      +'</div>'
+      +'<div style="font-size:13px;margin-bottom:8px">'+esc(cm.message)+'</div>'
+      +(cm.admin_reply?'<div style="background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);border-radius:9px;padding:8px;font-size:12px;color:#67e8f9;margin-bottom:8px">💬 ردك: '+esc(cm.admin_reply)+'</div>':'')
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+      +'<input id="rep_'+cm.id+'" placeholder="اكتب الرد..." style="flex:1;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.07);color:var(--text);font-family:Cairo,sans-serif;font-size:12px"/>'
+      +'<button class="btn btn-grad" style="padding:7px 14px;font-size:12px" onclick="replyComment('+cm.id+')">إرسال الرد</button>'
+      +'</div></div>';
+  }).join('');
+}
+
+async function replyComment(id){
+  const inp=document.getElementById('rep_'+id);
+  const reply=inp.value.trim();
+  if(!reply)return;
+  const d=await fetch(FN+'/video-comments',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({comment_id:id,admin_reply:reply})
+  }).then(r=>r.json()).catch(()=>({}));
+  if(d.ok){inp.value='';loadAllComments();}
+}
+
+
+
 </script>
 </body>
 </html>
