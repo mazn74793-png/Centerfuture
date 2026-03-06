@@ -170,53 +170,47 @@ function goPay(){if(!selC){alert('اختار كورس الأول');return;}locat
 
 // Notifs
 async function loadNotifs(){
-  const token=localStorage.getItem('mf_access_token');
   const el=document.getElementById('notifsList');
-  if(!token){el.textContent='—';return;}
-  const r=await fetch(FN+'/user-notifications',{headers:{apikey:KEY,'Authorization':'Bearer '+token}});
+  el.textContent='…';
+  const r=await fetch(FN+'/user-notifications?user_id='+me.id,{headers:{apikey:KEY}});
   const d=await r.json().catch(()=>({}));
   if(!d.ok||!d.notifications?.length){el.textContent='لا توجد إشعارات';return;}
   el.innerHTML=d.notifications.map(n=>`<div class="notif ${n.is_read?'':'unread'}"><b>${esc(n.title)}</b><br><span class="muted">${esc(n.message)}</span></div>`).join('');
 }
 
-// Courses
+// Courses - single API call for everything
 async function loadCourses(){
   const el=document.getElementById('coursesList');
   el.innerHTML='<div class="spin"></div>';
-  const d=await api('public-courses',`?grade=${encodeURIComponent(me.grade)}`);
+  const r=await fetch(FN+'/student-courses?grade='+encodeURIComponent(me.grade)+'&user_id='+me.id,{headers:{apikey:KEY}});
+  const d=await r.json().catch(()=>({}));
   if(!d.ok||!d.courses?.length){el.innerHTML='<div class="muted" style="padding:20px;text-align:center">مفيش كورسات لسنتك لسه 📭</div>';return;}
   el.innerHTML='';
-  for(const c of d.courses){
-    // check enrollment
-    const enr=await api('check-enrollment',`?user_id=${me.id}&course_id=${c.id}`);
-    const enrolled=enr.enrolled;
+  d.courses.forEach(c=>{
+    const enrolled=c.enrolled;
+    const pending=c.payment_status==='pending';
     const div=document.createElement('div');
     div.className='course-card';
     div.innerHTML=`
       <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
         <div class="course-title">${esc(c.title)}</div>
-        <div style="display:flex;gap:8px;align-items:center">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <span class="price-badge">${c.price||0} جنيه</span>
           ${enrolled?`<a href="course.html?id=${c.id}" class="btn-open">▶️ فتح الكورس</a>`:''}
+          ${pending?`<span style="background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.3);color:#fbbf24;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800">⏳ قيد المراجعة</span>`:''}
         </div>
       </div>
       <div class="tag-row">
         <span class="tag">👨‍🏫 ${esc(c.teacher_name)}</span>
         <span class="tag">📘 ${esc(c.subject)}</span>
-        <span class="tag">${enrolled?'✅ مسجل':'🔓 غير مسجل'}</span>
+        <span class="tag">${enrolled?'✅ مسجل':pending?'⏳ في الانتظار':'🔓 غير مسجل'}</span>
       </div>
-      <div id="sch_${c.id}" class="muted">جاري تحميل المواعيد…</div>
-      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn" onclick='selCourse(${c.id},"${c.title.replaceAll('"','')}", "${c.subject.replaceAll('"','')}",${c.price||0})'>اختيار هذا الكورس</button>
+      ${c.schedules?.length?c.schedules.map(s=>`<div class="sch-item">🗓️ <b>${esc(s.day_of_week)}</b> — ${esc(s.start_time)} → ${esc(s.end_time)}${s.notes?` <span class="muted">(${esc(s.notes)})</span>`:''}</div>`).join(''):'<div class="muted" style="font-size:12px;margin-top:6px">مواعيد لسه ما اتحطتش</div>'}
+      <div style="margin-top:10px">
+        <button class="btn" onclick='selCourse(${c.id},"${c.title.replaceAll('"','').replaceAll("'","").replaceAll('\','')}","${c.subject.replaceAll('"','').replaceAll("'","")}",${c.price||0})'>اختيار هذا الكورس</button>
       </div>`;
     el.appendChild(div);
-    // schedules
-    api('public-schedules',`?course_id=${c.id}`).then(sd=>{
-      const sw=document.getElementById('sch_'+c.id);
-      if(!sd.ok||!sd.schedules?.length){sw.textContent='مواعيد الكورس لسه ما اتحطتش';return;}
-      sw.innerHTML=sd.schedules.map(s=>`<div class="sch-item">🗓️ <b>${esc(s.day_of_week)}</b> — ${esc(s.start_time)} → ${esc(s.end_time)}${s.notes?` <span class="muted">(${esc(s.notes)})</span>`:''}</div>`).join('');
-    });
-  }
+  });
 }
 
 function selCourse(id,title,subject,price){
