@@ -1,195 +1,213 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Make Future | الطالب</title>
-  <style>
-    :root{color-scheme:dark}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;padding:20px}
-    .wrap{max-width:1050px;margin:0 auto}
-    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
-    .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
-    .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:grid;place-items:center;font-weight:900;font-size:13px}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13px}
-    a:hover,button:hover{background:rgba(255,255,255,.14)}
-    .muted{opacity:.8;font-size:13px;line-height:1.7}
-    .hr{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.14),transparent);margin:14px 0}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media(max-width:760px){.grid{grid-template-columns:1fr}}
-    .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
-    .tag{display:inline-flex;gap:6px;align-items:center;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700}
-    .course{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);border-radius:16px;padding:14px;margin-top:10px}
-    .course h3{margin:0 0 8px;font-size:15px}
-    .pill{display:inline-flex;gap:6px;align-items:center;border:1px solid rgba(255,255,255,.14);padding:5px 10px;border-radius:999px;font-size:12px;margin:2px}
-    .schItem{padding:9px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.2);font-size:13px;margin-top:6px}
-    .notif{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(124,58,237,.12);font-size:13px;margin-top:8px}
-    .notif.unread{border-color:#7c3aed55;background:rgba(124,58,237,.2)}
-    .price-badge{background:linear-gradient(135deg,#7c3aed,#06b6d4);padding:4px 10px;border-radius:999px;font-size:12px;font-weight:800}
-  </style>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Make Future | الطالب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07091a;--bg2:#0d1230;--card:rgba(255,255,255,.055);--border:rgba(255,255,255,.1);--text:#eef0ff;--muted:rgba(238,240,255,.5);--grad:linear-gradient(135deg,#7c3aed,#06b6d4);--r:18px;color-scheme:dark}
+[data-theme=light]{--bg:#f2f4ff;--bg2:#e6eaff;--card:rgba(255,255,255,.8);--border:rgba(0,0,0,.09);--text:#0d1230;--muted:rgba(13,18,48,.5);color-scheme:light}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .35s,color .35s}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 55% at 10% 10%,rgba(124,58,237,.08) 0%,transparent 55%),radial-gradient(ellipse 55% 45% at 88% 88%,rgba(6,182,212,.06) 0%,transparent 55%);pointer-events:none;z-index:0}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.a0{opacity:0;animation:up .55s ease forwards}.a1{animation-delay:.08s}.a2{animation-delay:.16s}.a3{animation-delay:.24s}.a4{animation-delay:.32s}.a5{animation-delay:.40s}
+nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(22px);background:rgba(7,9,26,.84);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;animation:fi .4s ease}
+[data-theme=light] nav{background:rgba(242,244,255,.9)}
+.nav-logo{font-size:18px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.nb{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);padding:7px 13px;border-radius:11px;text-decoration:none;font-weight:700;font-size:13px;font-family:'Cairo',sans-serif;transition:all .2s}
+.nb:hover{background:rgba(124,58,237,.18);border-color:#7c3aed77;transform:translateY(-1px)}
+.thbtn{cursor:pointer;border:1px solid var(--border);background:var(--card);width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:15px;transition:all .25s}
+.thbtn:hover{transform:rotate(22deg) scale(1.12)}
+.wrap{max-width:1100px;margin:0 auto;padding:22px 18px;position:relative;z-index:1}
+.hero{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;backdrop-filter:blur(12px)}
+.hero-name{font-size:22px;font-weight:900;margin-bottom:3px}
+.hero-sub{font-size:13px;color:var(--muted)}
+.grade-badge{display:inline-block;background:var(--grad);color:#fff;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:800;margin-top:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.grid2{grid-template-columns:1fr}}
+.box{background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:16px;padding:16px}
+[data-theme=light] .box{background:rgba(255,255,255,.55)}
+.pill{display:inline-flex;gap:5px;align-items:center;border:1px solid var(--border);padding:4px 11px;border-radius:999px;font-size:12px;font-weight:700}
+.hr{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:16px 0}
+.muted{color:var(--muted);font-size:13px;line-height:1.75}
+/* Selected course */
+.sel-card{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:16px;padding:16px}
+.price-badge{background:var(--grad);color:#fff;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:900}
+/* Course cards */
+.course-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-top:12px;transition:all .25s;backdrop-filter:blur(8px)}
+.course-card:hover{border-color:#7c3aed66;transform:translateY(-2px);box-shadow:0 12px 40px rgba(124,58,237,.15)}
+.course-title{font-size:16px;font-weight:800;margin-bottom:8px}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tag{background:rgba(255,255,255,.07);border:1px solid var(--border);padding:4px 10px;border-radius:999px;font-size:12px}
+[data-theme=light] .tag{background:rgba(0,0,0,.05)}
+.sch-item{padding:8px 12px;border-radius:11px;border:1px solid var(--border);background:rgba(0,0,0,.18);font-size:13px;margin-top:6px}
+[data-theme=light] .sch-item{background:rgba(0,0,0,.04)}
+/* Notif */
+.notif{padding:11px 14px;border-radius:12px;border:1px solid rgba(124,58,237,.2);background:rgba(124,58,237,.08);font-size:13px;margin-top:8px;transition:all .2s}
+.notif.unread{border-color:rgba(124,58,237,.45);background:rgba(124,58,237,.15)}
+/* Btn */
+.btn{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);padding:9px 14px;border-radius:12px;font-weight:800;font-size:13px;font-family:'Cairo',sans-serif;transition:all .2s}
+.btn:hover{background:rgba(255,255,255,.12);transform:translateY(-1px)}
+.btn-grad{border:none;background:var(--grad);color:#fff;box-shadow:0 4px 18px rgba(124,58,237,.35)}
+.btn-grad:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.55)}
+/* Open course btn */
+.btn-open{border:none;background:linear-gradient(135deg,#06b6d4,#7c3aed);color:#fff;padding:8px 16px;border-radius:11px;font-weight:800;font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-open:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(6,182,212,.4)}
+.spin{width:36px;height:36px;border-radius:50%;border:3px solid var(--border);border-top-color:#7c3aed;animation:spin 1s linear infinite;margin:20px auto}
+</style>
 </head>
 <body>
+<nav>
+  <div class="nav-logo">MF — Make Future</div>
+  <div class="nav-row">
+    <a href="payment.html" class="nb">💳 الدفع</a>
+    <a href="change-password.html" class="nb">🔑 الباسورد</a>
+    <a href="https://wa.me/201210575530" target="_blank" class="nb">💬 واتساب</a>
+    <div class="thbtn" id="thb" onclick="toggleTheme()">🌙</div>
+    <button class="nb" onclick="logout()">خروج</button>
+  </div>
+</nav>
+
 <div class="wrap">
-  <div class="card">
-    <div class="top">
-      <div class="row">
-        <div class="logo">MF</div>
-        <div>
-          <div style="font-size:18px;font-weight:900">Make Future</div>
-          <div class="muted">اختر كورسك وشوف المواعيد</div>
+  <!-- Hero -->
+  <div class="hero a0 a1" style="margin-bottom:16px">
+    <div class="hero-name" id="hName">أهلاً 👋</div>
+    <div class="hero-sub" id="hSub">…</div>
+    <div id="hBadge"></div>
+  </div>
+
+  <div class="grid2" style="margin-bottom:16px">
+    <!-- Selected -->
+    <div class="a0 a2">
+      <div class="sel-card">
+        <div class="pill" style="margin-bottom:10px">✅ الكورس المختار</div>
+        <div id="selBox" class="muted">—</div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-grad" onclick="goPay()">💳 ادفع الآن</button>
+          <a id="btnOpen" href="#" class="btn-open" style="display:none">▶️ افتح الكورس</a>
         </div>
-      </div>
-      <div class="row">
-        <a href="index.html">الرئيسية</a>
-        <a href="payment.html">الدفع</a>
-        <a href="change-password.html">🔑 تغيير الباسورد</a>
-        <a href="https://wa.me/201210575530" target="_blank">واتساب</a>
-        <button onclick="logout()">خروج</button>
+        <div class="muted" style="margin-top:8px">Vodafone Cash / InstaPay: <b>01210575530</b></div>
       </div>
     </div>
 
-    <div class="hr"></div>
-
-    <div class="grid">
+    <!-- Notifs -->
+    <div class="a0 a3">
       <div class="box">
-        <div class="tag">👤 بياناتك</div>
-        <div class="muted" style="margin-top:10px" id="meBox">...</div>
-      </div>
-      <div class="box">
-        <div class="tag">✅ الكورس المختار</div>
-        <div class="muted" style="margin-top:10px" id="selected">—</div>
-        <div class="row" style="margin-top:10px">
-          <button onclick="goPay()">💳 ادفع للكورس ده</button>
-        </div>
-        <div class="muted" style="margin-top:8px">
-          Vodafone Cash / InstaPay على <b>01210575530</b>
-        </div>
+        <div class="pill" style="margin-bottom:10px">🔔 الإشعارات</div>
+        <div id="notifsList" class="muted">جاري التحميل…</div>
       </div>
     </div>
+  </div>
 
-    <div class="hr"></div>
-
-    <!-- الإشعارات -->
-    <div class="box" style="margin-bottom:12px" id="notifsBox" style="display:none">
-      <div class="tag">🔔 إشعاراتك</div>
-      <div id="notifsList" style="margin-top:8px"></div>
-    </div>
-
+  <!-- Courses -->
+  <div class="a0 a4">
     <div class="box">
-      <div class="tag">🎓 الكورسات المتاحة لسنتك</div>
-      <div id="courses" class="muted" style="margin-top:10px">جاري التحميل…</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <div class="pill">🎓 الكورسات المتاحة لسنتك</div>
+        <button class="btn" onclick="loadCourses()">🔄 تحديث</button>
+      </div>
+      <div id="coursesList" style="margin-top:10px"><div class="spin"></div></div>
     </div>
   </div>
 </div>
 
 <script>
-const FN = "https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1";
-const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4";
+(function(){var t=localStorage.getItem('mf_theme')||'dark';if(t==='light')document.documentElement.setAttribute('data-theme','light');document.getElementById('thb').textContent=t==='light'?'☀️':'🌙';})();
+function toggleTheme(){var c=document.documentElement.getAttribute('data-theme')||'dark',n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('mf_theme',n);document.getElementById('thb').textContent=n==='light'?'☀️':'🌙';}
 
-function logout(){
-  localStorage.removeItem("mf_user");
-  localStorage.removeItem("mf_access_token");
-  localStorage.removeItem("mf_refresh_token");
-  localStorage.removeItem("mf_selected_course");
-  location.href="login.html";
-}
+const FN="https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1";
+const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4";
+const gradeMap={"3prep":"3 إعدادي","1sec":"1 ثانوي","2sec":"2 ثانوي","3sec":"3 ثانوي"};
 
-const me = JSON.parse(localStorage.getItem("mf_user")||"null");
-if(!me) location.href="login.html";
+function logout(){['mf_user','mf_access_token','mf_refresh_token','mf_selected_course'].forEach(k=>localStorage.removeItem(k));location.href='login.html';}
+function esc(s){return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');}
+async function api(fn,params){const r=await fetch(FN+'/'+fn+(params||''),{headers:{apikey:KEY}});return r.json().catch(()=>({}));}
 
-// عرض بيانات المستخدم
-const gradeMap = {
-  "3prep":"3 إعدادي","1sec":"1 ثانوي","2sec":"2 ثانوي","3sec":"3 ثانوي"
-};
-document.getElementById("meBox").innerHTML =
-  `الاسم: <b>${esc(me.name||"")}</b><br>الموبايل: <b>${esc(me.phone||"")}</b><br>السنة: <b>${esc(gradeMap[me.grade]||me.grade||"")}</b>`;
+const me=JSON.parse(localStorage.getItem('mf_user')||'null');
+if(!me)location.href='login.html';
 
-let selectedCourse = JSON.parse(localStorage.getItem("mf_selected_course")||"null");
-renderSelected();
+// Hero
+document.getElementById('hName').textContent='أهلاً، '+esc(me.name||'طالب')+'! 👋';
+document.getElementById('hSub').textContent='موبايل: '+esc(me.phone||'');
+document.getElementById('hBadge').innerHTML=`<span class="grade-badge">${esc(gradeMap[me.grade]||me.grade)}</span>`;
 
-function renderSelected(){
-  const el = document.getElementById("selected");
-  if(!selectedCourse) el.innerHTML="—";
-  else el.innerHTML=`<b>${esc(selectedCourse.title)}</b><br><span class="pill">📘 ${esc(selectedCourse.subject)}</span> <span class="price-badge">${esc(String(selectedCourse.price||0))} جنيه</span>`;
-}
-
-async function fn(name, params=""){
-  const res = await fetch(`${FN}/${name}${params}`, {headers:{"apikey":KEY}});
-  return res.json();
-}
-
-// تحميل الإشعارات
-async function loadNotifs(){
-  const token = localStorage.getItem("mf_access_token");
-  if(!token) return;
-  const res = await fetch(`${FN}/user-notifications`, {
-    headers:{"apikey":KEY,"Authorization":"Bearer "+token}
+// Selected course
+let selC=JSON.parse(localStorage.getItem('mf_selected_course')||'null');
+function renderSel(){
+  const b=document.getElementById('selBox'),o=document.getElementById('btnOpen');
+  if(!selC){b.innerHTML='—';o.style.display='none';return;}
+  b.innerHTML=`<b>${esc(selC.title)}</b><br><span class="tag">${esc(selC.subject)}</span> <span class="price-badge">${selC.price||0} جنيه</span>`;
+  // check enrollment
+  api('check-enrollment',`?user_id=${me.id}&course_id=${selC.id}`).then(d=>{
+    if(d.enrolled){o.style.display='inline-block';o.href=`course.html?id=${selC.id}`;}
   });
-  const data = await res.json().catch(()=>({}));
-  if(!data.ok||!data.notifications?.length) return;
-  const box = document.getElementById("notifsBox");
-  box.style.display="block";
-  const list = document.getElementById("notifsList");
-  list.innerHTML = data.notifications.map(n=>
-    `<div class="notif ${n.is_read?'':'unread'}">
-      <b>${esc(n.title)}</b><br>
-      <span class="muted">${esc(n.message)}</span>
-    </div>`
-  ).join("");
+}
+renderSel();
+
+function goPay(){if(!selC){alert('اختار كورس الأول');return;}location.href='payment.html';}
+
+// Notifs
+async function loadNotifs(){
+  const token=localStorage.getItem('mf_access_token');
+  const el=document.getElementById('notifsList');
+  if(!token){el.textContent='—';return;}
+  const r=await fetch(FN+'/user-notifications',{headers:{apikey:KEY,'Authorization':'Bearer '+token}});
+  const d=await r.json().catch(()=>({}));
+  if(!d.ok||!d.notifications?.length){el.textContent='لا توجد إشعارات';return;}
+  el.innerHTML=d.notifications.map(n=>`<div class="notif ${n.is_read?'':'unread'}"><b>${esc(n.title)}</b><br><span class="muted">${esc(n.message)}</span></div>`).join('');
 }
 
-// تحميل الكورسات
+// Courses
 async function loadCourses(){
-  const wrap = document.getElementById("courses");
-  wrap.textContent="جاري التحميل…";
-  const data = await fn("public-courses", `?grade=${encodeURIComponent(me.grade)}`);
-  if(!data.ok){ wrap.textContent=data.error||"فشل التحميل"; return; }
-  if(!data.courses?.length){ wrap.textContent="مفيش كورسات لسنتك لسه."; return; }
-  wrap.innerHTML="";
-  for(const c of data.courses){
-    const div=document.createElement("div");
-    div.className="course";
+  const el=document.getElementById('coursesList');
+  el.innerHTML='<div class="spin"></div>';
+  const d=await api('public-courses',`?grade=${encodeURIComponent(me.grade)}`);
+  if(!d.ok||!d.courses?.length){el.innerHTML='<div class="muted" style="padding:20px;text-align:center">مفيش كورسات لسنتك لسه 📭</div>';return;}
+  el.innerHTML='';
+  for(const c of d.courses){
+    // check enrollment
+    const enr=await api('check-enrollment',`?user_id=${me.id}&course_id=${c.id}`);
+    const enrolled=enr.enrolled;
+    const div=document.createElement('div');
+    div.className='course-card';
     div.innerHTML=`
       <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
-        <h3>${esc(c.title)}</h3>
-        <span class="price-badge">${c.price||0} جنيه</span>
+        <div class="course-title">${esc(c.title)}</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="price-badge">${c.price||0} جنيه</span>
+          ${enrolled?`<a href="course.html?id=${c.id}" class="btn-open">▶️ فتح الكورس</a>`:''}
+        </div>
       </div>
-      <div style="margin:6px 0">
-        <span class="pill">👨‍🏫 ${esc(c.teacher_name)}</span>
-        <span class="pill">📘 ${esc(c.subject)}</span>
+      <div class="tag-row">
+        <span class="tag">👨‍🏫 ${esc(c.teacher_name)}</span>
+        <span class="tag">📘 ${esc(c.subject)}</span>
+        <span class="tag">${enrolled?'✅ مسجل':'🔓 غير مسجل'}</span>
       </div>
       <div id="sch_${c.id}" class="muted">جاري تحميل المواعيد…</div>
-      <div class="row" style="margin-top:10px">
-        <button onclick='selectCourse(${c.id},"${escAttr(c.title)}","${escAttr(c.subject)}",${c.price||0})'>اختيار هذا الكورس</button>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" onclick='selCourse(${c.id},"${c.title.replaceAll('"','')}", "${c.subject.replaceAll('"','')}",${c.price||0})'>اختيار هذا الكورس</button>
       </div>`;
-    wrap.appendChild(div);
-    // تحميل مواعيد الكورس
-    fn("public-schedules",`?course_id=${c.id}`).then(sd=>{
-      const sw=document.getElementById(`sch_${c.id}`);
-      if(!sd.ok||!sd.schedules?.length){ sw.textContent="مواعيد الكورس لسه ما اتحطتش"; return; }
-      sw.innerHTML=sd.schedules.map(s=>
-        `<div class="schItem">🗓️ <b>${esc(s.day_of_week)}</b> — ${esc(s.start_time)} → ${esc(s.end_time)}${s.notes?` <span class="muted">(${esc(s.notes)})</span>`:""}</div>`
-      ).join("");
+    el.appendChild(div);
+    // schedules
+    api('public-schedules',`?course_id=${c.id}`).then(sd=>{
+      const sw=document.getElementById('sch_'+c.id);
+      if(!sd.ok||!sd.schedules?.length){sw.textContent='مواعيد الكورس لسه ما اتحطتش';return;}
+      sw.innerHTML=sd.schedules.map(s=>`<div class="sch-item">🗓️ <b>${esc(s.day_of_week)}</b> — ${esc(s.start_time)} → ${esc(s.end_time)}${s.notes?` <span class="muted">(${esc(s.notes)})</span>`:''}</div>`).join('');
     });
   }
 }
 
-function selectCourse(id,title,subject,price){
-  selectedCourse={id,title,subject,price};
-  localStorage.setItem("mf_selected_course",JSON.stringify(selectedCourse));
-  renderSelected();
-  window.scrollTo({top:0,behavior:"smooth"});
+function selCourse(id,title,subject,price){
+  selC={id,title,subject,price};
+  localStorage.setItem('mf_selected_course',JSON.stringify(selC));
+  renderSel();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-
-function goPay(){
-  if(!selectedCourse){ alert("اختار كورس الأول"); return; }
-  location.href="payment.html";
-}
-
-function esc(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
-function escAttr(s){ return String(s||"").replaceAll('"',"&quot;").replaceAll("'","&#39;").replaceAll("<","&lt;"); }
 
 loadNotifs();
 loadCourses();
