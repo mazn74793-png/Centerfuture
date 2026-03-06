@@ -151,10 +151,10 @@ async function apiFetch(slug, params){
 
 // ── Auth check ──────────────────────────────────────────────
 const me = JSON.parse(localStorage.getItem('mf_user')||'null');
-if(!me){ location.href='login.html'; }
-else if(!me.phone && me.id){
+if(!me || (!me.phone && me.id)){
   ['mf_user','mf_access_token','mf_refresh_token'].forEach(k=>localStorage.removeItem(k));
   location.href='login.html';
+  throw new Error('redirect'); // STOP JS execution
 }
 
 // ── Hero ─────────────────────────────────────────────────────
