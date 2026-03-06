@@ -8,194 +8,307 @@
 :root{--bg:#07091a;--bg2:#0d1230;--card:rgba(255,255,255,.055);--border:rgba(255,255,255,.1);--text:#eef0ff;--muted:rgba(238,240,255,.5);--grad:linear-gradient(135deg,#7c3aed,#06b6d4);--r:18px;color-scheme:dark}
 [data-theme=light]{--bg:#f2f4ff;--bg2:#e6eaff;--card:rgba(255,255,255,.8);--border:rgba(0,0,0,.09);--text:#0d1230;--muted:rgba(13,18,48,.5);color-scheme:light}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .35s,color .35s}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 65% 50% at 12% 12%,rgba(124,58,237,.08) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 88% 88%,rgba(6,182,212,.06) 0%,transparent 55%);pointer-events:none;z-index:0}
-@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fi{from{opacity:0}to{opacity:1}}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
-.a0{opacity:0;animation:up .5s ease forwards}
-.a1{animation-delay:.08s}.a2{animation-delay:.16s}.a3{animation-delay:.24s}.a4{animation-delay:.32s}
-nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(22px);background:rgba(7,9,26,.84);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;animation:fi .4s ease}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(22px);background:rgba(7,9,26,.84);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;justify-content:space-between;align-items:center}
 [data-theme=light] nav{background:rgba(242,244,255,.9)}
 .nav-logo{font-size:18px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-row{display:flex;gap:7px;align-items:center}
+.nav-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .nb{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);padding:7px 13px;border-radius:11px;text-decoration:none;font-weight:700;font-size:13px;font-family:'Cairo',sans-serif;transition:all .2s}
-.nb:hover{background:rgba(124,58,237,.18);border-color:#7c3aed77;transform:translateY(-1px)}
-.thbtn{cursor:pointer;border:1px solid var(--border);background:var(--card);width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:15px;transition:all .25s}
-.thbtn:hover{transform:rotate(22deg) scale(1.12)}
-/* Layout */
-.layout{max-width:1280px;margin:0 auto;padding:22px 18px;display:grid;grid-template-columns:1fr 340px;gap:20px;position:relative;z-index:1}
-@media(max-width:920px){.layout{grid-template-columns:1fr}}
-/* Player */
-.course-heading{margin-bottom:14px}
-.course-name{font-size:22px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
-.course-meta{font-size:13px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.progress-bar{height:4px;background:var(--border);border-radius:999px;margin-top:10px;overflow:hidden}
-.progress-fill{height:100%;background:var(--grad);border-radius:999px;transition:width .5s ease}
-.player-box{width:100%;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;background:#000;border:1px solid var(--border);box-shadow:0 24px 64px rgba(0,0,0,.5)}
-.player-box iframe{width:100%;height:100%;border:none}
-.video-info{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-top:14px;backdrop-filter:blur(10px)}
-.video-info h3{font-size:16px;font-weight:800;margin-bottom:6px}
-.video-info p{font-size:13px;color:var(--muted);line-height:1.7}
-/* Playlist */
-.pl-header{font-size:14px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.pl-count{background:var(--grad);color:#fff;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:800}
-.vid-card{cursor:pointer;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;transition:all .22s;backdrop-filter:blur(8px)}
-.vid-card:hover{border-color:#7c3aed55;transform:translateX(-3px);background:rgba(124,58,237,.08)}
-.vid-card.on{border-color:#7c3aed;background:rgba(124,58,237,.15)}
-.vid-num{width:30px;height:30px;flex-shrink:0;border-radius:9px;background:var(--grad);display:grid;place-items:center;font-weight:900;font-size:12px;color:#fff;transition:all .2s}
-.vid-card.on .vid-num{box-shadow:0 0 14px rgba(124,58,237,.7)}
-.vid-body{flex:1;min-width:0}
-.vid-body h4{font-size:13px;font-weight:700;margin-bottom:3px;line-height:1.4}
-.vid-body p{font-size:12px;color:var(--muted)}
-.play-ic{font-size:16px;flex-shrink:0;margin-top:3px;transition:all .2s;opacity:.6}
-.vid-card:hover .play-ic,.vid-card.on .play-ic{opacity:1}
-/* Locked */
-.locked{max-width:540px;margin:60px auto;padding:0 18px;text-align:center}
-.locked-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:48px 28px;backdrop-filter:blur(12px)}
-.locked-icon{font-size:58px;margin-bottom:16px;animation:pulse 2s infinite}
-.locked-box h2{font-size:22px;font-weight:900;margin-bottom:8px}
-.locked-box p{color:var(--muted);font-size:14px;margin-bottom:24px;line-height:1.75}
-.btn-grad{display:inline-block;border:none;background:var(--grad);color:#fff;padding:12px 28px;border-radius:14px;font-weight:800;font-size:14px;font-family:'Cairo',sans-serif;cursor:pointer;text-decoration:none;box-shadow:0 6px 24px rgba(124,58,237,.4);transition:all .25s}
-.btn-grad:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(124,58,237,.58)}
-/* Loading */
-.loading{text-align:center;padding:80px 20px}
-.spin{width:44px;height:44px;border-radius:50%;border:3px solid var(--border);border-top-color:#7c3aed;animation:spin 1s linear infinite;margin:0 auto 14px}
+.nb:hover{background:rgba(124,58,237,.18)}
+.thbtn{cursor:pointer;border:1px solid var(--border);background:var(--card);width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:15px}
+.wrap{max-width:1200px;margin:0 auto;padding:18px;display:grid;grid-template-columns:1fr 340px;gap:18px}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}}
+/* Video Player */
+.player-wrap{background:#000;border-radius:18px;overflow:hidden;position:relative;aspect-ratio:16/9;width:100%}
+/* Watermark overlay */
+#watermark{position:absolute;z-index:20;font-size:13px;font-weight:900;color:rgba(255,255,255,0.22);pointer-events:none;user-select:none;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.5);transition:top .8s,left .8s}
+/* Block right-click & screenshot hint */
+.player-wrap::after{content:'';position:absolute;inset:0;z-index:10;pointer-events:none}
+video{width:100%;height:100%;display:block;object-fit:contain}
+iframe{width:100%;height:100%;border:none}
+/* Progress bar */
+.progress-outer{width:100%;height:6px;background:rgba(255,255,255,.1);border-radius:4px;margin-top:8px;overflow:hidden}
+.progress-inner{height:100%;background:var(--grad);border-radius:4px;transition:width .3s}
+.box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;backdrop-filter:blur(10px)}
+[data-theme=light] .box{background:rgba(255,255,255,.7)}
+.pill{display:inline-flex;gap:5px;align-items:center;border:1px solid var(--border);padding:4px 11px;border-radius:999px;font-size:12px;font-weight:700}
+.vid-item{padding:10px 12px;border-radius:12px;border:1px solid var(--border);margin-top:8px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px}
+.vid-item:hover{border-color:#7c3aed66;background:rgba(124,58,237,.08)}
+.vid-item.active{border-color:#7c3aed;background:rgba(124,58,237,.15)}
+.vid-item.done .vi-icon{color:#22c55e}
+.vi-icon{font-size:18px;flex-shrink:0}
+.vi-info{flex:1;min-width:0}
+.vi-title{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vi-dur{font-size:11px;color:var(--muted)}
+/* Comments */
+.comment{padding:10px 13px;border-radius:12px;border:1px solid var(--border);background:rgba(0,0,0,.15);margin-top:8px;font-size:13px}
+[data-theme=light] .comment{background:rgba(0,0,0,.04)}
+.comment-name{font-weight:800;font-size:12px;color:#7c3aed;margin-bottom:3px}
+.comment-reply{margin-top:8px;padding:8px 12px;border-radius:10px;background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);font-size:12px}
+.reply-label{font-size:11px;font-weight:800;color:#06b6d4;margin-bottom:3px}
+.btn{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 14px;border-radius:11px;font-weight:800;font-size:13px;font-family:'Cairo',sans-serif;transition:all .2s}
+.btn-grad{border:none;background:var(--grad);color:#fff}
+.btn:hover{background:rgba(255,255,255,.12);transform:translateY(-1px)}
+textarea{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:10px;font-family:'Cairo',sans-serif;font-size:13px;resize:vertical;min-height:70px}
+textarea:focus{outline:none;border-color:#7c3aed66}
+/* Certificate */
+.cert-banner{background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(234,179,8,.1));border:1px solid rgba(245,158,11,.4);border-radius:16px;padding:16px;text-align:center;margin-top:12px}
+.spin{width:30px;height:30px;border-radius:50%;border:3px solid var(--border);border-top-color:#7c3aed;animation:spin 1s linear infinite;margin:16px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
 <nav>
-  <div class="nav-logo">MF — الكورس</div>
+  <div class="nav-logo">MF — Make Future</div>
   <div class="nav-row">
-    <a href="student.html" class="nb">← لوحة الطالب</a>
+    <a href="student.html" class="nb">← رجوع</a>
     <div class="thbtn" id="thb" onclick="toggleTheme()">🌙</div>
   </div>
 </nav>
 
-<div id="root" style="position:relative;z-index:1">
-  <div class="loading"><div class="spin"></div><div style="color:var(--muted);font-size:14px">جاري تحميل الكورس…</div></div>
+<div class="wrap" id="mainWrap">
+  <!-- Video side -->
+  <div>
+    <div id="playerSection">
+      <div class="player-wrap" id="playerWrap">
+        <div id="watermark">🔒 جار التحميل…</div>
+        <div id="playerInner" style="width:100%;height:100%"></div>
+      </div>
+      <!-- Progress bar -->
+      <div style="margin-top:8px;display:flex;align-items:center;gap:10px">
+        <div class="progress-outer" style="flex:1"><div class="progress-inner" id="courseProgress" style="width:0%"></div></div>
+        <span id="progressText" style="font-size:12px;font-weight:800;color:var(--muted);white-space:nowrap">0%</span>
+      </div>
+    </div>
+
+    <!-- Video info -->
+    <div style="margin-top:14px" class="box">
+      <div id="vidTitle" style="font-size:18px;font-weight:900;margin-bottom:6px">جاري التحميل…</div>
+      <div id="vidDesc" style="font-size:13px;color:var(--muted)"></div>
+    </div>
+
+    <!-- Certificate -->
+    <div id="certSection" style="display:none"></div>
+
+    <!-- Comments -->
+    <div style="margin-top:14px" class="box">
+      <div class="pill" style="margin-bottom:12px">💬 الأسئلة والتعليقات</div>
+      <div id="commentsList"><div class="spin"></div></div>
+      <div style="margin-top:12px">
+        <textarea id="cmtInput" placeholder="اكتب سؤالك أو تعليقك هنا…"></textarea>
+        <button class="btn btn-grad" style="margin-top:8px;width:100%" onclick="submitComment()">إرسال 📩</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar: video list -->
+  <div>
+    <div class="box">
+      <div class="pill" style="margin-bottom:10px">🎬 قائمة الفيديوهات</div>
+      <div id="videoList"><div class="spin"></div></div>
+    </div>
+  </div>
 </div>
 
 <script>
 (function(){var t=localStorage.getItem('mf_theme')||'dark';if(t==='light')document.documentElement.setAttribute('data-theme','light');document.getElementById('thb').textContent=t==='light'?'☀️':'🌙';})();
 function toggleTheme(){var c=document.documentElement.getAttribute('data-theme')||'dark',n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('mf_theme',n);document.getElementById('thb').textContent=n==='light'?'☀️':'🌙';}
 
-const FN="https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1";
-const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4";
-const gradeMap={"3prep":"3 إعدادي","1sec":"1 ثانوي","2sec":"2 ثانوي","3sec":"3 ثانوي"};
+const FN  = 'https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1';
+const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4';
 
-const me=JSON.parse(localStorage.getItem('mf_user')||'null');
-if(!me)location.href='login.html';
+const me = JSON.parse(localStorage.getItem('mf_user')||'null');
+if(!me){ location.href='login.html'; throw new Error('redirect'); }
+const courseId = new URLSearchParams(location.search).get('id');
+if(!courseId){ location.href='student.html'; throw new Error('redirect'); }
 
-const cId=new URLSearchParams(location.search).get('id');
-if(!cId)location.href='student.html';
-
-function esc(s){return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');}
-async function api(fn,params){const r=await fetch(FN+'/'+fn+(params||''),{headers:{apikey:KEY}});return r.json().catch(()=>({}));}
-
-function ytId(url){const m=url?.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);return m?m[1]:null;}
-
-let videos=[],curVid=null;
-
-function playerHtml(v){
-  const id=ytId(v.youtube_url||'');
-  return id
-    ?`<iframe src="https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&color=white" allowfullscreen allow="autoplay;encrypted-media;picture-in-picture"></iframe>`
-    :`<div style="display:grid;place-items:center;height:100%;color:rgba(255,255,255,.35);font-size:14px">❌ رابط الفيديو غير صحيح</div>`;
+function esc(s){ return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+async function apiFetch(slug,params,opts){
+  try{
+    const r=await fetch(FN+'/'+slug+(params||''),{headers:{apikey:KEY},...(opts||{})});
+    return await r.json();
+  }catch(e){return {ok:false,error:String(e)};}
 }
 
-function renderLayout(course){
-  const prog=videos.length>1?((videos.indexOf(curVid)+1)/videos.length*100).toFixed(0):100;
-  document.getElementById('root').innerHTML=`
-    <div class="layout">
-      <div>
-        <div class="course-heading a0 a1">
-          <div class="course-name">${esc(course?.title||'الكورس')}</div>
-          <div class="course-meta">
-            <span>👨‍🏫 ${esc(course?.teacher_name||'')}</span>
-            <span>📘 ${esc(course?.subject||'')}</span>
-            <span>📺 ${videos.indexOf(curVid)+1} / ${videos.length}</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" id="pFill" style="width:${prog}%"></div></div>
-        </div>
-        <div class="player-box a0 a2" id="playerBox">${playerHtml(curVid)}</div>
-        <div class="video-info a0 a3">
-          <h3 id="vidTitle">${esc(curVid.title)}</h3>
-          ${curVid.description?`<p id="vidDesc">${esc(curVid.description)}</p>`:'<p id="vidDesc" style="display:none"></p>'}
-        </div>
-      </div>
-      <div class="a0 a4">
-        <div class="pl-header">📋 محتوى الكورس <span class="pl-count">${videos.length} فيديو</span></div>
-        <div id="playlist">${renderPlaylist()}</div>
-      </div>
-    </div>`;
+let videos=[], currentVid=null, progressData={}, vidEl=null, progressInterval=null;
+
+// ── Watermark ────────────────────────────────────────────────
+const wm = document.getElementById('watermark');
+function updateWatermark(){
+  wm.textContent = '📵 ' + (me.phone||me.name||'طالب') + ' — Make Future';
+  const pw = document.getElementById('playerWrap');
+  const maxX = Math.max(0, pw.offsetWidth  - wm.offsetWidth  - 20);
+  const maxY = Math.max(0, pw.offsetHeight - wm.offsetHeight - 20);
+  wm.style.left = Math.random()*maxX + 'px';
+  wm.style.top  = Math.random()*maxY + 'px';
+}
+setInterval(updateWatermark, 5000);
+
+// block right-click on player
+document.getElementById('playerWrap').addEventListener('contextmenu', e=>e.preventDefault());
+
+// ── Load course data ─────────────────────────────────────────
+async function init(){
+  const [vids, prog] = await Promise.all([
+    apiFetch('course-videos','?course_id='+courseId),
+    apiFetch('video-progress','?user_id='+me.id+'&course_id='+courseId)
+  ]);
+
+  if(!vids.ok || !vids.videos?.length){
+    document.getElementById('videoList').innerHTML='<div style="color:var(--muted);font-size:13px;padding:10px">لا توجد فيديوهات بعد</div>';
+    return;
+  }
+
+  videos = vids.videos;
+  if(prog.ok && prog.progress){
+    prog.progress.forEach(p=>{ progressData[p.video_id]=p; });
+  }
+
+  // update course progress bar
+  if(prog.ok){
+    document.getElementById('courseProgress').style.width = prog.percent + '%';
+    document.getElementById('progressText').textContent  = prog.percent + '%';
+    if(prog.certificate) showCertificate(prog.certificate);
+  }
+
+  renderVideoList();
+  // play first unwatched or first
+  const firstUnwatched = videos.find(v=>!progressData[v.id]?.completed) || videos[0];
+  playVideo(firstUnwatched);
 }
 
-function renderPlaylist(){
-  return videos.map((v,i)=>`
-    <div class="vid-card ${curVid?.id===v.id?'on':''}" onclick="playVid(${v.id})">
-      <div class="vid-num">${i+1}</div>
-      <div class="vid-body">
-        <h4>${esc(v.title)}</h4>
-        ${v.description?`<p>${esc(v.description.substring(0,55))}${v.description.length>55?'…':''}</p>`:''}
-      </div>
-      <div class="play-ic">${curVid?.id===v.id?'▶️':'▷'}</div>
+function renderVideoList(){
+  const el = document.getElementById('videoList');
+  el.innerHTML = '';
+  videos.forEach(v=>{
+    const done = progressData[v.id]?.completed;
+    const active = currentVid?.id === v.id;
+    const div = document.createElement('div');
+    div.className = 'vid-item' + (active?' active':'') + (done?' done':'');
+    div.innerHTML =
+      '<span class="vi-icon">'+(done?'✅':active?'▶️':'⭕')+'</span>'
+      +'<div class="vi-info"><div class="vi-title">'+esc(v.title)+'</div>'
+      +'<div class="vi-dur">'+(v.video_type==='upload'?'🎞️ مرفوع':'▶️ يوتيوب')+'</div></div>';
+    div.onclick = ()=>playVideo(v);
+    div.id = 'vi_'+v.id;
+    el.appendChild(div);
+  });
+}
+
+async function playVideo(v){
+  if(progressInterval){ clearInterval(progressInterval); progressInterval=null; }
+  currentVid = v;
+  document.getElementById('vidTitle').textContent = v.title||'';
+  document.getElementById('vidDesc').textContent  = v.description||'';
+  const inner = document.getElementById('playerInner');
+  inner.innerHTML = '';
+  renderVideoList();
+
+  if(v.video_type === 'upload'){
+    // get signed URL
+    const d = await apiFetch('get-video-url','?video_id='+v.id+'&user_id='+me.id);
+    if(!d.ok){ inner.innerHTML='<div style="color:#f87171;padding:20px;text-align:center">⛔ '+esc(d.error)+'</div>'; return; }
+    vidEl = document.createElement('video');
+    vidEl.controls = true;
+    vidEl.controlsList = 'nodownload';
+    vidEl.disablePictureInPicture = true;
+    vidEl.style.cssText = 'width:100%;height:100%;object-fit:contain;background:#000';
+    vidEl.src = d.url;
+    vidEl.addEventListener('contextmenu',e=>e.preventDefault());
+    // save last position
+    const saved = progressData[v.id]?.watched_sec;
+    if(saved && saved>5){ vidEl.addEventListener('loadedmetadata',()=>{ vidEl.currentTime=saved; },{ once:true }); }
+    inner.appendChild(vidEl);
+    updateWatermark();
+    // track progress every 5s
+    progressInterval = setInterval(()=>saveProgress(v), 5000);
+    vidEl.addEventListener('ended',()=>{ saveProgress(v,true); });
+  } else {
+    // YouTube
+    const ytId = v.youtube_url?.split('v=')[1]?.split('&')[0] || v.youtube_url?.split('/').pop();
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://www.youtube.com/embed/'+ytId+'?rel=0&modestbranding=1';
+    iframe.allow = 'accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.style.cssText='width:100%;height:100%;border:none';
+    inner.appendChild(iframe);
+    vidEl=null;
+    updateWatermark();
+  }
+  loadComments();
+}
+
+async function saveProgress(v, force){
+  if(!vidEl) return;
+  const watched = Math.floor(vidEl.currentTime||0);
+  const duration = Math.floor(vidEl.duration||0);
+  if(watched<1 && !force) return;
+  const d=await fetch(FN+'/video-progress',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({user_id:me.id,video_id:v.id,course_id:parseInt(courseId),watched_sec:watched,duration_sec:duration})});
+  const r=await d.json().catch(()=>({}));
+  if(r.ok){
+    if(!progressData[v.id]) progressData[v.id]={};
+    progressData[v.id].watched_sec=watched;
+    progressData[v.id].completed=r.completed;
+    renderVideoList();
+    // refresh overall progress
+    const prog=await apiFetch('video-progress','?user_id='+me.id+'&course_id='+courseId);
+    if(prog.ok){
+      document.getElementById('courseProgress').style.width=prog.percent+'%';
+      document.getElementById('progressText').textContent=prog.percent+'%';
+      if(prog.certificate) showCertificate(prog.certificate);
+    }
+  }
+}
+
+function showCertificate(cert){
+  const el=document.getElementById('certSection');
+  el.style.display='block';
+  el.innerHTML='<div class="cert-banner" style="animation:up .5s ease"><div style="font-size:36px">🏆</div><div style="font-size:18px;font-weight:900;margin:8px 0">مبروك! أتممت الكورس بنجاح</div><div style="font-size:13px;color:var(--muted);margin-bottom:12px">كود شهادتك: <b style="color:#fbbf24">'+esc(cert.cert_code)+'</b></div><button class="btn" onclick="downloadCert(\''+esc(cert.cert_code)+'\')">⬇️ تحميل الشهادة</button></div>';
+}
+
+function downloadCert(code){
+  const name=me.name||'الطالب';
+  const course=document.getElementById('vidTitle').textContent||'الكورس';
+  const date=new Date().toLocaleDateString('ar-EG');
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html dir="rtl"><head><meta charset="UTF-8"><title>شهادة</title><style>body{font-family:Cairo,Tajawal,sans-serif;background:linear-gradient(135deg,#07091a,#0d1230);color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}
+.cert{background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(6,182,212,.1));border:2px solid rgba(124,58,237,.4);border-radius:24px;padding:48px;max-width:700px;width:100%;text-align:center;box-shadow:0 0 60px rgba(124,58,237,.3)}
+h1{font-size:32px;font-weight:900;background:linear-gradient(135deg,#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
+.name{font-size:28px;font-weight:900;color:#fbbf24;margin:18px 0}
+.code{font-size:13px;color:rgba(255,255,255,.4);margin-top:18px}
+@media print{body{background:#fff}}</style></head>
+<body><div class="cert"><div style="font-size:48px">🏆</div><h1>شهادة إتمام</h1><p style="color:rgba(255,255,255,.6)">تُمنح هذه الشهادة إلى</p><div class="name">${name}</div><p style="color:rgba(255,255,255,.7)">لإتمامه بنجاح كورس</p><h2 style="margin:12px 0;font-size:22px">${course}</h2><p style="color:rgba(255,255,255,.5);font-size:13px">بتاريخ ${date}</p><p style="color:rgba(255,255,255,.4);font-size:13px;margin-top:4px">Make Future Center 🎓</p><div class="code">كود التحقق: ${code}</div></div></body></html>`);
+  w.document.close();
+  setTimeout(()=>w.print(),600);
+}
+
+// ── Comments ─────────────────────────────────────────────────
+async function loadComments(){
+  if(!currentVid) return;
+  const el=document.getElementById('commentsList');
+  el.innerHTML='<div class="spin"></div>';
+  const d=await apiFetch('video-comments','?video_id='+currentVid.id);
+  if(!d.ok||!d.comments?.length){ el.innerHTML='<div style="color:var(--muted);font-size:13px;padding:8px">لا توجد تعليقات بعد — كن أول من يسأل! 💬</div>'; return; }
+  el.innerHTML=d.comments.map(c=>`
+    <div class="comment ${c.is_pinned?'':''}">
+      ${c.is_pinned?'<span style="font-size:11px;color:#fbbf24;font-weight:800">📌 مثبت</span><br>':''}
+      <div class="comment-name">${esc(c.user_name)} ${c.user_role==='admin'||c.user_role==='superadmin'?'👨‍🏫 (أستاذ)':''}</div>
+      <div>${esc(c.message)}</div>
+      ${c.reply?`<div class="comment-reply"><div class="reply-label">👨‍🏫 رد الأستاذ:</div><div>${esc(c.reply)}</div></div>`:''}
     </div>`).join('');
 }
 
-function playVid(id){
-  curVid=videos.find(v=>v.id===id)||videos[0];
-  const idx=videos.indexOf(curVid);
-  const prog=videos.length>1?((idx+1)/videos.length*100).toFixed(0):100;
-  document.getElementById('playerBox').innerHTML=playerHtml(curVid);
-  document.getElementById('vidTitle').textContent=curVid.title;
-  const desc=document.getElementById('vidDesc');
-  desc.textContent=curVid.description||'';
-  desc.style.display=curVid.description?'':'none';
-  document.getElementById('pFill').style.width=prog+'%';
-  document.getElementById('playlist').innerHTML=renderPlaylist();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-async function init(){
-  const isAdmin=['admin','superadmin'].includes(me.role);
-  const [enrollData,videosData,coursesData]=await Promise.all([
-    api('check-enrollment',`?user_id=${me.id}&course_id=${cId}`),
-    api('course-videos',`?course_id=${cId}`),
-    api('admin-courses',`?grade=&subject=`)
-  ]);
-  const course=(coursesData.courses||[]).find(c=>String(c.id)===String(cId));
-  videos=videosData.videos||[];
-  curVid=videos[0]||null;
-
-  if(!enrollData.enrolled&&!isAdmin){
-    document.getElementById('root').innerHTML=`
-      <div class="locked a0 a1">
-        <div class="locked-box">
-          <div class="locked-icon">🔒</div>
-          <h2>الكورس ده محتاج اشتراك</h2>
-          <p>مش مسجل في الكورس ده لسه.<br>ادفع الاشتراك وبعد موافقة الأدمن هيفتحلك فوراً ✅</p>
-          <a href="student.html" class="btn-grad">🎓 اختار كورس وادفع</a>
-        </div>
-      </div>`;
-    return;
-  }
-
-  if(!videos.length){
-    document.getElementById('root').innerHTML=`
-      <div class="locked a0 a1">
-        <div class="locked-box">
-          <div class="locked-icon">📭</div>
-          <h2>${esc(course?.title||'الكورس')}</h2>
-          <p>المحتوى لسه بيتجهز… رجع تاني قريباً! 🚀</p>
-          <a href="student.html" class="btn-grad">← رجوع</a>
-        </div>
-      </div>`;
-    return;
-  }
-
-  renderLayout(course);
+async function submitComment(){
+  const inp=document.getElementById('cmtInput');
+  const msg=inp.value.trim();
+  if(!msg||!currentVid) return;
+  inp.disabled=true;
+  const d=await fetch(FN+'/video-comments',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({user_id:me.id,video_id:currentVid.id,course_id:parseInt(courseId),message:msg})});
+  const r=await d.json().catch(()=>({}));
+  if(r.ok){ inp.value=''; loadComments(); }
+  else alert('خطأ: '+r.error);
+  inp.disabled=false;
 }
 
 init();
