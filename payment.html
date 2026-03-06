@@ -1,186 +1,172 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Make Future | الدفع</title>
-  <style>
-    :root{color-scheme:dark}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;padding:20px;display:grid;place-items:center}
-    .card{width:min(700px,100%);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:24px;box-shadow:0 10px 40px rgba(0,0,0,.4)}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13px}
-    a:hover,button:hover{background:rgba(255,255,255,.14)}
-    button.primary{border:none;background:linear-gradient(135deg,#7c3aed,#06b6d4);padding:13px 20px;font-size:15px;width:100%;margin-top:4px}
-    button.primary:disabled{opacity:.5;cursor:not-allowed}
-    input,select,textarea{width:100%;padding:10px 13px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:#fff;outline:none;font-size:14px;transition:border-color .2s}
-    input:focus,select:focus,textarea:focus{border-color:#7c3aed88}
-    select option{background:#1a1f35}
-    textarea{min-height:90px;resize:vertical}
-    .muted{opacity:.8;font-size:13px;line-height:1.7}
-    .hr{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.14),transparent);margin:16px 0}
-    .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px;margin-bottom:14px}
-    .label{font-size:12px;opacity:.75;margin-bottom:6px;display:block}
-    .field{margin-bottom:13px}
-    .badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800;background:linear-gradient(135deg,#7c3aed,#06b6d4)}
-    .msg{margin-top:14px;padding:12px 15px;border-radius:13px;font-size:13px;display:none}
-    .msg.show{display:block}
-    .msg.err{background:#7f1d1d;border:1px solid #991b1b}
-    .msg.ok{background:#065f46;border:1px solid #047857}
-    .step{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);margin-bottom:8px}
-    .step-num{width:26px;height:26px;border-radius:999px;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:grid;place-items:center;font-weight:900;font-size:13px;flex-shrink:0}
-  </style>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Make Future | الدفع</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07091a;--bg2:#0d1230;--card:rgba(255,255,255,.055);--border:rgba(255,255,255,.1);--text:#eef0ff;--muted:rgba(238,240,255,.5);--grad:linear-gradient(135deg,#7c3aed,#06b6d4);--r:18px;color-scheme:dark}
+[data-theme=light]{--bg:#f2f4ff;--bg2:#e6eaff;--card:rgba(255,255,255,.8);--border:rgba(0,0,0,.09);--text:#0d1230;--muted:rgba(13,18,48,.5);color-scheme:light}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .35s,color .35s}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 65% 50% at 15% 15%,rgba(124,58,237,.08) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 85% 85%,rgba(6,182,212,.06) 0%,transparent 55%);pointer-events:none;z-index:0}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.a0{opacity:0;animation:up .55s ease forwards}
+.a1{animation-delay:.07s}.a2{animation-delay:.14s}.a3{animation-delay:.21s}.a4{animation-delay:.28s}.a5{animation-delay:.35s}
+nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(22px);background:rgba(7,9,26,.84);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;animation:fi .4s ease}
+[data-theme=light] nav{background:rgba(242,244,255,.9)}
+.nav-logo{font-size:18px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-row{display:flex;gap:7px;align-items:center}
+.nb{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);padding:7px 13px;border-radius:11px;text-decoration:none;font-weight:700;font-size:13px;font-family:'Cairo',sans-serif;transition:all .2s}
+.nb:hover{background:rgba(124,58,237,.18);border-color:#7c3aed77;transform:translateY(-1px)}
+.thbtn{cursor:pointer;border:1px solid var(--border);background:var(--card);width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:15px;transition:all .25s}
+.thbtn:hover{transform:rotate(22deg) scale(1.12)}
+.wrap{max-width:680px;margin:0 auto;padding:30px 18px;position:relative;z-index:1}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;backdrop-filter:blur(12px);box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.page-title{font-size:22px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+/* Course selected box */
+.course-sel{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:14px;padding:14px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.price-badge{background:var(--grad);color:#fff;padding:5px 14px;border-radius:999px;font-size:13px;font-weight:900}
+/* Steps */
+.steps{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.step{flex:1;padding:12px 8px;text-align:center;font-size:13px;font-weight:700;border-left:1px solid var(--border);position:relative}
+.step:last-child{border-left:none}
+.step-num{display:block;font-size:18px;margin-bottom:2px}
+.step.done{background:rgba(6,182,212,.08);color:#06b6d4}
+.step.active{background:rgba(124,58,237,.15);color:#c4b5fd}
+/* Form */
+.field{margin-bottom:14px}
+.flabel{font-size:12px;color:var(--muted);margin-bottom:5px;display:block}
+input,select{width:100%;padding:11px 14px;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text);font-size:14px;font-family:'Cairo',sans-serif;outline:none;transition:all .2s}
+[data-theme=light] input,[data-theme=light] select{background:rgba(0,0,0,.04)}
+input:focus,select:focus{border-color:#7c3aed88;box-shadow:0 0 0 3px rgba(124,58,237,.12)}
+select option{background:var(--bg2)}
+input[readonly]{opacity:.6;cursor:not-allowed}
+.btn-main{width:100%;padding:13px;border:none;background:var(--grad);color:#fff;border-radius:14px;font-weight:900;font-size:15px;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .25s;box-shadow:0 6px 24px rgba(124,58,237,.4);margin-top:4px}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(124,58,237,.55)}
+.btn-main:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.msgbar{padding:12px 15px;border-radius:13px;font-size:13px;margin-top:12px;display:none}
+.msgbar.show{display:block}
+.msgbar.err{background:rgba(220,38,38,.15);border:1px solid #991b1b}
+.msgbar.ok{background:rgba(6,78,59,.8);border:1px solid #047857}
+.hr{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:18px 0}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border:1px solid #25d366;border-radius:13px;background:rgba(37,211,102,.08);color:#25d366;text-decoration:none;font-weight:700;font-size:13px;transition:all .2s}
+.wa-btn:hover{background:rgba(37,211,102,.15);transform:translateY(-1px)}
+.info-box{background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);border-radius:13px;padding:14px;font-size:13px;line-height:1.75;margin-bottom:20px}
+.info-box b{color:#06b6d4}
+</style>
 </head>
 <body>
-<div class="card">
-
-  <!-- Header -->
-  <div class="row" style="justify-content:space-between;margin-bottom:16px">
-    <div>
-      <div style="font-size:20px;font-weight:900">💳 صفحة الدفع</div>
-      <div class="muted">سجّل طلب دفعك وهيتراجع من الأدمن</div>
-    </div>
-    <div class="row">
-      <a href="student.html">← رجوع</a>
-      <a href="https://wa.me/201210575530" target="_blank">واتساب</a>
-    </div>
+<nav>
+  <div class="nav-logo">MF — الدفع</div>
+  <div class="nav-row">
+    <a href="student.html" class="nb">← رجوع</a>
+    <div class="thbtn" id="thb" onclick="toggleTheme()">🌙</div>
   </div>
+</nav>
 
-  <!-- الكورس المختار -->
-  <div class="box">
-    <div class="muted" style="margin-bottom:8px;font-weight:700">🎓 الكورس المختار</div>
-    <div id="courseBox" class="muted">جاري التحميل…</div>
-  </div>
+<div class="wrap">
+  <div class="card a0 a1">
+    <div class="page-title">💳 اشتراك في الكورس</div>
+    <div class="page-sub">اتبع الخطوات وهنفعّل اشتراكك بسرعة</div>
 
-  <!-- خطوات الدفع -->
-  <div class="box">
-    <div class="muted" style="font-weight:700;margin-bottom:10px">📋 خطوات الدفع</div>
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="muted">حوّل المبلغ على <b>Vodafone Cash</b> أو <b>InstaPay</b><br>على الرقم: <b style="font-size:15px">01210575530</b></div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="muted">سجّل رقم العملية أو آخر 4 أرقام من الرقم اللي حولت منه</div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="muted">اضغط "إرسال طلب الدفع" وانتظر موافقة الأدمن — هتوصلك إشعار ✅</div>
-    </div>
-  </div>
+    <div id="courseBox" class="a0 a2"><!-- filled by JS --></div>
 
-  <!-- فورم الدفع -->
-  <div class="box">
-    <div class="field">
-      <span class="label">طريقة الدفع</span>
+    <!-- Steps -->
+    <div class="steps a0 a3">
+      <div class="step done"><span class="step-num">✅</span>اختار الكورس</div>
+      <div class="step active"><span class="step-num">💳</span>ادفع الأونر</div>
+      <div class="step"><span class="step-num">⏳</span>انتظر الموافقة</div>
+    </div>
+
+    <!-- Info -->
+    <div class="info-box a0 a3">
+      <b>طريقة الدفع:</b><br>
+      1️⃣ حوّل المبلغ على رقم <b>01210575530</b> (Vodafone Cash أو InstaPay)<br>
+      2️⃣ اكتب رقم العملية أو ارفع صورة الإيصال<br>
+      3️⃣ بعد موافقة الأدمن هيفتحلك الكورس فوراً 🚀
+    </div>
+
+    <!-- Form -->
+    <div class="field a0 a4">
+      <span class="flabel">طريقة الدفع</span>
       <select id="method">
-        <option value="vodafone">💜 Vodafone Cash</option>
-        <option value="instapay">🔵 InstaPay</option>
+        <option value="Vodafone Cash">Vodafone Cash</option>
+        <option value="InstaPay">InstaPay</option>
       </select>
     </div>
-
-    <div class="field">
-      <span class="label">المبلغ المدفوع (جنيه)</span>
-      <input id="amount" type="number" placeholder="مثال: 300" min="0"/>
+    <div class="field a0 a4" style="animation-delay:.3s">
+      <span class="flabel">المبلغ (جنيه)</span>
+      <input id="amount" type="number" readonly placeholder="0"/>
+    </div>
+    <div class="field a0 a4" style="animation-delay:.34s">
+      <span class="flabel">رقم العملية / Transaction ID *</span>
+      <input id="txId" placeholder="مثال: 123456789"/>
+    </div>
+    <div class="field a0 a4" style="animation-delay:.38s">
+      <span class="flabel">ملاحظة (اختياري)</span>
+      <input id="note" placeholder="أي معلومة إضافية…"/>
     </div>
 
-    <div class="field">
-      <span class="label">رقم العملية / التحويل <span style="color:#f87171">*</span></span>
-      <input id="transaction_id" placeholder="مثال: 4567 أو رقم الإيصال"/>
-    </div>
+    <button class="btn-main a0 a5" id="btnPay" onclick="submitPay()">إرسال طلب الاشتراك ✓</button>
+    <div id="msg" class="msgbar"></div>
 
-    <div class="field">
-      <span class="label">ملاحظة إضافية (اختياري)</span>
-      <textarea id="note" placeholder="مثال: حولت الساعة 3 العصر من رقم 012xxxxxxxx…"></textarea>
-    </div>
-
-    <button class="primary" id="btnPay" onclick="sendPayment()">📤 إرسال طلب الدفع</button>
-    <button style="margin-top:10px;width:100%;text-align:center" onclick="openWhats()">❓ مشكلة في الدفع؟ تواصل واتساب</button>
-
-    <div id="msg" class="msg"></div>
+    <div class="hr a0 a5" style="animation-delay:.42s"></div>
+    <a href="https://wa.me/201210575530?text=مرحباً، عايز مساعدة في الدفع" target="_blank" class="wa-btn a0 a5" style="animation-delay:.45s">
+      💬 محتاج مساعدة؟ تواصل على واتساب
+    </a>
   </div>
-
 </div>
 
 <script>
-const FN  = "https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1";
-const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4";
+(function(){var t=localStorage.getItem('mf_theme')||'dark';if(t==='light')document.documentElement.setAttribute('data-theme','light');document.getElementById('thb').textContent=t==='light'?'☀️':'🌙';})();
+function toggleTheme(){var c=document.documentElement.getAttribute('data-theme')||'dark',n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('mf_theme',n);document.getElementById('thb').textContent=n==='light'?'☀️':'🌙';}
 
-const me = JSON.parse(localStorage.getItem("mf_user")||"null");
-if(!me) location.href="login.html";
+const FN="https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1";
+const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4";
 
-const selectedCourse = JSON.parse(localStorage.getItem("mf_selected_course")||"null");
-const courseBox = document.getElementById("courseBox");
+const me=JSON.parse(localStorage.getItem('mf_user')||'null');
+if(!me)location.href='login.html';
 
-if(!selectedCourse){
-  courseBox.innerHTML = `<span style="color:#f87171">⚠️ مفيش كورس مختار — <a href="student.html" style="color:#c4b5fd">ارجع واختار كورس الأول</a></span>`;
-  document.getElementById("btnPay").disabled = true;
+const selC=JSON.parse(localStorage.getItem('mf_selected_course')||'null');
+const box=document.getElementById('courseBox');
+
+if(!selC){
+  box.innerHTML='<div style="background:rgba(220,38,38,.12);border:1px solid #991b1b;border-radius:13px;padding:14px;margin-bottom:16px;font-size:13px">⚠️ مفيش كورس مختار — <a href="student.html" style="color:#fca5a5;font-weight:800">اختار كورس الأول</a></div>';
+  document.getElementById('btnPay').disabled=true;
 } else {
-  courseBox.innerHTML = `
-    <b>${esc(selectedCourse.title)}</b>
-    <span class="badge" style="margin-right:8px">${esc(selectedCourse.subject)}</span><br>
-    <span class="muted">السعر: <b>${selectedCourse.price||0} جنيه</b></span>`;
-  // ضع المبلغ تلقائياً
-  if(selectedCourse.price) document.getElementById("amount").value = selectedCourse.price;
+  box.innerHTML=`
+    <div class="course-sel" style="margin-bottom:20px">
+      <div>
+        <div style="font-size:16px;font-weight:800;margin-bottom:2px">${selC.title}</div>
+        <div style="font-size:13px;color:var(--muted)">${selC.subject||''}</div>
+      </div>
+      <span class="price-badge">${selC.price||0} جنيه</span>
+    </div>`;
+  document.getElementById('amount').value=selC.price||0;
 }
 
-function showMsg(type, text){
-  const m = document.getElementById("msg");
-  m.className = "msg show " + type;
-  m.textContent = text;
+function showMsg(type,text){const m=document.getElementById('msg');m.className='msgbar show '+type;m.textContent=text;}
+
+async function submitPay(){
+  if(!selC){showMsg('err','⚠️ اختار كورس الأول');return;}
+  const method=document.getElementById('method').value;
+  const txId=document.getElementById('txId').value.trim();
+  const note=document.getElementById('note').value.trim();
+  if(!txId){showMsg('err','⚠️ اكتب رقم العملية');return;}
+  const btn=document.getElementById('btnPay');btn.disabled=true;btn.textContent='جاري الإرسال…';
+  const r=await fetch(FN+'/create-payment',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({user_id:me.id,course_id:selC.id,method,amount:selC.price||0,transaction_id:txId,receipt_note:note||null})});
+  const d=await r.json().catch(()=>({}));
+  btn.disabled=false;btn.textContent='إرسال طلب الاشتراك ✓';
+  if(!d.ok){showMsg('err','❌ '+(d.error||'فشل الإرسال'));return;}
+  localStorage.removeItem('mf_selected_course');
+  showMsg('ok','✅ تم إرسال طلبك! الأدمن هيراجعه وهيفتحلك الكورس قريباً 🚀');
+  btn.disabled=true;
+  setTimeout(()=>location.href='student.html',2500);
 }
-
-async function sendPayment(){
-  if(!selectedCourse){ showMsg("err","⚠️ اختار كورس الأول"); return; }
-
-  const transaction_id = document.getElementById("transaction_id").value.trim();
-  const note           = document.getElementById("note").value.trim();
-  const method         = document.getElementById("method").value;
-  const amount         = document.getElementById("amount").value;
-
-  if(!transaction_id){ showMsg("err","⚠️ اكتب رقم العملية عشان الأدمن يقدر يتأكد"); return; }
-
-  const btn = document.getElementById("btnPay");
-  btn.disabled = true;
-  btn.textContent = "جاري الإرسال…";
-  showMsg("ok","⏳ جاري إرسال الطلب…");
-
-  const res = await fetch(`${FN}/create-payment`,{
-    method:"POST",
-    headers:{"apikey":KEY,"Content-Type":"application/json"},
-    body: JSON.stringify({
-      user_id:       me.id,
-      course_id:     selectedCourse.id,
-      method,
-      amount:        parseInt(amount)||0,
-      transaction_id,
-      receipt_note:  note||null
-    })
-  });
-
-  const data = await res.json().catch(()=>({}));
-  btn.disabled = false;
-  btn.textContent = "📤 إرسال طلب الدفع";
-
-  if(!data.ok){
-    showMsg("err","❌ " + (data.error||"حصل خطأ"));
-    return;
-  }
-
-  showMsg("ok","✅ تم إرسال طلب الدفع بنجاح! هيتراجع من الأدمن وهتوصلك إشعار.");
-  localStorage.removeItem("mf_selected_course");
-  setTimeout(()=> location.href="student.html", 2000);
-}
-
-function openWhats(){
-  const text = encodeURIComponent(
-    `مرحباً، عندي مشكلة في الدفع - Make Future\nالاسم: ${me.name||""}\nالموبايل: ${me.phone||""}\nالكورس: ${selectedCourse?.title||"—"}`
-  );
-  window.open(`https://wa.me/201210575530?text=${text}`, "_blank");
-}
-
-function esc(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
 </script>
 </body>
 </html>
