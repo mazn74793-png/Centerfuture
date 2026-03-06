@@ -34,7 +34,7 @@ nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(28px) saturate(180%);
 [data-theme=light] nav{background:rgba(240,242,255,.88)}
 @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
 .nav-logo{font-size:17px;font-weight:900;background:var(--pg);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-row{display:flex;gap:6px;align-items:center}
+.nav-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .nb{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);
   padding:6px 13px;border-radius:10px;text-decoration:none;font-weight:700;font-size:12px;
   font-family:'Cairo',sans-serif;transition:all .25s}
@@ -184,6 +184,14 @@ nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(28px) saturate(180%);
 .msg.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spin{width:32px;height:32px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--p);animation:spin .8s linear infinite;margin:20px auto}
+
+@media(max-width:480px){
+  input,select,textarea{font-size:16px!important}
+  .nb{padding:5px 10px;font-size:11px}
+  .vid-title{font-size:15px}
+  .tabs{gap:3px}
+  .tbtn{padding:6px 10px;font-size:12px}
+}
 </style>
 </head>
 <body>
