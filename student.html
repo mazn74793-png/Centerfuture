@@ -3,187 +3,195 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Make Future | Student</title>
+  <title>Make Future | الطالب</title>
   <style>
     :root{color-scheme:dark}
+    *{box-sizing:border-box}
     body{margin:0;font-family:system-ui;background:#0b1020;color:#e8ecff;min-height:100vh;padding:20px}
     .wrap{max-width:1050px;margin:0 auto}
     .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
     .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
-    .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:grid;place-items:center;font-weight:900}
+    .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:grid;place-items:center;font-weight:900;font-size:13px}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:800}
-    a:hover,button:hover{transform:translateY(-1px);background:rgba(255,255,255,.12)}
-    .muted{opacity:.82;font-size:13px;line-height:1.6}
+    a,button{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13px}
+    a:hover,button:hover{background:rgba(255,255,255,.14)}
+    .muted{opacity:.8;font-size:13px;line-height:1.7}
     .hr{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.14),transparent);margin:14px 0}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+    @media(max-width:760px){.grid{grid-template-columns:1fr}}
     .box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
-    .tag{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);padding:6px 10px;border-radius:999px;font-size:12px}
-    .course{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);border-radius:16px;padding:14px;margin-top:10px}
-    .course h3{margin:0 0 8px;font-size:16px}
-    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.14);padding:6px 10px;border-radius:999px;font-size:12px;opacity:.9}
-    .sch{margin-top:10px;display:grid;gap:8px}
-    .schItem{padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.22);font-size:13px}
+    .tag{display:inline-flex;gap:6px;align-items:center;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700}
+    .course{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);border-radius:16px;padding:14px;margin-top:10px}
+    .course h3{margin:0 0 8px;font-size:15px}
+    .pill{display:inline-flex;gap:6px;align-items:center;border:1px solid rgba(255,255,255,.14);padding:5px 10px;border-radius:999px;font-size:12px;margin:2px}
+    .schItem{padding:9px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.2);font-size:13px;margin-top:6px}
+    .notif{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(124,58,237,.12);font-size:13px;margin-top:8px}
+    .notif.unread{border-color:#7c3aed55;background:rgba(124,58,237,.2)}
+    .price-badge{background:linear-gradient(135deg,#7c3aed,#06b6d4);padding:4px 10px;border-radius:999px;font-size:12px;font-weight:800}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="top">
-        <div class="row">
-          <div class="logo">MF</div>
-          <div>
-            <div style="font-size:18px;font-weight:900">Make Future</div>
-            <div class="muted">اختر كورسك وشوف المواعيد قبل الدفع</div>
-          </div>
-        </div>
-        <div class="row">
-          <a href="index.html">الرئيسية</a>
-          <a href="payment.html">الدفع</a>
-          <a href="https://wa.me/201210575530" target="_blank" rel="noreferrer">واتساب الدعم</a>
-          <button onclick="logout()">خروج</button>
+<div class="wrap">
+  <div class="card">
+    <div class="top">
+      <div class="row">
+        <div class="logo">MF</div>
+        <div>
+          <div style="font-size:18px;font-weight:900">Make Future</div>
+          <div class="muted">اختر كورسك وشوف المواعيد</div>
         </div>
       </div>
-
-      <div class="hr"></div>
-
-      <div class="grid">
-        <div class="box">
-          <div class="tag">👤 بياناتك</div>
-          <div class="muted" style="margin-top:10px" id="meBox">...</div>
-          <div class="row" style="margin-top:10px">
-            <button onclick="loadCourses()">تحديث الكورسات</button>
-          </div>
-        </div>
-
-        <div class="box">
-          <div class="tag">✅ الكورس المختار</div>
-          <div class="muted" style="margin-top:10px" id="selected">—</div>
-          <div class="row" style="margin-top:10px">
-            <button onclick="goPay()">ادفع للكورس ده</button>
-          </div>
-          <div class="muted" style="margin-top:10px">
-            الدفع: Vodafone Cash / InstaPay على <b>01210575530</b>
-          </div>
-        </div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="box">
-        <div class="tag">🎓 الكورسات المتاحة</div>
-        <div id="courses" class="muted" style="margin-top:10px">Loading…</div>
+      <div class="row">
+        <a href="index.html">الرئيسية</a>
+        <a href="payment.html">الدفع</a>
+        <a href="https://wa.me/201210575530" target="_blank">واتساب</a>
+        <button onclick="logout()">خروج</button>
       </div>
     </div>
+
+    <div class="hr"></div>
+
+    <div class="grid">
+      <div class="box">
+        <div class="tag">👤 بياناتك</div>
+        <div class="muted" style="margin-top:10px" id="meBox">...</div>
+      </div>
+      <div class="box">
+        <div class="tag">✅ الكورس المختار</div>
+        <div class="muted" style="margin-top:10px" id="selected">—</div>
+        <div class="row" style="margin-top:10px">
+          <button onclick="goPay()">💳 ادفع للكورس ده</button>
+        </div>
+        <div class="muted" style="margin-top:8px">
+          Vodafone Cash / InstaPay على <b>01210575530</b>
+        </div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <!-- الإشعارات -->
+    <div class="box" style="margin-bottom:12px" id="notifsBox" style="display:none">
+      <div class="tag">🔔 إشعاراتك</div>
+      <div id="notifsList" style="margin-top:8px"></div>
+    </div>
+
+    <div class="box">
+      <div class="tag">🎓 الكورسات المتاحة لسنتك</div>
+      <div id="courses" class="muted" style="margin-top:10px">جاري التحميل…</div>
+    </div>
   </div>
+</div>
 
 <script>
-  function logout(){
-    localStorage.removeItem("mf_user");
-    location.href = "login.html";
+const FN = "https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4";
+
+function logout(){
+  localStorage.removeItem("mf_user");
+  localStorage.removeItem("mf_access_token");
+  localStorage.removeItem("mf_refresh_token");
+  localStorage.removeItem("mf_selected_course");
+  location.href="login.html";
+}
+
+const me = JSON.parse(localStorage.getItem("mf_user")||"null");
+if(!me) location.href="login.html";
+
+// عرض بيانات المستخدم
+const gradeMap = {
+  "3prep":"3 إعدادي","1sec":"1 ثانوي","2sec":"2 ثانوي","3sec":"3 ثانوي"
+};
+document.getElementById("meBox").innerHTML =
+  `الاسم: <b>${esc(me.name||"")}</b><br>الموبايل: <b>${esc(me.phone||"")}</b><br>السنة: <b>${esc(gradeMap[me.grade]||me.grade||"")}</b>`;
+
+let selectedCourse = JSON.parse(localStorage.getItem("mf_selected_course")||"null");
+renderSelected();
+
+function renderSelected(){
+  const el = document.getElementById("selected");
+  if(!selectedCourse) el.innerHTML="—";
+  else el.innerHTML=`<b>${esc(selectedCourse.title)}</b><br><span class="pill">📘 ${esc(selectedCourse.subject)}</span> <span class="price-badge">${esc(String(selectedCourse.price||0))} جنيه</span>`;
+}
+
+async function fn(name, params=""){
+  const res = await fetch(`${FN}/${name}${params}`, {headers:{"apikey":KEY}});
+  return res.json();
+}
+
+// تحميل الإشعارات
+async function loadNotifs(){
+  const token = localStorage.getItem("mf_access_token");
+  if(!token) return;
+  const res = await fetch(`${FN}/user-notifications`, {
+    headers:{"apikey":KEY,"Authorization":"Bearer "+token}
+  });
+  const data = await res.json().catch(()=>({}));
+  if(!data.ok||!data.notifications?.length) return;
+  const box = document.getElementById("notifsBox");
+  box.style.display="block";
+  const list = document.getElementById("notifsList");
+  list.innerHTML = data.notifications.map(n=>
+    `<div class="notif ${n.is_read?'':'unread'}">
+      <b>${esc(n.title)}</b><br>
+      <span class="muted">${esc(n.message)}</span>
+    </div>`
+  ).join("");
+}
+
+// تحميل الكورسات
+async function loadCourses(){
+  const wrap = document.getElementById("courses");
+  wrap.textContent="جاري التحميل…";
+  const data = await fn("public-courses", `?grade=${encodeURIComponent(me.grade)}`);
+  if(!data.ok){ wrap.textContent=data.error||"فشل التحميل"; return; }
+  if(!data.courses?.length){ wrap.textContent="مفيش كورسات لسنتك لسه."; return; }
+  wrap.innerHTML="";
+  for(const c of data.courses){
+    const div=document.createElement("div");
+    div.className="course";
+    div.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
+        <h3>${esc(c.title)}</h3>
+        <span class="price-badge">${c.price||0} جنيه</span>
+      </div>
+      <div style="margin:6px 0">
+        <span class="pill">👨‍🏫 ${esc(c.teacher_name)}</span>
+        <span class="pill">📘 ${esc(c.subject)}</span>
+      </div>
+      <div id="sch_${c.id}" class="muted">جاري تحميل المواعيد…</div>
+      <div class="row" style="margin-top:10px">
+        <button onclick='selectCourse(${c.id},"${escAttr(c.title)}","${escAttr(c.subject)}",${c.price||0})'>اختيار هذا الكورس</button>
+      </div>`;
+    wrap.appendChild(div);
+    // تحميل مواعيد الكورس
+    fn("public-schedules",`?course_id=${c.id}`).then(sd=>{
+      const sw=document.getElementById(`sch_${c.id}`);
+      if(!sd.ok||!sd.schedules?.length){ sw.textContent="مواعيد الكورس لسه ما اتحطتش"; return; }
+      sw.innerHTML=sd.schedules.map(s=>
+        `<div class="schItem">🗓️ <b>${esc(s.day_of_week)}</b> — ${esc(s.start_time)} → ${esc(s.end_time)}${s.notes?` <span class="muted">(${esc(s.notes)})</span>`:""}</div>`
+      ).join("");
+    });
   }
+}
 
-  const me = JSON.parse(localStorage.getItem("mf_user") || "null");
-  if(!me){ location.href="login.html"; }
-
-  const meBox = document.getElementById("meBox");
-  meBox.innerHTML =
-    "الاسم: <b>"+(me.full_name||"")+"</b><br>"+
-    "الموبايل: <b>"+(me.phone_student||"")+"</b><br>"+
-    "السنة: <b>"+(me.grade||"")+"</b><br>"+
-    "Role: <b>"+(me.role||"")+"</b>";
-
-  let selectedCourse = JSON.parse(localStorage.getItem("mf_selected_course") || "null");
+function selectCourse(id,title,subject,price){
+  selectedCourse={id,title,subject,price};
+  localStorage.setItem("mf_selected_course",JSON.stringify(selectedCourse));
   renderSelected();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
 
-  function renderSelected(){
-    const el = document.getElementById("selected");
-    if(!selectedCourse) el.innerHTML = "—";
-    else el.innerHTML = `ID: <b>${selectedCourse.id}</b> — <b>${escapeHtml(selectedCourse.title)}</b> — <span class="pill">${escapeHtml(selectedCourse.subject)}</span>`;
-  }
+function goPay(){
+  if(!selectedCourse){ alert("اختار كورس الأول"); return; }
+  location.href="payment.html";
+}
 
-  async function loadCourses(){
-    const wrap = document.getElementById("courses");
-    wrap.textContent = "Loading…";
+function esc(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
+function escAttr(s){ return String(s||"").replaceAll('"',"&quot;").replaceAll("'","&#39;").replaceAll("<","&lt;"); }
 
-    const res = await fetch(`/.netlify/functions/public_courses?grade=${encodeURIComponent(me.grade)}`);
-    const data = await res.json().catch(()=>({}));
-
-    if(!res.ok || !data.ok){
-      wrap.textContent = data.error || "فشل تحميل الكورسات";
-      return;
-    }
-
-    if(data.courses.length === 0){
-      wrap.textContent = "مفيش كورسات لسه للسنة دي.";
-      return;
-    }
-
-    wrap.innerHTML = "";
-    for(const c of data.courses){
-      const div = document.createElement("div");
-      div.className = "course";
-      div.innerHTML = `
-        <h3>${escapeHtml(c.title)}</h3>
-        <div class="muted">
-          <span class="pill">👨‍🏫 ${escapeHtml(c.teacher_name)}</span>
-          <span class="pill">📘 ${escapeHtml(c.subject)}</span>
-        </div>
-        <div class="sch" id="sch_${c.id}">
-          <div class="muted" style="opacity:.8">Loading schedule…</div>
-        </div>
-        <div class="row" style="margin-top:10px">
-          <button onclick='selectCourse(${c.id}, "${escapeAttr(c.title)}", "${escapeAttr(c.subject)}")'>اختيار الكورس</button>
-        </div>
-      `;
-      wrap.appendChild(div);
-
-      // load schedules لكل كورس
-      const schRes = await fetch(`/.netlify/functions/public_schedules?course_id=${c.id}`);
-      const schData = await schRes.json().catch(()=>({}));
-      const schWrap = document.getElementById(`sch_${c.id}`);
-
-      if(!schRes.ok || !schData.ok){
-        schWrap.innerHTML = `<div class="muted">مش قادر أجيب المواعيد</div>`;
-        continue;
-      }
-
-      if(schData.schedules.length === 0){
-        schWrap.innerHTML = `<div class="muted">مواعيد الكورس لسه ما اتحطتش</div>`;
-        continue;
-      }
-
-      schWrap.innerHTML = "";
-      schData.schedules.forEach(s => {
-        const it = document.createElement("div");
-        it.className = "schItem";
-        it.innerHTML = `🗓️ <b>${escapeHtml(s.day_of_week)}</b> — ${escapeHtml(s.start_time)} → ${escapeHtml(s.end_time)}${s.notes ? ` <span class="muted">(${escapeHtml(s.notes)})</span>` : ""}`;
-        schWrap.appendChild(it);
-      });
-    }
-  }
-
-  function selectCourse(id, title, subject){
-    selectedCourse = { id, title, subject };
-    localStorage.setItem("mf_selected_course", JSON.stringify(selectedCourse));
-    renderSelected();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function goPay(){
-    if(!selectedCourse){
-      alert("اختار كورس الأول");
-      return;
-    }
-    location.href = "payment.html";
-  }
-
-  function escapeHtml(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
-  function escapeAttr(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("\"","&quot;").replaceAll("'","&#39;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
-
-  // أول تحميل
-  loadCourses();
+loadNotifs();
+loadCourses();
 </script>
 </body>
 </html>
