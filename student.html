@@ -104,6 +104,18 @@ nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(22px);background:rgba
     </div>
   </div>
 
+  <!-- Payment Status Banner -->
+  <div id="pendingBanner" style="display:none;margin-bottom:16px" class="a0 a3">
+    <div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="font-size:32px">⏳</div>
+      <div style="flex:1">
+        <div style="font-size:15px;font-weight:800;color:#fbbf24;margin-bottom:4px">طلب اشتراكك قيد المراجعة</div>
+        <div id="pendingDetail" style="font-size:13px;color:var(--muted)"></div>
+      </div>
+      <div style="background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.3);padding:6px 14px;border-radius:999px;font-size:12px;font-weight:800;color:#fbbf24">Pending</div>
+    </div>
+  </div>
+
   <!-- Courses -->
   <div class="a0 a4">
     <div class="box">
@@ -215,6 +227,7 @@ function selCourse(id,title,subject,price){
 }
 
 loadNotifs();
+loadPaymentStatus();
 loadCourses();
 </script>
 </body>
