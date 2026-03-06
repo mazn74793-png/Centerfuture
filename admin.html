@@ -571,6 +571,7 @@ async function saveVideo(){
       xhr.onerror=function(){btn.disabled=false;btn.textContent='💾 حفظ الفيديو';msg('err','❌ فشل الاتصال');};
       xhr.open('POST',FN+'/video-upload');
       xhr.setRequestHeader('apikey',KEY);
+      xhr.setRequestHeader('Content-Type',file.type||'video/mp4');
       xhr.setRequestHeader('x-course-id',selCIdV);
       xhr.setRequestHeader('x-title',encodeURIComponent(title));
       xhr.setRequestHeader('x-order',order);
