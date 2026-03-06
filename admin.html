@@ -62,6 +62,7 @@
     <button class="tabBtn" onclick="openTab('courses',this)">🎓 Courses</button>
     <button class="tabBtn" onclick="openTab('sched',this)">🗓️ Schedules</button>
     <button class="tabBtn" onclick="openTab('pay',this)">💳 Payments</button>
+    <button class="tabBtn" onclick="openTab('users',this)">👥 المستخدمين</button>
   </div>
 
   <!-- ===== DASHBOARD ===== -->
@@ -209,6 +210,21 @@
       </table>
     </div>
   </div>
+
+  <!-- ===== USERS ===== -->
+  <div id="users" class="tab">
+    <div class="box">
+      <div class="pill">👥 كل المستخدمين</div>
+      <div class="row" style="margin-top:10px">
+        <button class="btnSm" onclick="loadUsers()">🔄 تحديث</button>
+      </div>
+      <table>
+        <thead><tr><th>الاسم</th><th>الموبايل</th><th>السنة</th><th>الدور الحالي</th><th>تغيير الدور</th></tr></thead>
+        <tbody id="usersBody"></tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -373,6 +389,44 @@ async function payAct(id,action){
 
 function esc(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
 function escAttr(s){ return String(s||"").replaceAll('"',"&quot;").replaceAll("'","&#39;").replaceAll("<","&lt;"); }
+
+loadStats();
+loadCourses();
+
+// ===== USERS =====
+async function loadUsers(){
+  const tb=document.getElementById("usersBody");
+  tb.innerHTML='<tr><td colspan="5">Loading…</td></tr>';
+  const data=await apiFetch("admin-users","GET",null,"");
+  tb.innerHTML="";
+  if(!data.ok){ tb.innerHTML=`<tr><td colspan="5">فشل التحميل</td></tr>`; return; }
+  if(!data.users?.length){ tb.innerHTML=`<tr><td colspan="5" class="muted">مفيش مستخدمين</td></tr>`; return; }
+  const gradeMap={"3prep":"3 إعدادي","1sec":"1 ثانوي","2sec":"2 ثانوي","3sec":"3 ثانوي"};
+  const roleColor={"student":"#6ee7b7","admin":"#93c5fd","superadmin":"#f9a8d4"};
+  data.users.forEach(u=>{
+    const isSelf = u.phone_student===me.phone;
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td><b>${esc(u.full_name||"")}</b></td>
+      <td>${esc(u.phone_student||"")}</td>
+      <td>${esc(gradeMap[u.grade]||u.grade||"")}</td>
+      <td><span style="color:${roleColor[u.role]||'#fff'};font-weight:800">${esc(u.role||"")}</span></td>
+      <td>${isSelf?'<span class="muted">أنت</span>':`
+        <div class="row">
+          ${u.role!=='superadmin'?`<button class="btnSm ok" onclick="setRole('${u.id}','superadmin')">Super</button>`:''}
+          ${u.role!=='admin'?`<button class="btnSm" onclick="setRole('${u.id}','admin')">Admin</button>`:''}
+          ${u.role!=='student'?`<button class="btnSm bad" onclick="setRole('${u.id}','student')">Student</button>`:''}
+        </div>`}
+      </td>`;
+    tb.appendChild(tr);
+  });
+}
+async function setRole(userId, role){
+  const data=await apiFetch("admin-users","POST",{user_id:userId,role});
+  if(!data.ok){ msg(data.error||"فشل"); return; }
+  msg("تم تغيير الدور ✅"); loadUsers();
+}
+
 
 loadStats();
 loadCourses();
