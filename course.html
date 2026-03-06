@@ -336,7 +336,7 @@ async function api(fn,method,body,params){
   const opts={method:m,headers:h};
   if(body){h['Content-Type']='application/json';opts.body=JSON.stringify(body);}
   try{const r=await fetch(FN+'/'+fn+(params||''),opts);return await r.json();}
-  catch(e){console.error('api error',fn,e);return {ok:false,error:String(e)};}
+  catch(e){console.error('api error:',fn,e);return {ok:false,error:'فشل الاتصال'};}
 }
 function esc(s){return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');}
 
