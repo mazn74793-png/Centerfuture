@@ -1,262 +1,168 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Make Future | Login</title>
-  <style>
-    :root { color-scheme: dark }
-    * { box-sizing: border-box }
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, sans-serif;
-      background: #0b1020;
-      color: #e8ecff;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 20px;
-    }
-    .card {
-      width: min(520px, 100%);
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 18px;
-      padding: 28px 24px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.4);
-    }
-    .logo {
-      font-size: 24px;
-      font-weight: 900;
-      background: linear-gradient(135deg,#7c3aed,#06b6d4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 2px;
-    }
-    h2 { margin: 0 0 4px; font-size: 17px; }
-    .muted { opacity: .55; font-size: 12px; margin-bottom: 18px; }
-    .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-    .tab {
-      cursor: pointer;
-      border: 1px solid rgba(255,255,255,.15);
-      background: rgba(255,255,255,.06);
-      padding: 8px 22px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 14px;
-      transition: all .2s;
-    }
-    .tab.active {
-      background: linear-gradient(135deg,#7c3aed33,#06b6d433);
-      border-color: #7c3aed99;
-      color: #c4b5fd;
-    }
-    .field { margin-top: 13px; }
-    label { font-size: 12px; opacity: .75; display: block; margin-bottom: 5px; }
-    .req { color: #f87171; }
-    input, select {
-      width: 100%;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.15);
-      background: rgba(255,255,255,.07);
-      color: #fff;
-      font-size: 14px;
-      outline: none;
-      transition: border-color .2s;
-    }
-    input:focus, select:focus { border-color: #7c3aed88; }
-    select option { background: #1a1f35; }
-    .btn {
-      cursor: pointer;
-      border: none;
-      background: linear-gradient(135deg,#7c3aed,#06b6d4);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 15px;
-      margin-top: 20px;
-      width: 100%;
-      transition: opacity .2s;
-    }
-    .btn:disabled { opacity: .5; cursor: not-allowed; }
-    .msg {
-      margin-top: 14px;
-      padding: 11px 14px;
-      border-radius: 12px;
-      font-size: 13px;
-      display: none;
-    }
-    .msg.show { display: block; }
-    .msg.err { background: #7f1d1d; border: 1px solid #991b1b; }
-    .msg.ok  { background: #065f46; border: 1px solid #047857; }
-  </style>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Make Future | دخول</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07091a;--bg2:#0d1230;--card:rgba(255,255,255,.055);--border:rgba(255,255,255,.1);--text:#eef0ff;--muted:rgba(238,240,255,.5);--grad:linear-gradient(135deg,#7c3aed,#06b6d4);color-scheme:dark}
+[data-theme=light]{--bg:#f2f4ff;--bg2:#e6eaff;--card:rgba(255,255,255,.85);--border:rgba(0,0,0,.09);--text:#0d1230;--muted:rgba(13,18,48,.5);color-scheme:light}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:grid;place-items:center;padding:20px;transition:background .35s,color .35s;overflow:hidden}
+.blob{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+.b1{width:600px;height:600px;background:rgba(124,58,237,.11);top:-150px;right:-150px;animation:blob1 9s ease-in-out infinite}
+.b2{width:500px;height:500px;background:rgba(6,182,212,.08);bottom:-120px;left:-120px;animation:blob2 11s ease-in-out infinite}
+@keyframes blob1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,30px)}}
+@keyframes blob2{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,-20px)}}
+@keyframes pop{from{opacity:0;transform:scale(.85) translateY(30px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.card{position:relative;z-index:1;width:min(430px,100%);background:var(--card);border:1px solid var(--border);border-radius:24px;padding:36px 28px;backdrop-filter:blur(18px);box-shadow:0 40px 100px rgba(0,0,0,.5);animation:pop .65s cubic-bezier(.34,1.56,.64,1) both}
+.logo-box{text-align:center;margin-bottom:26px}
+.logo-icon{width:66px;height:66px;border-radius:20px;background:var(--grad);display:grid;place-items:center;font-size:22px;font-weight:900;color:#fff;margin:0 auto 11px;box-shadow:0 10px 35px rgba(124,58,237,.5);animation:up .5s .15s both}
+.logo-title{font-size:21px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:up .5s .2s both;opacity:0}
+.logo-sub{font-size:13px;color:var(--muted);margin-top:3px;animation:up .5s .25s both;opacity:0}
+.tab-row{display:flex;background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:14px;padding:3px;margin-bottom:22px;animation:up .5s .3s both;opacity:0}
+[data-theme=light] .tab-row{background:rgba(0,0,0,.06)}
+.tab{flex:1;padding:9px;border-radius:11px;text-align:center;font-weight:700;font-size:14px;cursor:pointer;transition:all .25s;color:var(--muted)}
+.tab.on{background:var(--grad);color:#fff;box-shadow:0 4px 16px rgba(124,58,237,.4)}
+.field{margin-bottom:13px;animation:up .5s both;opacity:0}
+.flabel{font-size:12px;color:var(--muted);margin-bottom:5px;display:block}
+input,select{width:100%;padding:11px 14px;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text);font-size:14px;font-family:'Cairo',sans-serif;outline:none;transition:all .2s}
+[data-theme=light] input,[data-theme=light] select{background:rgba(0,0,0,.04)}
+input:focus,select:focus{border-color:#7c3aed88;box-shadow:0 0 0 3px rgba(124,58,237,.13)}
+select option{background:var(--bg2)}
+.btn-main{width:100%;padding:13px;border:none;background:var(--grad);color:#fff;border-radius:14px;font-weight:900;font-size:15px;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .25s;box-shadow:0 6px 24px rgba(124,58,237,.4);animation:up .5s .45s both;opacity:0}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(124,58,237,.58)}
+.btn-main:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn-ghost{width:100%;border:none;background:none;color:#a78bfa;font-size:13px;cursor:pointer;margin-top:10px;font-family:'Cairo',sans-serif;text-decoration:underline;text-underline-offset:3px;animation:up .5s .5s both;opacity:0}
+.btn-ghost:hover{color:#c4b5fd}
+.msgbar{padding:11px 14px;border-radius:13px;font-size:13px;margin-top:12px;display:none;animation:up .3s both}
+.msgbar.show{display:block}
+.msgbar.err{background:rgba(220,38,38,.15);border:1px solid #991b1b}
+.msgbar.ok{background:rgba(5,78,59,.8);border:1px solid #047857}
+.thbtn{position:fixed;top:14px;left:14px;z-index:200;cursor:pointer;border:1px solid var(--border);background:var(--card);backdrop-filter:blur(14px);width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:15px;transition:all .25s;animation:up .5s .6s both;opacity:0}
+.thbtn:hover{transform:rotate(22deg) scale(1.12)}
+</style>
 </head>
 <body>
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+<div class="thbtn" id="thb" onclick="toggleTheme()">🌙</div>
 
 <div class="card">
-  <div class="logo">MF</div>
-  <h2 id="title">تسجيل الدخول</h2>
-  <div class="muted">Make Future Center — منصة سنتر فرح</div>
-
-  <div class="tabs">
-    <div class="tab active" onclick="switchMode('login')"  id="tabLogin">دخول</div>
-    <div class="tab"        onclick="switchMode('signup')" id="tabSignup">حساب جديد</div>
+  <div class="logo-box">
+    <div class="logo-icon">MF</div>
+    <div class="logo-title">Make Future Center</div>
+    <div class="logo-sub">مركز التفوق الدراسي</div>
   </div>
 
-  <!-- LOGIN -->
-  <div id="loginBox">
-    <div class="field">
-      <label>موبايل الطالب أو اسم المستخدم</label>
-      <input id="loginValue" placeholder="01xxxxxxxxx أو username" autocomplete="username">
-    </div>
-    <div class="field">
-      <label>كلمة المرور</label>
-      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
-    </div>
-    <button class="btn" id="btnLogin" onclick="login()">دخول ←</button>
-    <button type="button" onclick="forgotPassword()" style="margin-top:10px;width:100%;cursor:pointer;border:none;background:none;color:#a78bfa;font-size:13px;text-decoration:underline;padding:4px">نسيت كلمة المرور؟</button>
+  <div class="tab-row">
+    <div class="tab on" onclick="switchTab('login')">تسجيل الدخول</div>
+    <div class="tab" onclick="switchTab('signup')">حساب جديد</div>
   </div>
 
-  <!-- SIGNUP -->
-  <div id="signupBox" style="display:none">
-    <div class="field">
-      <label>اسم الطالب الكامل <span class="req">*</span></label>
-      <input id="suName" placeholder="مثال: أحمد محمد">
+  <div id="pLogin">
+    <div class="field" style="animation-delay:.33s">
+      <span class="flabel">رقم الموبايل</span>
+      <input id="lv" placeholder="01xxxxxxxxx" maxlength="11" inputmode="tel"/>
     </div>
-    <div class="field">
-      <label>السنة الدراسية <span class="req">*</span></label>
-      <select id="suGrade">
-        <option value="">-- اختر --</option>
+    <div class="field" style="animation-delay:.38s">
+      <span class="flabel">كلمة المرور</span>
+      <input id="lp" type="password" placeholder="••••••••"/>
+    </div>
+    <button class="btn-main" id="btnL" onclick="doLogin()">دخول ←</button>
+    <button class="btn-ghost" onclick="forgotPw()">نسيت كلمة المرور؟</button>
+  </div>
+
+  <div id="pSignup" style="display:none">
+    <div class="field" style="animation-delay:.32s">
+      <span class="flabel">الاسم الكامل</span>
+      <input id="sn" placeholder="مثال: أحمد محمد"/>
+    </div>
+    <div class="field" style="animation-delay:.35s">
+      <span class="flabel">رقم موبايل الطالب</span>
+      <input id="sp" placeholder="01xxxxxxxxx" maxlength="11" inputmode="tel"/>
+    </div>
+    <div class="field" style="animation-delay:.38s">
+      <span class="flabel">رقم ولي الأمر (اختياري)</span>
+      <input id="spar" placeholder="01xxxxxxxxx" maxlength="11" inputmode="tel"/>
+    </div>
+    <div class="field" style="animation-delay:.41s">
+      <span class="flabel">الصف الدراسي</span>
+      <select id="sg">
         <option value="3prep">3 إعدادي</option>
         <option value="1sec">1 ثانوي</option>
         <option value="2sec">2 ثانوي</option>
         <option value="3sec">3 ثانوي</option>
       </select>
     </div>
-    <div class="field">
-      <label>موبايل الطالب <span class="req">*</span></label>
-      <input id="suPhone" placeholder="01xxxxxxxxx" maxlength="11">
+    <div class="field" style="animation-delay:.44s">
+      <span class="flabel">كلمة المرور</span>
+      <input id="spw" type="password" placeholder="6 أحرف على الأقل"/>
     </div>
-    <div class="field">
-      <label>موبايل ولي الأمر <span style="opacity:.5">(اختياري)</span></label>
-      <input id="suParent" placeholder="01xxxxxxxxx" maxlength="11">
-    </div>
-    <div class="field">
-      <label>اسم المستخدم <span style="opacity:.5">(اختياري)</span></label>
-      <input id="suUser" placeholder="بالإنجليزي فقط">
-    </div>
-    <div class="field">
-      <label>كلمة المرور <span class="req">*</span></label>
-      <input type="password" id="suPass" placeholder="6 أحرف على الأقل" autocomplete="new-password">
-    </div>
-    <button class="btn" id="btnSignup" onclick="signup()">إنشاء حساب ←</button>
+    <button class="btn-main" id="btnS" onclick="doSignup()">إنشاء الحساب ✓</button>
   </div>
 
-  <div id="msg" class="msg"></div>
+  <div id="msg" class="msgbar"></div>
 </div>
 
 <script>
-const FN_BASE  = "https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1";
-const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4";
+(function(){var t=localStorage.getItem('mf_theme')||'dark';if(t==='light')document.documentElement.setAttribute('data-theme','light');document.getElementById('thb').textContent=t==='light'?'☀️':'🌙';})();
+function toggleTheme(){var c=document.documentElement.getAttribute('data-theme')||'dark',n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('mf_theme',n);document.getElementById('thb').textContent=n==='light'?'☀️':'🌙';}
 
-function showMsg(type, text){
-  const m = document.getElementById("msg");
-  m.className = "msg show " + (type==="ok" ? "ok" : "err");
-  m.textContent = text;
-}
-function clearMsg(){
-  const m = document.getElementById("msg");
-  m.className = "msg"; m.textContent = "";
-}
-function switchMode(mode){
-  document.getElementById("loginBox").style.display  = mode==="login"  ? "block" : "none";
-  document.getElementById("signupBox").style.display = mode==="signup" ? "block" : "none";
-  document.getElementById("tabLogin").classList.toggle("active",  mode==="login");
-  document.getElementById("tabSignup").classList.toggle("active", mode==="signup");
-  document.getElementById("title").textContent = mode==="login" ? "تسجيل الدخول" : "إنشاء حساب";
-  clearMsg();
-}
+const FN="https://anlstahxxpbbfnwrwulu.supabase.co/functions/v1";
+const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubHN0YWh4eHBiYmZud3J3dWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDQzMTIsImV4cCI6MjA4ODEyMDMxMn0.4RQxQ4AZZCVCswTRdJoZ7Jz9qNwQq0fPs7vitnMJ3A4";
 
-async function callFn(name, body){
-  const res = await fetch(`${FN_BASE}/${name}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "apikey": ANON_KEY },
-    body: JSON.stringify(body)
-  });
-  return res.json();
+const u=JSON.parse(localStorage.getItem('mf_user')||'null');
+if(u){location.href=['admin','superadmin'].includes(u.role)?'admin.html':'student.html';}
+
+function msg(type,text){const m=document.getElementById('msg');m.className='msgbar show '+type;m.textContent=text;}
+function clrMsg(){document.getElementById('msg').className='msgbar';}
+
+function switchTab(t){
+  const il=t==='login';
+  document.querySelectorAll('.tab').forEach((e,i)=>e.classList.toggle('on',i===0?il:!il));
+  document.getElementById('pLogin').style.display=il?'':'none';
+  document.getElementById('pSignup').style.display=il?'none':'';
+  clrMsg();
 }
 
-async function signup(){
-  clearMsg();
-  const name  = document.getElementById("suName").value.trim();
-  const grade = document.getElementById("suGrade").value;
-  const phone = document.getElementById("suPhone").value.trim();
-  const parent= document.getElementById("suParent").value.trim();
-  const user  = document.getElementById("suUser").value.trim();
-  const pass  = document.getElementById("suPass").value;
-
-  if(!name||!grade||!phone||!pass){ showMsg("err","⚠️ اكمل البيانات المطلوبة"); return; }
-  if(!/^01[0-9]{9}$/.test(phone)){ showMsg("err","⚠️ رقم الموبايل غير صحيح (11 رقم يبدأ بـ 01)"); return; }
-  if(pass.length < 6){ showMsg("err","⚠️ كلمة المرور أقل من 6 أحرف"); return; }
-
-  const btn = document.getElementById("btnSignup");
-  btn.disabled = true; btn.textContent = "جاري التسجيل...";
-
-  const data = await callFn("auth-signup", {
-    full_name: name, grade,
-    phone_student: phone,
-    phone_parent: parent || null,
-    username: user || null,
-    password: pass
-  });
-
-  btn.disabled = false; btn.textContent = "إنشاء حساب ←";
-
-  if(!data.ok){ showMsg("err","❌ " + (data.error || "خطأ في التسجيل")); return; }
-  showMsg("ok","✅ تم التسجيل بنجاح! اضغط دخول الآن");
-  setTimeout(()=> switchMode("login"), 1500);
+async function doLogin(){
+  const v=document.getElementById('lv').value.trim(),p=document.getElementById('lp').value;
+  if(!v||!p){msg('err','⚠️ اكمل البيانات');return;}
+  const btn=document.getElementById('btnL');btn.disabled=true;btn.textContent='جاري الدخول…';
+  const r=await fetch(FN+'/auth-login',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({login:v,password:p})});
+  const d=await r.json().catch(()=>({}));
+  btn.disabled=false;btn.textContent='دخول ←';
+  if(!d.ok){msg('err','❌ '+(d.error||'بيانات الدخول غلط'));return;}
+  localStorage.setItem('mf_access_token',d.access_token);
+  localStorage.setItem('mf_refresh_token',d.refresh_token);
+  localStorage.setItem('mf_user',JSON.stringify({id:d.user.id,name:d.profile?.full_name||'',phone:d.profile?.phone_student||'',grade:d.profile?.grade||'',role:d.profile?.role||'student'}));
+  msg('ok','✅ أهلاً! جاري الانتقال…');
+  setTimeout(()=>location.href=['admin','superadmin'].includes(d.profile?.role)?'admin.html':'student.html',700);
 }
 
-async function login(){
-  clearMsg();
-  const loginVal = document.getElementById("loginValue").value.trim();
-  const pass     = document.getElementById("loginPass").value;
-
-  if(!loginVal||!pass){ showMsg("err","⚠️ اكتب البيانات"); return; }
-
-  const btn = document.getElementById("btnLogin");
-  btn.disabled = true; btn.textContent = "جاري الدخول...";
-
-  const data = await callFn("auth-login", { login: loginVal, password: pass });
-
-  btn.disabled = false; btn.textContent = "دخول ←";
-
-  if(!data.ok){ showMsg("err","❌ " + (data.error || "بيانات الدخول غلط")); return; }
-
-  // حفظ الـ JWT Token الحقيقي من Supabase Auth
-  localStorage.setItem("mf_access_token",  data.access_token);
-  localStorage.setItem("mf_refresh_token", data.refresh_token);
-  localStorage.setItem("mf_user", JSON.stringify(data.user));
-
-  showMsg("ok","✅ أهلاً " + data.user.name + "!");
-  setTimeout(()=>{
-    const role = data.user.role;
-    if(role === "admin" || role === "superadmin") location.href = "admin.html";
-    else location.href = "student.html";
-  }, 700);
+async function doSignup(){
+  const name=document.getElementById('sn').value.trim(),phone=document.getElementById('sp').value.trim();
+  const parent=document.getElementById('spar').value.trim(),grade=document.getElementById('sg').value,pass=document.getElementById('spw').value;
+  if(!name||!phone||!pass){msg('err','⚠️ اكمل البيانات المطلوبة');return;}
+  if(!/^01[0-9]{9}$/.test(phone)){msg('err','⚠️ رقم الموبايل غير صحيح');return;}
+  if(pass.length<6){msg('err','⚠️ كلمة المرور أقل من 6 أحرف');return;}
+  const btn=document.getElementById('btnS');btn.disabled=true;btn.textContent='جاري الإنشاء…';
+  const r=await fetch(FN+'/auth-signup',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({full_name:name,phone_student:phone,phone_parent:parent||null,grade,password:pass})});
+  const d=await r.json().catch(()=>({}));
+  btn.disabled=false;btn.textContent='إنشاء الحساب ✓';
+  if(!d.ok){msg('err','❌ '+(d.error||'فشل الإنشاء'));return;}
+  msg('ok','✅ تم إنشاء الحساب! ادخل الآن 🎉');
+  setTimeout(()=>switchTab('login'),1300);
 }
 
-function forgotPassword(){
-  const phone = document.getElementById("loginValue").value.trim();
-  const text = encodeURIComponent(
-    phone && /^01[0-9]{9}$/.test(phone)
-      ? `مرحباً، نسيت كلمة المرور - Make Future\nرقم موبايلي: ${phone}\nأرجو مساعدتي في إعادة تعيين كلمة المرور 🙏`
-      : `مرحباً، نسيت كلمة المرور - Make Future\nأرجو مساعدتي في إعادة تعيين كلمة المرور 🙏`
-  );
-  window.open(`https://wa.me/201210575530?text=${text}`, "_blank");
+function forgotPw(){
+  const p=document.getElementById('lv').value.trim();
+  const t=encodeURIComponent(/^01[0-9]{9}$/.test(p)?`مرحباً، نسيت كلمة المرور - Make Future\nرقم موبايلي: ${p}\nأرجو المساعدة 🙏`:`مرحباً، نسيت كلمة المرور - Make Future\nأرجو مساعدتي 🙏`);
+  window.open('https://wa.me/201210575530?text='+t,'_blank');
 }
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){if(document.getElementById('pLogin').style.display!=='none')doLogin();else doSignup();}});
 </script>
 </body>
 </html>
