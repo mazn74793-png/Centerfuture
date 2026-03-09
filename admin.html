@@ -92,8 +92,8 @@ th{text-align:right;color:var(--muted);font-weight:600}
 <nav>
   <div class="nav-logo">MF — <span id="navRoleLabel">لوحة الأدمن</span></div>
   <div class="nav-row">
-    <a href="student.html" class="nb">👁️ طالب</a>
-    <a href="change-password.html" class="nb">🔑 الباسورد</a>
+    <a href="student" class="nb">👁️ طالب</a>
+    <a href="change-password" class="nb">🔑 الباسورد</a>
     <div class="thbtn" id="thb" onclick="toggleTheme()">🌙</div>
     <button class="nb" onclick="logout()">خروج</button>
   </div>
@@ -343,8 +343,8 @@ const gradeMap={"3prep":"3 إعدادي","1sec":"1 ثانوي","2sec":"2 ثان�
 
 // Auth & Role check
 const me=JSON.parse(localStorage.getItem('mf_user')||'null');
-if(!me){location.href='login.html';throw new Error();}
-if(!['admin','superadmin','course_admin'].includes(me.role)){alert('مش عندك صلاحية');location.href='student.html';throw new Error();}
+if(!me){location.href='login';throw new Error();}
+if(!['admin','superadmin','course_admin'].includes(me.role)){alert('مش عندك صلاحية');location.href='student';throw new Error();}
 
 const isSuperAdmin=me.role==='superadmin';
 const isAdmin=me.role==='admin'||isSuperAdmin;
@@ -360,7 +360,7 @@ if(isCourseAdmin){
   document.getElementById('courseFormBox').style.display='none';
 }
 
-function logout(){['mf_user','mf_access_token','mf_refresh_token'].forEach(k=>localStorage.removeItem(k));location.href='login.html';}
+function logout(){['mf_user','mf_access_token','mf_refresh_token'].forEach(k=>localStorage.removeItem(k));location.href='login';}
 function esc(s){return String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');}
 function escA(s){return String(s||'').replaceAll('"','&quot;').replaceAll("'",'&#39;').replaceAll('<','&lt;');}
 
@@ -821,7 +821,7 @@ function renderUsers(users){
 function filterUsers(){
   const q=document.getElementById('userSearch').value.trim().toLowerCase();
   const r=document.getElementById('userRoleFilter').value;
-  renderUsers(allUsersCache.filter(u=>(!q|||(u.full_name||'').toLowerCase().includes(q)||(u.phone_student||'').includes(q))&&(!r||u.role===r)));
+  renderUsers(allUsersCache.filter(u=>(!q||(u.full_name||'').toLowerCase().includes(q)||(u.phone_student||'').includes(q))&&(!r||u.role===r)));
 }
 async function setRole(uid,role){
   const d=await api('admin-users','POST',{user_id:uid,role});
